@@ -17,17 +17,20 @@ def addVectors(angle1, length1, angle2, length2):
 
     x = math.sin(angle1) * length1 + math.sin(angle2) * length2
     y = math.cos(angle1) * length1 + math.cos(angle2) * length2
-    
+
     angle = 0.5 * math.pi - math.atan2(y, x)
     length = math.hypot(x, y)
 
-    return (angle, length)
+    return angle, length
+
+
 # -----------End-----------------
 
 class Environment():
     """
     Defines the structure of the environment (e.g.boundary of a simulation and its properties)
     """
+
     def __init__(self, width, height):
         self.width = width
         self.height = height
@@ -45,9 +48,9 @@ class Environment():
         y = random.uniform(self.objectSize, self.height - self.objectSize)
         object.x = x
         object.y = y
-        object.direction = (1,2)
+        object.direction = (1, 2)
         object.speed = 5
-        object.angle = random.uniform(0, math.pi*2)
+        object.angle = random.uniform(0, math.pi * 2)
 
     def update(self, objects1, objects2, collision_handler):
         """
@@ -61,7 +64,7 @@ class Environment():
         for i, objectA in enumerate(objects1):
             self.__move(objectA)
             self.__bounce(objectA)
-            #for object in population1.individuals[i+1:]:
+            # for object in population1.individuals[i+1:]:
             for objectB in objects2:
                 self.__collide(objectA, objectB, collision_handler)
         for objectB in objects2:
@@ -74,21 +77,21 @@ class Environment():
         :param object:
         :return:
         """
-        
+
         if object.x > self.width - self.objectSize:
-            object.x = 2*(self.width - self.objectSize) - object.x
+            object.x = 2 * (self.width - self.objectSize) - object.x
             object.angle = - object.angle
 
         elif object.x < self.objectSize:
-            object.x = 2*self.objectSize - object.x
+            object.x = 2 * self.objectSize - object.x
             object.angle = - object.angle
 
         if object.y > self.height - self.objectSize:
-            object.y = 2*(self.height - self.objectSize) - object.y
+            object.y = 2 * (self.height - self.objectSize) - object.y
             object.angle = math.pi - object.angle
 
         elif object.y < self.objectSize:
-            object.y = 2*self.objectSize - object.y
+            object.y = 2 * self.objectSize - object.y
             object.angle = math.pi - object.angle
 
     def findObject(self, x, y, groups_of_object):
@@ -118,20 +121,20 @@ class Environment():
         :param collision_handler:
         :return:
         """
-    
+
         dx = p1.x - p2.x
         dy = p1.y - p2.y
-    
+
         dist = math.hypot(dx, dy)
-        if dist < 2*self.objectSize:
+        if dist < 2 * self.objectSize:
             collision_handler(p1, p2)
             angle = math.atan2(dy, dx) + 0.5 * math.pi
 
             (p1.angle, p1.speed) = addVectors(p1.angle, 0, angle, p2.speed)
-            (p2.angle, p2.speed) = addVectors(p2.angle, 0, angle+math.pi, p1.speed)
+            (p2.angle, p2.speed) = addVectors(p2.angle, 0, angle + math.pi, p1.speed)
 
-            overlap = 0.5*(2*self.objectSize - dist+1)
-            p1.x += math.sin(angle)*overlap
-            p1.y -= math.cos(angle)*overlap
-            p2.x -= math.sin(angle)*overlap
-            p2.y += math.cos(angle)*overlap
+            overlap = 0.5 * (2 * self.objectSize - dist + 1)
+            p1.x += math.sin(angle) * overlap
+            p1.y -= math.cos(angle) * overlap
+            p2.x -= math.sin(angle) * overlap
+            p2.y += math.cos(angle) * overlap
