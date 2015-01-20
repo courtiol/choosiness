@@ -1,9 +1,10 @@
-import math, random
+import math
+import random
 
-#Parameters of environment:
 
-#helpers:
-#------------Start-----------------
+# Parameters of environment:
+# helpers:
+# ------------Start-----------------
 def addVectors(angle1, length1, angle2, length2):
     """
     Returns the sum of two vectors
@@ -14,14 +15,14 @@ def addVectors(angle1, length1, angle2, length2):
     :return:
     """
 
-    x  = math.sin(angle1) * length1 + math.sin(angle2) * length2
-    y  = math.cos(angle1) * length1 + math.cos(angle2) * length2
+    x = math.sin(angle1) * length1 + math.sin(angle2) * length2
+    y = math.cos(angle1) * length1 + math.cos(angle2) * length2
     
-    angle  = 0.5 * math.pi - math.atan2(y, x)
+    angle = 0.5 * math.pi - math.atan2(y, x)
     length = math.hypot(x, y)
 
     return (angle, length)
-#-----------End-----------------
+# -----------End-----------------
 
 class Environment():
     """
