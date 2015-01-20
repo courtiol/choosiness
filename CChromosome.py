@@ -52,4 +52,4 @@ class CChromosome:
             n_str += str(locus) + " locus evolves? " + str(locus_evolves) + "\n"
         return n_str
 
-        # -------------------------------End of class CChromosome-------------------------------------
+# -------------------------------End of class CChromosome-------------------------------------
