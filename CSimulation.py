@@ -40,8 +40,8 @@ def rotate(array, n):
 
 class CSimulationSettings:
     def __init__(self):
-        self.width = 1000;
-        self.height = 1000;
+        self.width = 1000
+        self.height = 1000
         self.size_of_population = 400
         self.sex_ratio = 0.5
         self.s = 0.999
