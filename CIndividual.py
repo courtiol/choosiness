@@ -66,7 +66,7 @@ class CIndividual:
         :param s: survival probability
         :return:
         """
-        if random.random() > s:  # 1-s is the probability to die in one timestep
+        if random.random() > s:  # 1-s is the probability to die in one time step
             self.state = DEAD
         elif self.state == IN_LATENCY and random.random() > self.l:
             self.state = ALIVE
@@ -85,7 +85,7 @@ class CIndividual:
             return True
 
     def mate(self):
-        # In latency after mating but latency can be remove by update so latency proba
+        # In latency after mating but latency can be remove by update so latency probability
         # is the same at the mating step as for other states
         self.state = IN_LATENCY
 
