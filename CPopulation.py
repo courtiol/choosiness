@@ -53,7 +53,7 @@ class CPopulation:
         #Add n individuals
         for i in range(n):
             individual = self.__createIndividual()
-            if individual.getGender() == CIndividual.MALE:
+            if individual.get_gender() == CIndividual.MALE:
                 self.males.append(individual)
             else:
                 self.females.append(individual)
@@ -112,7 +112,7 @@ class CPopulation:
         :return:
         """
         individual = self.__createIndividual()
-        if individual.getGender() == CIndividual.MALE:
+        if individual.get_gender() == CIndividual.MALE:
             self.males.append(individual)
         else:
             self.females.append(individual)
@@ -146,8 +146,8 @@ class CPopulation:
         :return:
         """
         if male_parent.accepts_for_mating(female_parent) and female_parent.accepts_for_mating(male_parent):
-            male_parent.mate(female_parent)
-            female_parent.mate(male_parent)
+            male_parent.mate()
+            female_parent.mate()
             a = 1/2 #weighted average of quality of the male and female
             #Compute quality of possible offspring
             quality_of_couple = male_parent.q*a+female_parent.q*(1-a)
