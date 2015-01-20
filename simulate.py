@@ -2,7 +2,7 @@ import CSimulation
 import time
 import pickle
 
-#Start simulation
+# Start simulation
 simulation = CSimulation.CSimulation()
 
 """
@@ -18,10 +18,10 @@ simulation.settings = settings
 print("Start simulation")
 print(simulation)
 simulation.run()
-#simulation.run_n_timesteps(500)
-#pickle.dump( simulation.population, open( "saved/population"+str(simulation.settings.step_counter)+".p", "wb" ) )
-#pickle.dump( simulation.env, open( "saved/environment"+str(simulation.settings.step_counter)+".p", "wb" ) )
-#pickle.dump( simulation.settings, open( "saved/settings"+str(simulation.settings.step_counter)+".p", "wb" ) )
+# simulation.run_n_timesteps(500)
+# pickle.dump( simulation.population, open( "saved/population"+str(simulation.settings.step_counter)+".p", "wb" ) )
+# pickle.dump( simulation.env, open( "saved/environment"+str(simulation.settings.step_counter)+".p", "wb" ) )
+# pickle.dump( simulation.settings, open( "saved/settings"+str(simulation.settings.step_counter)+".p", "wb" ) )
 
 """
 while True:
@@ -41,5 +41,4 @@ while True:
     print("Turn graphics on")
     simulation.show_diagrams_graphics()
 """
-#End simulation
-
+# End simulation
