@@ -41,7 +41,9 @@ class Alias(object):
         ai = self.alias[nint]
         return ai[1 if (n - nint) < ai[0] else 2]
 
-# stochiastic acceptance method
+# stochastic acceptance method
+
+
 class Roulette(object):
     def __init__(self, keys):
         keys = list(keys)
@@ -66,4 +68,4 @@ a = Alias(vals)
 r = Roulette(vals)
 
 def test(n):
-    return Counter(a.get() for _ in range(n)) # xrange changed to range for python3 compatibility
+    return Counter(a.get() for _ in range(n))  # xrange changed to range for python3 compatibility
