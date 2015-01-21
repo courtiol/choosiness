@@ -17,7 +17,7 @@ class CVisualizationWithPygame(CVisualizationBaseClass):
         CVisualizationBaseClass.__init__(self, simulation)
 
     # overwrite
-    def initDisplay(self):
+    def init_display(self):
         global screen
         screen = pygame.display.set_mode((self.simulation.settings.width, self.simulation.settings.height))
         pygame.display.set_caption("Simulation with "+str(self.simulation.population.get_current_females_size()) +
@@ -29,7 +29,7 @@ class CVisualizationWithPygame(CVisualizationBaseClass):
         global screen
         screen = pygame.display.set_mode((self.simulation.settings.width, self.simulation.settings.height))
 
-    def doInteractionWithUser(self):
+    def do_interaction_with_user(self):
         """
         Encapsulates all possible user interactions. (Hot keys, click events)
         :return:
