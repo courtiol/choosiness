@@ -21,7 +21,7 @@ def add_vectors(angle1, length1, angle2, length2):
 
     return angle, length
 
-
+#df
 # -----------End-----------------
 
 class Environment():
@@ -30,6 +30,12 @@ class Environment():
     """
 
     def __init__(self, width, height):
+        """
+
+        :param width: the width of the environment
+        :param height: the highz
+        :return:
+        """
         self.width = width
         self.height = height
         self.objectSize = 7
@@ -37,11 +43,18 @@ class Environment():
     def _move(self, item):
         """
         Update position based on speed, angle
+        :param item: the object/item whose position should be updated
+        :return:
         """
         item.x += math.sin(item.angle) * item.speed
         item.y -= math.cos(item.angle) * item.speed
 
     def place_item_in_environment(self, item):
+        """
+        The method places an object/item on some place in the environment. Here it will be just a random point.
+        :param item: the object that should be placed in the environment
+        :return:
+        """
         x = random.uniform(self.objectSize, self.width - self.objectSize)
         y = random.uniform(self.objectSize, self.height - self.objectSize)
         item.x = x
