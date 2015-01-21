@@ -20,7 +20,7 @@ class CPopulation:
     def __init__(self, population_size, sex_ratio, s, latency_males,
                  latency_females, mutation_range, mutation_rate, set_initial_position_in_the_environment):
         """
-        TO DO
+        ToDo
         :param population_size: Integer which is the maximal number of the population
         :return:
         """
