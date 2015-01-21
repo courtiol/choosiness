@@ -314,6 +314,7 @@ class CTestVisualization(CVisualizationWithPygame):
     def _plot(self, data, colour, title, x_axis_label):  # ToDo: fix this as data and colour are not used
         self.canvas.figure.clf()  # clears the previous diagram
         # n, bins, patches = plt.hist(data, self.num_bins, normed=False, facecolor=colour, alpha=0.5)
+        plt.hist(data, self.num_bins, normed=False, facecolor=colour, alpha=0.5)
         plt.xlabel(x_axis_label)
         plt.ylabel("Frequency")
         plt.title(title)
