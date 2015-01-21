@@ -38,7 +38,7 @@ class CVisualizationWithPygame(CVisualizationBaseClass):
                 self.simulation.quit_simulation()
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 (mouseX, mouseY) = pygame.mouse.get_pos()
-                self.simulation.selectIndividual(mouseX, mouseY)
+                self.simulation.select_individual(mouseX, mouseY)
             elif event.type == pygame.MOUSEBUTTONUP:
                 self.simulation.selected_individual = None
             elif event.type == pygame.KEYDOWN:
