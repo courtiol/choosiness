@@ -11,7 +11,7 @@ class CChromosome:
     def __init__(self, mutation_range, mutation_rate, loci=None):
         if loci is None:
             loci = []
-        self.loci = loci  # has the form (locus,locus_evolves), locus is a value in [0,1]
+        self.loci = loci  # has the form (locus, locus_evolves), locus is a value in [0,1]
         self.mutation_range = mutation_range  # mutation range: for details go to the method mutate
         self.mutation_rate = mutation_rate  # mutation rate: for details go to the method mutate
 
@@ -43,7 +43,7 @@ class CChromosome:
             else:
                 novi_loci.append((locus_b * 1, locus_b_evolves))
         new_chromosome = CChromosome(self.mutation_range, self.mutation_rate, novi_loci)
-        new_chromosome.mutate()
+        new_chromosome.mutate()  # ToDo: put this outside this function!!!!
         return new_chromosome
 
     def __str__(self):
