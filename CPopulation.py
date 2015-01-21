@@ -152,7 +152,7 @@ class CPopulation:
             female_parent.mate()
             a = 1/2  # weighted average of quality of the male and female
             # ToDo: the paramater "a" should be global and defined with the other ones!
-            # ToDo: you should also consider the multiplicative case
+            # ToDo: you should also consider the multiplicative case (quality of offspring = product of parents quality)
             # Compute quality of possible offspring
             quality_of_couple = male_parent.q*a+female_parent.q*(1-a)
             if len(self.couples) > self.maximal_number_of_saved_couples:
