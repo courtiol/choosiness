@@ -110,9 +110,9 @@ class C2DVisualizationOfSimulation(CVisualizationWithPygame):
         CVisualizationWithPygame.__init__(self,simulation)
         self.colour_of_environment = (255,255,255)
         self.colour_of_males = (0, 0, 255) #blue
-        self.colour_male_latency = (0,200,255)
+        self.thickness_latency = 2
+        self.thickness_available = 0
         self.colour_of_females = (255, 0, 0) #red
-        self.colour_female_latency = (255,200,0)
         self.colour_of_dead_individual = (0, 0, 0) #black
 
     def drawSimulation(self):
@@ -147,18 +147,22 @@ class C2DVisualizationOfSimulation(CVisualizationWithPygame):
         :param individual:individual which is drawn.
         :return:
         """
-        thickness = 0
+        # thickness = 2
         if (individual.get_gender() == CIndividual.MALE):
             if individual.state == CIndividual.IN_LATENCY:
-                pygame.draw.circle(screen, self.colour_male_latency, (int(individual.x), int(individual.y)), self.simulation.env.objectSize, thickness)
+                pygame.draw.circle(screen, self.colour_of_males, (int(individual.x), int(individual.y)),
+                                   self.simulation.env.objectSize, self.thickness_latency)
             else:
-                pygame.draw.circle(screen, self.colour_of_males, (int(individual.x), int(individual.y)), self.simulation.env.objectSize, thickness)
+                pygame.draw.circle(screen, self.colour_of_males, (int(individual.x), int(individual.y)),
+                                   self.simulation.env.objectSize, self.thickness_available)
             self.printTextOnScreen(str(round(individual.q,4)), int(individual.x), int(individual.y), 15)
         else:
             if individual.state == CIndividual.IN_LATENCY:
-                pygame.draw.circle(screen, self.colour_female_latency, (int(individual.x), int(individual.y)), self.simulation.env.objectSize, thickness)
+                pygame.draw.circle(screen, self.colour_of_females, (int(individual.x), int(individual.y)),
+                                   self.simulation.env.objectSize, self.thickness_latency)
             else:
-                pygame.draw.circle(screen, self.colour_of_females, (int(individual.x), int(individual.y)), self.simulation.env.objectSize, thickness)
+                pygame.draw.circle(screen, self.colour_of_females, (int(individual.x), int(individual.y)),
+                                   self.simulation.env.objectSize, self.thickness_available)
             self.printTextOnScreen(str(round(individual.phi,4)), int(individual.x), int(individual.y), 15)
 
     def __show_information_about_selected_individual(self):
