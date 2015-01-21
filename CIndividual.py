@@ -15,7 +15,7 @@ class CIndividual:
     can be created by its "parents". The inheritable information of each individual is saved in a pair of
     chromosomes.
     """
-    def __init__(self, gender, latency, mutation_range, mutation_rate, mother=None, father=None):
+    def __init__(self, gender, latency, mutation_range, mutation_rate, mother=None, father=None):  # ToDo: pass survival proba
         """
 
         :type self: object
