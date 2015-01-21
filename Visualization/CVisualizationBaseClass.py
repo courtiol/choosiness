@@ -8,7 +8,7 @@ should be derived from the the following abstract base class:
 # -------------------------------------abstract base class-----------------------------------
 
 
-class CVisualizationBaseClass:
+class CVisualizationBaseClass(object):
     """
     Abstract base class for any visualization of the simulation
     """

@@ -57,7 +57,7 @@ class CVisualizationWithPygame(CVisualizationBaseClass):
                     print(str(self.simulation.settings.step_counter))
             if self.simulation.selected_individual:
                 self.simulation.give_information_about_selected_individual()
-                self.__show_information_about_selected_individual()
+                self._show_information_about_selected_individual()
 
     def print_text_on_screen(self, text, pos_x, pos_y, size=30, colour=(0, 0, 0)):
         large_text = pygame.font.Font('freesansbold.ttf', size)
@@ -174,7 +174,7 @@ class C2DVisualizationOfSimulation(CVisualizationWithPygame):
                                    self.simulation.env.objectSize, self.thickness_available)
             self.print_text_on_screen(str(round(individual.phi, 4)), int(individual.x), int(individual.y), 15)
 
-    def __show_information_about_selected_individual(self):
+    def _show_information_about_selected_individual(self):
         if self.simulation.selected_individual is not None:
             print(str(self.simulation.selected_individual))
 
