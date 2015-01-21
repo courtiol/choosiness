@@ -274,6 +274,8 @@ import matplotlib.backends.backend_agg as agg
 import pylab
 import matplotlib.pyplot as plt
 
+# useful tutorial for matplotlib http://matplotlib.org/users/pyplot_tutorial.html
+
 
 class CTestVisualization(CVisualizationWithPygame):
     def __init__(self, simulation):
