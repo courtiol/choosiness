@@ -12,17 +12,14 @@ def add_vectors(angle1, length1, angle2, length2):
     :param two vectors in polar coordinates
     :return: sum of vectors
     """
-
     x = math.sin(angle1) * length1 + math.sin(angle2) * length2
     y = math.cos(angle1) * length1 + math.cos(angle2) * length2
-
     angle = 0.5 * math.pi - math.atan2(y, x)
     length = math.hypot(x, y)
-
     return angle, length
 
-#df
 # -----------End-----------------
+
 
 class Environment():
     """
@@ -59,10 +56,11 @@ class Environment():
         y = random.uniform(self.objectSize, self.height - self.objectSize)
         item.x = x
         item.y = y
-        item.direction = (1, 2)
-        item.speed = 5
+        item.direction = (1, 2)  # ToDo: changed that ?
+        item.speed = 5  # ToDo: general parameter
         item.angle = random.uniform(0, math.pi * 2)
 
+    # ALEX checked untill there!
     def update(self, item1, item2, collision_handler):
         """
         Moves individuals and tests for collisions with the walls and each other
