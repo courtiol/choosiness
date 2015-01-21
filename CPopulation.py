@@ -151,7 +151,7 @@ class CPopulation:
             male_parent.mate()
             female_parent.mate()
             a = 1/2  # weighted average of quality of the male and female
-            # ToDo: the paramater "a" should be global and defined with the other ones!
+            # ToDo: the parameter "a" should be global and defined with the other ones!
             # ToDo: you should also consider the multiplicative case (quality of offspring = product of parents quality)
             # Compute quality of possible offspring
             quality_of_couple = male_parent.q*a+female_parent.q*(1-a)
