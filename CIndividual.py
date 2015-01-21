@@ -2,11 +2,11 @@ import random
 import CChromosome
 
 # constants:
-ALIVE = True  # We try to code states as boolean using "None" as the third state (ternary coding)
-DEAD = False
-IN_LATENCY = None
-MALE = True
-FEMALE = False
+ALIVE = 0
+DEAD = 1
+IN_LATENCY = 2
+MALE = 1
+FEMALE = 0
 
 
 class CIndividual:
@@ -15,7 +15,6 @@ class CIndividual:
     can be created by its "parents". The inheritable information of each individual is saved in a pair of
     chromosomes.
     """
-
     def __init__(self, gender, latency, mutation_range, mutation_rate, mother=None, father=None):
         """
 
@@ -25,17 +24,16 @@ class CIndividual:
         self.gender = gender
 
         if mother is None or father is None:
-            # 4 loci are needed
+            # 4 loci are needed (phi_a_male, phi_b_male, phi_a_female, phi_b_female)
             # each chromosome stores all loci
-            self.ch1 = CChromosome.CChromosome(mutation_range, mutation_rate,
-                                               [(0, False), (0.5, True), (0, False), (0.5, True)])
-            self.ch2 = CChromosome.CChromosome(mutation_range, mutation_rate,
-                                               [(0, False), (0.5, True), (0, False), (0.5, True)])
+            chromosome = [(0, False), (0.5, True), (0, False), (0.5, True)]
+            self.ch1 = CChromosome.CChromosome(mutation_range, mutation_rate, list(chromosome))
+            self.ch2 = CChromosome.CChromosome(mutation_range, mutation_rate, list(chromosome))
         else:
             # random segregation as if loci where independent (on different chromosomes)
             self.ch1 = mother.ch1 + mother.ch2
             self.ch2 = father.ch1 + father.ch2
-
+            # ToDo: add mutation here (after removing it from __add__)!
         self.l = latency  # latency #change
         self.q = random.uniform(0, 1)  # correct?
         self._express_genes()
@@ -57,7 +55,7 @@ class CIndividual:
             phi_b_ch2 = self.ch2.loci[3][0]
         self.phi = ((phi_a_ch1 + phi_a_ch2) * self.q + phi_b_ch1 + phi_b_ch2) / 2
 
-    def get_gender(self):
+    def get_gender(self):  # ToDo: remove!!
         return self.gender
 
     def update_state(self, s):
