@@ -21,6 +21,9 @@ def rotate(array, n):
 
 
 class CSimulationSettings:
+    """
+    Stores the settings of the simulation
+    """
     def __init__(self):
         self.width = 800
         self.height = 800
@@ -46,12 +49,10 @@ class CSimulation:
         self.settings = CSimulationSettings()
 
         self.graphics_just_text = CSimpleVisualization(self)
-        self.graphics_2D = C2DVisualizationOfSimulation(self)
-        self.graphics_diagram = CDiagramVisualizationOfSimulation(self)
         self.visualizations_of_simulation = []
         # different possible visualizations of the simulation
-        self.visualizations_of_simulation.append(self.graphics_2D)
-        self.visualizations_of_simulation.append(self.graphics_diagram)
+        self.visualizations_of_simulation.append(C2DVisualizationOfSimulation(self))
+        self.visualizations_of_simulation.append(CDiagramVisualizationOfSimulation(self))
         self.visualizations_of_simulation.append(CNoVisualizationOfSimulation(self))  # no visualization
         self.visualizations_of_simulation.append(CVisualizationWithMatplotlib(self))
         self.graphicsSimulation = self.visualizations_of_simulation[0]
@@ -93,20 +94,6 @@ class CSimulation:
         :return:
         """
         self.graphicsSimulation = self.graphics_just_text
-
-    def show_2D_graphics(self):
-        """
-        Turnes the graphic on. The simulation runs slower in this mode
-        :return:
-        """
-        self.graphicsSimulation = self.graphics_2D
-
-    def show_diagrams_graphics(self):
-        """
-        Shows only diagrams
-        :return:
-        """
-        self.graphicsSimulation = self.graphics_diagram
 
     def _perform_time_step(self):
         """
