@@ -282,13 +282,16 @@ class CTestVisualization(CVisualizationWithPygame):
         self.ax = self.fig.add_subplot(111)
         self.canvas = agg.FigureCanvasAgg(self.fig)
         self.num_bins = 20
-        self.update_in_every_n_step = 10  # it not necessary to update in every step the graphics
+        # it not necessary to update in every step the graphics
+        # take expected life = average time of one generation as update rate
+        self.update_in_every_n_step = int(round(1/(1-self.simulation.settings.s)))
         self.counter = 0
 
     def draw_simulation(self):
-        self.counter = (self.counter+1) % self.update_in_every_n_step
         if self.counter != 0:
             return
+        #ToDo: Make all plots as subplots. (See here: http://matplotlib.org/examples/pylab_examples/subplots_demo.html)
+        self.counter = (self.counter+1) % self.update_in_every_n_step
         # female phi-plot
         females = self._get_female_choosiness_array()
         female_surf = self._plot(females, 'red', 'Choosiness of Females', 'choosiness')
