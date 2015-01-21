@@ -18,7 +18,7 @@ class CVisualizationWithPygame(CVisualizationBaseClass):
         CVisualizationBaseClass.__init__(self,simulation)
 
     #overwrite
-    def initDisplay(self):
+    def init_display(self):
         global screen
         screen = pygame.display.set_mode((self.simulation.settings.width, self.simulation.settings.height))
         pygame.display.set_caption("Simulation with "+str		(self.simulation.population.get_current_females_size())+' females in red and '+str(self.simulation.population.get_current_males_size())+' males in blue')
@@ -28,7 +28,7 @@ class CVisualizationWithPygame(CVisualizationBaseClass):
         global screen
         screen = pygame.display.set_mode((self.simulation.settings.width, self.simulation.settings.height))
 
-    def doInteractionWithUser(self):
+    def do_interaction_with_user(self):
         """
         Encapsulates all possible user interactions. (Hot keys, click events)
         :return:
@@ -115,7 +115,7 @@ class C2DVisualizationOfSimulation(CVisualizationWithPygame):
         self.colour_of_females = (255, 0, 0) #red
         self.colour_of_dead_individual = (0, 0, 0) #black
 
-    def drawSimulation(self):
+    def draw_simulation(self):
         self.__drawEnvironment()
         self.__drawPopulation(self.simulation.population)
         pygame.display.flip()
@@ -187,7 +187,7 @@ class CDiagramVisualizationOfSimulation(CVisualizationWithPygame):
         self.text_size_bar_label = int(self.text_size*1)
         self.maximal_height = round(self.window_height*0.6)
 
-    def drawSimulation(self):
+    def draw_simulation(self):
         screen.fill(self.colour_of_background)
         pygame.display.set_caption("Simulation with "+str(self.simulation.population.get_current_females_size())+' females in red and '+str(self.simulation.population.get_current_males_size())+' males in blue')
         self.printTextOnScreen("Choosiness of females(red) and males(blue). ", 170,10, self.text_size)
@@ -271,7 +271,7 @@ class CTestVisualization(CVisualizationWithPygame):
         self.update_in_every_n_step = 10 #it not necessary to update in every step the graphics
         self.counter = 0
 
-    def drawSimulation(self):
+    def draw_simulation(self):
         self.counter = (self.counter+1)%self.update_in_every_n_step
         if self.counter != 0:
             return

@@ -5,7 +5,9 @@ In this module you find different graphical representations of the simulation. E
 should be derived from the the following abstract base class:
 """
 
-#-------------------------------------abstract base class-----------------------------------
+# -------------------------------------abstract base class-----------------------------------
+
+
 class CVisualizationBaseClass:
     """
     Abstract base class for any visualization of the simulation
@@ -14,34 +16,39 @@ class CVisualizationBaseClass:
     def __init__(self, simulation):
         self.simulation = simulation
 
-    def printInformationAboutPopulation(self):
+    def print_information_about_population(self):
         print(self.simulation.population)
 
-    #overwrite me
-    #These functions are necessary
-    def drawSimulation(self):
+    # overwrite me
+    # These functions are necessary
+    def draw_simulation(self):
         pass
-    def initDisplay(self):
+
+    def init_display(self):
         pass
-    def doInteractionWithUser(self):
+
+    def do_interaction_with_user(self):
         pass
 
 """
 Very simple example
 """
+
+
 class CSimpleVisualization(CVisualizationBaseClass):
     """
     . The most simple "visualization". The class just prints out information about the simulation in the terminal
     """
     def __init__(self, simulation):
-        self.simulation = simulation
+        super(CSimpleVisualization,self).__init__(simulation)
 
-    def initDisplay(self):
+    def init_display(self):
         print("Starting the simulation:")
 
-    def doInteractionWithUser(self):
-        pass#no interaction implemented
+    # no interaction implemented
+    def do_interaction_with_user(self):
+        pass
 
-    def drawSimulation(self):
-        #print(self.simulation.step_counter)
+    def draw_simulation(self):
+        # print(self.simulation.step_counter)
         pass

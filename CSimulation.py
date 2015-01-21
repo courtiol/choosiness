@@ -87,7 +87,7 @@ class CSimulation:
         self.pause = False
 
         #display information
-        self.graphicsSimulation.initDisplay()
+        self.graphicsSimulation.init_display()
 
     def next_visualization(self):
         self.visualization_pointer = (self.visualization_pointer+1)%len(self.visualizations_of_simulation)
@@ -130,7 +130,7 @@ class CSimulation:
         """
         self.population.update_states()
         self.env.update(self.population.males, self.population.females, self.collision_occured)
-        self.graphicsSimulation.drawSimulation()
+        self.graphicsSimulation.draw_simulation()
         self.settings.step_counter += 1
 
     def run(self):
@@ -141,7 +141,7 @@ class CSimulation:
         while self.running:
             if self.pause == False:
                 self.__performTimeStep()
-            self.graphicsSimulation.doInteractionWithUser()
+            self.graphicsSimulation.do_interaction_with_user()
 
     def run_n_timesteps(self, n):
         """
@@ -153,7 +153,7 @@ class CSimulation:
             if self.running:
                 if self.pause == False:
                     self.__performTimeStep()
-                self.graphicsSimulation.doInteractionWithUser()
+                self.graphicsSimulation.do_interaction_with_user()
             
 
     def collision_occured(self, male, female):
@@ -183,7 +183,7 @@ class CSimulation:
         self.selected_individual = self.env.find_item(x, y, [self.population])
 
     def showInformationAboutPopulation(self):
-        self.graphicsSimulation.printInformationAboutPopulation()
+        self.graphicsSimulation.print_information_about_population()
 
     def save(self):
         print("Save simulation")
