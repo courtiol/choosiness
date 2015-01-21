@@ -1,7 +1,9 @@
 import random
 from collections import Counter
 
+
 # alias method
+
 class Alias(object):
     def __init__(self, keys):
         # make either a copy of 'keys' or turn it into a list if it's a
