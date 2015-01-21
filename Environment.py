@@ -8,11 +8,9 @@ import random
 def add_vectors(angle1, length1, angle2, length2):
     """
     Returns the sum of two vectors
-    :param angle1:
-    :param length1:
-    :param angle2:
-    :param length2:
-    :return:
+    :rtype : vector in polar coordinates (angle, length)
+    :param two vectors in polar coordinates
+    :return: sum of vectors
     """
 
     x = math.sin(angle1) * length1 + math.sin(angle2) * length2
@@ -130,8 +128,8 @@ class Environment():
             collision_handler(p1, p2)
             angle = math.atan2(dy, dx) + 0.5 * math.pi
 
-            (p1.angle, p1.speed) = add_vectors(p1.angle, 0, angle, p2.speed)
-            (p2.angle, p2.speed) = add_vectors(p2.angle, 0, angle + math.pi, p1.speed)
+            p1.angle, p1.speed = add_vectors(p1.angle, 0, angle, p2.speed)
+            p2.angle, p2.speed = add_vectors(p2.angle, 0, angle + math.pi, p1.speed)
 
             overlap = 0.5 * (2 * self.objectSize - dist + 1)
             p1.x += math.sin(angle) * overlap

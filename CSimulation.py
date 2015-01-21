@@ -1,6 +1,4 @@
-import Environment
-import CPopulation
-import CIndividual
+import Environment, CPopulation
 from Visualization.VisualizationWithPygame import C2DVisualizationOfSimulation
 from Visualization.CVisualizationBaseClass import CSimpleVisualization
 from Visualization.VisualizationWithPygame import CDiagramVisualizationOfSimulation
@@ -9,23 +7,7 @@ from Visualization.VisualizationWithPygame import CTestVisualization
 import pickle
 
 
-#----------------------------CSimulation-------------------------------------
-# Parameters of the model:
-# survival rate s (in CSimulation)
-# latency for males and females (in CSimulation)
-#
-# Factors that influence the encounter rate e
-# size_of_population (in CSimulation)
-# width & height of area (in CSimulation)
-# size of individuals in the simulation (in Environment)
-# speed of individuals in the simulation (in Environment)
-# sex_ratio (in CSimulation)
-# populationSize (in CSimulation)
-#
-#Parameters that influence the mutation:
-#
-#mutation_rate (in CSimulation)
-#mutation_range (in CSimulation)
+# ----------------------------CSimulation-------------------------------------
 
 
 def rotate(array, n):
@@ -67,36 +49,39 @@ class CSimulation:
         self.graphics_2D = C2DVisualizationOfSimulation(self)
         self.graphics_diagram = CDiagramVisualizationOfSimulation(self)
         self.visualizations_of_simulation = []
-        #different possible visualizations of the simulation
+        # different possible visualizations of the simulation
         self.visualizations_of_simulation.append(self.graphics_2D)
         self.visualizations_of_simulation.append(self.graphics_diagram)
-        self.visualizations_of_simulation.append(CNoVisualizationOfSimulation(self)) #no visualization
+        self.visualizations_of_simulation.append(CNoVisualizationOfSimulation(self))  # no visualization
         self.visualizations_of_simulation.append(CTestVisualization(self))
         self.graphicsSimulation = self.visualizations_of_simulation[0]
-        self.visualization_pointer = 0 #which visualization
+        self.visualization_pointer = 0  # which visualization
 
-        #set the environment in which the population is placed
+        # set the environment in which the population is placed
         self.env = Environment.Environment(self.settings.width, self.settings.height)
 
-        #create a population of males on random positions in that environment
-        self.population = CPopulation.CPopulation(self.settings.size_of_population,self.settings.sex_ratio, self.settings.s, self.settings.latency_males, self.settings.latency_females, self.settings.mutation_range, self.settings.mutation_rate, self.env.place_item_in_environment)
+        # create a population of males on random positions in that environment
+        self.population = CPopulation.CPopulation(self.settings.size_of_population, self.settings.sex_ratio,
+                                                  self.settings.s, self.settings.latency_males,
+                                                  self.settings.latency_females, self.settings.mutation_range,
+                                                  self.settings.mutation_rate, self.env.place_item_in_environment)
 
-        #information about the current simulation
+        # information about the current simulation
         self.selected_individual = None
         self.running = True
         self.pause = False
 
-        #display information
-        self.graphicsSimulation.initDisplay()
+        # display information
+        self.graphicsSimulation.init_display()
 
     def next_visualization(self):
-        self.visualization_pointer = (self.visualization_pointer+1)%len(self.visualizations_of_simulation)
+        self.visualization_pointer = (self.visualization_pointer+1) % len(self.visualizations_of_simulation)
         self.graphicsSimulation = self.visualizations_of_simulation[self.visualization_pointer]
         self.graphicsSimulation.init_screen()
         print(self.graphicsSimulation)
 
     def prior_visualization(self):
-        self.visualization_pointer = (self.visualization_pointer-1)%len(self.visualizations_of_simulation)
+        self.visualization_pointer = (self.visualization_pointer-1) % len(self.visualizations_of_simulation)
         self.graphicsSimulation = self.visualizations_of_simulation[self.visualization_pointer]
         self.graphicsSimulation.init_screen()
         print(self.graphicsSimulation)
@@ -123,14 +108,14 @@ class CSimulation:
         """
         self.graphicsSimulation = self.graphics_diagram
 
-    def __performTimeStep(self):
+    def _perform_time_step(self):
         """
         Performes one iteration of the simulation
         :return:
         """
         self.population.update_states()
         self.env.update(self.population.males, self.population.females, self.collision_occured)
-        self.graphicsSimulation.drawSimulation()
+        self.graphicsSimulation.draw_simulation()
         self.settings.step_counter += 1
 
     def run(self):
@@ -139,9 +124,9 @@ class CSimulation:
         :return:
         """
         while self.running:
-            if self.pause == False:
-                self.__performTimeStep()
-            self.graphicsSimulation.doInteractionWithUser()
+            if not self.pause:
+                self._perform_time_step()
+            self.graphicsSimulation.do_interaction_with_user()
 
     def run_n_timesteps(self, n):
         """
@@ -151,10 +136,9 @@ class CSimulation:
         """
         for i in range(n):
             if self.running:
-                if self.pause == False:
-                    self.__performTimeStep()
-                self.graphicsSimulation.doInteractionWithUser()
-            
+                if not self.pause:
+                    self._perform_time_step()
+                self.graphicsSimulation.do_interaction_with_user()
 
     def collision_occured(self, male, female):
         """
@@ -166,7 +150,8 @@ class CSimulation:
         :return:
         """
         self.settings.collision_counter += 1
-        self.settings.average_number_of_collisions_per_timestep = self.settings.collision_counter/self.settings.step_counter
+        self.settings.average_number_of_collisions_per_timestep = \
+            self.settings.collision_counter/self.settings.step_counter
         self.population.check_for_mating(male, female)
 
     def quit_simulation(self):
@@ -176,20 +161,25 @@ class CSimulation:
         self.pause = False if self.pause else True
 
     def give_information_about_selected_individual(self):
-        (mouseX, mouseY) = pygame.mouse.get_pos()
-        #do smth with it
+        """
+        Place holder for potential later use
+        :return:
+        """
+        # (mouseX, mouseY) = pygame.mouse.get_pos()
+        # do smth with it
+        pass
     
-    def selectIndividual(self,x,y):
+    def select_individual(self, x, y):
         self.selected_individual = self.env.find_item(x, y, [self.population])
 
-    def showInformationAboutPopulation(self):
-        self.graphicsSimulation.printInformationAboutPopulation()
+    def show_information_about_population(self):
+        self.graphicsSimulation.print_information_about_population()
 
     def save(self):
         print("Save simulation")
-        pickle.dump( self.population, open( "saved/population"+str(self.settings.step_counter)+".p", "wb" ) )
-        pickle.dump( self.env, open( "saved/environment"+str(self.settings.step_counter)+".p", "wb" ) )
-        pickle.dump( self.settings, open( "saved/settings"+str(self.settings.step_counter)+".p", "wb" ) )
+        pickle.dump(self.population, open("saved/population"+str(self.settings.step_counter)+".p", "wb"))
+        pickle.dump(self.env, open("saved/environment"+str(self.settings.step_counter)+".p", "wb"))
+        pickle.dump(self.settings, open("saved/settings"+str(self.settings.step_counter)+".p", "wb"))
 
     def __str__(self):
         z = "total population: "+str(self.settings.size_of_population)+"\n"
@@ -199,5 +189,3 @@ class CSimulation:
         z += "latency of females: "+str(self.settings.latency_females)+"\n"
         z += "area: "+str(self.settings.width)+"times"+str(self.settings.height)+"\n"
         return z
-
-

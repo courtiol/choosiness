@@ -1,7 +1,9 @@
 import random
 from collections import Counter
 
+
 # alias method
+
 class Alias(object):
     def __init__(self, keys):
         # make either a copy of 'keys' or turn it into a list if it's a
@@ -41,7 +43,9 @@ class Alias(object):
         ai = self.alias[nint]
         return ai[1 if (n - nint) < ai[0] else 2]
 
-# stochiastic acceptance method
+# stochastic acceptance method
+
+
 class Roulette(object):
     def __init__(self, keys):
         keys = list(keys)
@@ -66,4 +70,4 @@ a = Alias(vals)
 r = Roulette(vals)
 
 def test(n):
-    return Counter(a.get() for _ in range(n)) # xrange changed to range for python3 compatibility
+    return Counter(a.get() for _ in range(n))  # xrange changed to range for python3 compatibility
