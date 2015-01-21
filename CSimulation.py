@@ -3,7 +3,7 @@ from Visualization.VisualizationWithPygame import C2DVisualizationOfSimulation
 from Visualization.CVisualizationBaseClass import CSimpleVisualization
 from Visualization.VisualizationWithPygame import CDiagramVisualizationOfSimulation
 from Visualization.VisualizationWithPygame import CNoVisualizationOfSimulation
-from Visualization.VisualizationWithPygame import CTestVisualization
+from Visualization.VisualizationWithPygame import CVisualizationWithMatplotlib
 import pickle
 
 
@@ -22,8 +22,8 @@ def rotate(array, n):
 
 class CSimulationSettings:
     def __init__(self):
-        self.width = 1000
-        self.height = 1000
+        self.width = 800
+        self.height = 800
         self.size_of_population = 400
         self.sex_ratio = 0.5
         self.s = 0.999
@@ -53,7 +53,7 @@ class CSimulation:
         self.visualizations_of_simulation.append(self.graphics_2D)
         self.visualizations_of_simulation.append(self.graphics_diagram)
         self.visualizations_of_simulation.append(CNoVisualizationOfSimulation(self))  # no visualization
-        self.visualizations_of_simulation.append(CTestVisualization(self))
+        self.visualizations_of_simulation.append(CVisualizationWithMatplotlib(self))
         self.graphicsSimulation = self.visualizations_of_simulation[0]
         self.visualization_pointer = 0  # which visualization
 
