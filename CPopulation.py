@@ -19,6 +19,7 @@ class CPopulation:
 
     def __init__(self, population_size, sex_ratio, s, latency_males,
                  latency_females, mutation_range, mutation_rate, set_initial_position_in_the_environment):
+                 # ToDo: create a s_males and s_females!!!
         """
         ToDo
         :param population_size: Integer which is the maximal number of the population
@@ -31,14 +32,13 @@ class CPopulation:
         self.couples = []
         self.maximal_number_of_saved_couples = 1000
         self.sex_ratio = sex_ratio
-        self.s = s  # survival rate
+        self.s = s  # survival rate; ToDo: create a s_males and s_females!!!
         self.latency_males = latency_males
         self.latency_females = latency_females
         self.populationSize = population_size
         self.set_initial_position_in_the_environment = set_initial_position_in_the_environment
         self.mutation_range = mutation_range
         self.mutation_rate = mutation_rate
-
         self._add_individuals(self.populationSize)
 
     # choose for get_position_in_the_Environment any function that returns a tuple of coordinates in the environment
@@ -52,18 +52,18 @@ class CPopulation:
         # Add n individuals
         for i in range(n):
             individual = self._create_individual()
-            if individual.get_gender() == CIndividual.MALE:
+            if individual.get_gender() == CIndividual.MALE:  # ToDO do not use get_gender
                 self.males.append(individual)
             else:
                 self.females.append(individual)
 
-    def get_current_population_size(self):
+    def get_current_population_size(self):  # ToDO ?? do not use get_XX
         return len(self.males)+len(self.females)
 
-    def get_current_males_size(self):
+    def get_current_males_size(self):  # ToDO do not use get_XX
         return len(self.males)
 
-    def get_current_females_size(self):
+    def get_current_females_size(self):  # ToDO do not use get_XX
         return len(self.females)
 
     def _create_individual(self):
@@ -75,11 +75,13 @@ class CPopulation:
         2) Dead individuals need to be replaced
         :return: created individuals (an instance of CIndividual)
         """
-        (father, mother) = self.__choose_couple()
+        (father, mother) = self._choose_couple()
         if random.random() >= self.sex_ratio:
+            # ToDo: pass survival proba
             new_individual = CIndividual.CIndividual(CIndividual.MALE, self.latency_males,
                                                      self.mutation_range, self.mutation_rate, mother, father)
         else:
+            # ToDo: pass survival proba
             new_individual = CIndividual.CIndividual(CIndividual.FEMALE, self.latency_females,
                                                      self.mutation_range, self.mutation_rate, mother, father)
         self.set_initial_position_in_the_environment(new_individual)
@@ -95,15 +97,15 @@ class CPopulation:
             male.update_state(self.s)
             if male.state == CIndividual.DEAD:
                 del self.males[i]
-                self.__add_individual_of_next_generation()
+                self._add_individual_of_next_generation()
         for i, female in enumerate(self.females):
             female.update_state(self.s)
             if female.state == CIndividual.DEAD:
                 del self.females[i]
-                self.__add_individual_of_next_generation()
+                self._add_individual_of_next_generation()
 
     # Creates a new individual and appends it to "males" or "females"
-    def __add_individual_of_next_generation(self):
+    def _add_individual_of_next_generation(self):
         """
         Creates a new individual with the method "createIndividual". If the newly created individual is male it is
         appended to "males" otherwise it is appended to "females"
@@ -115,7 +117,7 @@ class CPopulation:
         else:
             self.females.append(individual)
 
-    def __choose_couple(self):
+    def _choose_couple(self):
         """
         The method chooses randomly a couple with the alias method. This means couples with higher quality are more
         likely to be selected. The method is called when an individual is created.
@@ -123,7 +125,8 @@ class CPopulation:
         """
         if len(self.couples) == 0:
             print("No couple in queue => Create individual with initial values")
-            return None, None  # ToDo: Better possible
+            return None, None  # ToDo: Better possible //
+            #  ToDo ALEX: No, you should keep these places free and fill them up later on!!
         else:
             # most stupid implementation since Alias is created every time even when "couples"
             # doesn't change => ToDo. Change
@@ -148,13 +151,15 @@ class CPopulation:
             male_parent.mate()
             female_parent.mate()
             a = 1/2  # weighted average of quality of the male and female
+            # ToDo: the parameter "a" should be global and defined with the other ones!
+            # ToDo: you should also consider the multiplicative case (quality of offspring = product of parents quality)
             # Compute quality of possible offspring
             quality_of_couple = male_parent.q*a+female_parent.q*(1-a)
             if len(self.couples) > self.maximal_number_of_saved_couples:
-                self.__update_couple_list()
+                self._update_couple_list()
             self.couples.append(((male_parent, female_parent), quality_of_couple))
 
-    def __update_couple_list(self):
+    def _update_couple_list(self):
         """
         placeholder for the case that the size of self.couples exceeds its maximal size
 
