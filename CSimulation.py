@@ -124,7 +124,7 @@ class CSimulation:
         :return:
         """
         while self.running:
-            if self.pause == False:
+            if not self.pause:
                 self._perform_time_step()
             self.graphicsSimulation.do_interaction_with_user()
 
