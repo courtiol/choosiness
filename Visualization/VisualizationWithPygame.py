@@ -274,6 +274,8 @@ import matplotlib.backends.backend_agg as agg
 import pylab
 import matplotlib.pyplot as plt
 
+# useful tutorial for matplotlib http://matplotlib.org/users/pyplot_tutorial.html
+
 
 class CTestVisualization(CVisualizationWithPygame):
     def __init__(self, simulation):
@@ -292,43 +294,44 @@ class CTestVisualization(CVisualizationWithPygame):
             return
         #ToDo: Make all plots as subplots. (See here: http://matplotlib.org/examples/pylab_examples/subplots_demo.html)
         self.counter = (self.counter+1) % self.update_in_every_n_step
-        # female phi-plot
-        females = self._get_female_choosiness_array()
-        female_surf = self._plot(females, 'red', 'Choosiness of Females', 'choosiness')
-        screen.blit(female_surf, (0, 0))
 
-        # male phi-plot
-        males = self._get_male_choosiness_array()
-        male_surf = self._plot(males, 'blue', 'Choosiness of Males', 'choosiness')
-        screen.blit(male_surf, (400, 0))
+        # collect data for plots
+        females_choosiness = self._get_female_choosiness_array()
+        males_choosiness = self._get_male_choosiness_array()
+        females_quality = self._get_female_quality_array()
+        males_quality = self._get_male_quality_array()
 
-        # female q-plot
-        females = self._get_female_quality_array()
-        female_surf = self._plot(females, 'red', 'Quality of Females', 'quality')
-        screen.blit(female_surf, (0, 400))
+        # clears the previous diagram
+        self.canvas.figure.clf()
 
-        # female q-plot
-        males = self._get_male_quality_array()
-        male_surf = self._plot(males, 'blue', 'Quality of Males', 'quality')
-        screen.blit(male_surf, (400, 400))
+        # make four subplots
+        f, axarr = plt.subplots(2, 2)
+        self._plot(females_choosiness, 'red', 'Choosiness of Females', 'choosiness', axarr[0, 0])
+        self._plot(males_choosiness, 'blue', 'Choosiness of Males', 'choosiness', axarr[0, 1])
+        self._plot(females_quality, 'red', 'Quality of Females', 'quality', axarr[1, 0])
+        self._plot(males_quality, 'blue', 'Quality of Males', 'quality', axarr[1, 1])
+
+        #draw the new diagram
+        self.canvas.draw()
+        renderer = self.canvas.get_renderer()
+        raw_data = renderer.tostring_rgb()
+        size = self.canvas.get_width_height()
+        surf = pygame.image.fromstring(raw_data, size, "RGB")
+
+        screen.blit(surf, (0, 0))
+        #screen.blit(male_surf, (400, 0))
+        #screen.blit(female_surf, (0, 400))
+        #screen.blit(male_surf, (400, 400))
 
         pygame.display.flip()
 
-    def _plot(self, data, colour, title, x_axis_label):  # ToDo: fix this as data and colour are not used
-        self.canvas.figure.clf()  # clears the previous diagram
+    def _plot(self, data, colour, title, x_axis_label, fig):  # ToDo: fix this as data and colour are not used
         # n, bins, patches = plt.hist(data, self.num_bins, normed=False, facecolor=colour, alpha=0.5)
-        plt.hist(data, self.num_bins, normed=False, facecolor=colour, alpha=0.5)
-        plt.xlabel(x_axis_label)
-        plt.ylabel("Frequency")
-        plt.title(title)
-
-        self.canvas.draw()
-        renderer = self.canvas.get_renderer()
-
-        raw_data = renderer.tostring_rgb()
-        size = self.canvas.get_width_height()
-
-        return pygame.image.fromstring(raw_data, size, "RGB")
+        fig.hist(data, self.num_bins, normed=False, facecolor=colour, alpha=0.5)
+        #fig.xlabel(x_axis_label)
+        #fig.ylabel("Frequency")
+        fig.set_title(title)
+        #fig.plot(0,0)
 
     def _get_male_choosiness_array(self):
         return [ind.phi for ind in self.simulation.population.males]
