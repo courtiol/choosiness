@@ -79,7 +79,7 @@ class CSimulation:
         self.env = Environment.Environment(self.settings.width, self.settings.height)
 
         #create a population of males on random positions in that environment
-        self.population = CPopulation.CPopulation(self.settings.size_of_population,self.settings.sex_ratio, self.settings.s, self.settings.latency_males, self.settings.latency_females, self.settings.mutation_range, self.settings.mutation_rate, self.env.place_object_in_environment)
+        self.population = CPopulation.CPopulation(self.settings.size_of_population,self.settings.sex_ratio, self.settings.s, self.settings.latency_males, self.settings.latency_females, self.settings.mutation_range, self.settings.mutation_rate, self.env.place_item_in_environment)
 
         #information about the current simulation
         self.selected_individual = None
@@ -180,7 +180,7 @@ class CSimulation:
         #do smth with it
     
     def selectIndividual(self,x,y):
-        self.selected_individual = self.env.findObject(x, y, [self.population])
+        self.selected_individual = self.env.find_item(x, y, [self.population])
 
     def showInformationAboutPopulation(self):
         self.graphicsSimulation.printInformationAboutPopulation()

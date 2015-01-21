@@ -5,7 +5,7 @@ import random
 # Parameters of environment:
 # helpers:
 # ------------Start-----------------
-def addVectors(angle1, length1, angle2, length2):
+def add_vectors(angle1, length1, angle2, length2):
     """
     Returns the sum of two vectors
     :param angle1:
@@ -36,82 +36,82 @@ class Environment():
         self.height = height
         self.objectSize = 7
 
-    def __move(self, object):
+    def _move(self, item):
         """
         Update position based on speed, angle
         """
-        object.x += math.sin(object.angle) * object.speed
-        object.y -= math.cos(object.angle) * object.speed
+        item.x += math.sin(item.angle) * item.speed
+        item.y -= math.cos(item.angle) * item.speed
 
-    def place_object_in_environment(self, object):
+    def place_item_in_environment(self, item):
         x = random.uniform(self.objectSize, self.width - self.objectSize)
         y = random.uniform(self.objectSize, self.height - self.objectSize)
-        object.x = x
-        object.y = y
-        object.direction = (1, 2)
-        object.speed = 5
-        object.angle = random.uniform(0, math.pi * 2)
+        item.x = x
+        item.y = y
+        item.direction = (1, 2)
+        item.speed = 5
+        item.angle = random.uniform(0, math.pi * 2)
 
-    def update(self, objects1, objects2, collision_handler):
+    def update(self, item1, item2, collision_handler):
         """
         Moves individuals and tests for collisions with the walls and each other
-        :param objects1:
-        :param objects2:
+        :param item1:
+        :param item2:
         :param collision_handler: method of type collision_handler(CIndividual,CIndividual). The method is called
         when a collision occurs.
         :return:
         """
-        for i, objectA in enumerate(objects1):
-            self.__move(objectA)
-            self.__bounce(objectA)
+        for i, objectA in enumerate(item1):
+            self._move(objectA)
+            self._bounce(objectA)
             # for object in population1.individuals[i+1:]:
-            for objectB in objects2:
-                self.__collide(objectA, objectB, collision_handler)
-        for objectB in objects2:
-            self.__move(objectB)
-            self.__bounce(objectB)
+            for objectB in item2:
+                self._collide(objectA, objectB, collision_handler)
+        for objectB in item2:
+            self._move(objectB)
+            self._bounce(objectB)
 
-    def __bounce(self, object):
+    def _bounce(self, item):
         """
         Tests whether an individual has hit the boundary of the environment
-        :param object:
+        :param item:
         :return:
         """
 
-        if object.x > self.width - self.objectSize:
-            object.x = 2 * (self.width - self.objectSize) - object.x
-            object.angle = - object.angle
+        if item.x > self.width - self.objectSize:
+            item.x = 2 * (self.width - self.objectSize) - item.x
+            item.angle = - item.angle
 
-        elif object.x < self.objectSize:
-            object.x = 2 * self.objectSize - object.x
-            object.angle = - object.angle
+        elif item.x < self.objectSize:
+            item.x = 2 * self.objectSize - item.x
+            item.angle = - item.angle
 
-        if object.y > self.height - self.objectSize:
-            object.y = 2 * (self.height - self.objectSize) - object.y
-            object.angle = math.pi - object.angle
+        if item.y > self.height - self.objectSize:
+            item.y = 2 * (self.height - self.objectSize) - item.y
+            item.angle = math.pi - item.angle
 
-        elif object.y < self.objectSize:
-            object.y = 2 * self.objectSize - object.y
-            object.angle = math.pi - object.angle
+        elif item.y < self.objectSize:
+            item.y = 2 * self.objectSize - item.y
+            item.angle = math.pi - item.angle
 
-    def findObject(self, x, y, groups_of_object):
+    def find_item(self, x, y, groups_of_items):
         """
         Returns any individual that occupies position x, y
         :param x: integer
         :param y: integer
-        :param groups_of_object: list of populations
+        :param groups_of_items: list of populations
         :return: CIndividual
         """
-        for group in groups_of_object:
-            for object in group.males:
-                if math.hypot(object.x - x, object.y - y) <= self.objectSize:
-                    return object
-            for object in group.females:
-                if math.hypot(object.x - x, object.y - y) <= self.objectSize:
-                    return object
+        for group in groups_of_items:
+            for item in group.males:
+                if math.hypot(item.x - x, item.y - y) <= self.objectSize:
+                    return item
+            for item in group.females:
+                if math.hypot(item.x - x, item.y - y) <= self.objectSize:
+                    return item
         return None
 
-    def __collide(self, p1, p2, collision_handler):
+    def _collide(self, p1, p2, collision_handler):
         """
         Tests whether two individuals overlap
         If they do, make them bounce
@@ -130,8 +130,8 @@ class Environment():
             collision_handler(p1, p2)
             angle = math.atan2(dy, dx) + 0.5 * math.pi
 
-            (p1.angle, p1.speed) = addVectors(p1.angle, 0, angle, p2.speed)
-            (p2.angle, p2.speed) = addVectors(p2.angle, 0, angle + math.pi, p1.speed)
+            (p1.angle, p1.speed) = add_vectors(p1.angle, 0, angle, p2.speed)
+            (p2.angle, p2.speed) = add_vectors(p2.angle, 0, angle + math.pi, p1.speed)
 
             overlap = 0.5 * (2 * self.objectSize - dist + 1)
             p1.x += math.sin(angle) * overlap
