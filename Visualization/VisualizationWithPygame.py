@@ -275,6 +275,7 @@ mpl.use("Agg")
 import matplotlib.backends.backend_agg as agg
 import pylab
 import matplotlib.pyplot as plt
+import numpy
 
 # useful tutorial for matplotlib http://matplotlib.org/users/pyplot_tutorial.html
 
@@ -314,15 +315,19 @@ class CVisualizationWithMatplotlib(CVisualizationWithPygame):
         # assemble plot
         self.canvas.figure.clf()  # clears the previous diagram
         plt.subplot(221) # first subplot of 2×2 subplots
-        self._plot(females_choosiness, 'red', 'Choosiness of Females', 'choosiness')
+        self._compute_subfigure(females_choosiness, 'red', 'Choosiness of Females', 'choosiness (dynamic bins)')
         plt.subplot(222) # second subplot of 2×2 subplots
-        self._plot(males_choosiness, 'blue', 'Choosiness of Males', 'choosiness')
+        self._compute_subfigure(males_choosiness, 'blue', 'Choosiness of Males', 'choosiness (dynamic bins)')
         plt.subplot(223) # third subplot of 2×2 subplots
-        self._plot(females_quality, 'red', 'Quality of Females', 'quality')
+        self._compute_subfigure(females_quality, 'red', 'Quality of Females', 'quality (dynamic bins)')
         plt.subplot(224) # fourth subplot of 2×2 subplots
-        self._plot(males_quality, 'blue', 'Quality of Males', 'quality')
-        self.canvas.draw()
+        self._compute_subfigure(males_quality, 'blue', 'Quality of Males', 'quality (dynamic bins)')
 
+        self._plot()
+
+
+    def _plot(self):
+        self.canvas.draw()
         # prepare plot
         renderer = self.canvas.get_renderer()
         raw_data = renderer.tostring_rgb()
@@ -333,12 +338,11 @@ class CVisualizationWithMatplotlib(CVisualizationWithPygame):
         screen.blit(surf, (0, 0))
 
         pygame.display.flip()
-
-    def _plot(self, data, colour, title, x_axis_label):
+    def _compute_subfigure(self, data, colour, title, x_axis_label):
         # n, bins, patches = plt.hist(data, self.num_bins, normed=False, facecolor=colour, alpha=0.5)
         plt.hist(data, self.num_bins, normed=False, facecolor=colour, alpha=0.5)
         plt.xlabel(x_axis_label)
-        plt.ylabel("Frequency")
+        plt.ylabel("number of individuals")
         plt.title(title)
 
     def _get_male_choosiness_array(self):
@@ -355,3 +359,36 @@ class CVisualizationWithMatplotlib(CVisualizationWithPygame):
 
     def __str__(self):
         return "Diagrams"
+
+#-----------------------------------------------------------------
+class CHistogramVisualization(CVisualizationWithMatplotlib):
+    """
+    Histograms for the distribution of choosiness within the population
+    """
+    def __init__(self, simulation):
+        CVisualizationWithMatplotlib.__init__(self, simulation)
+
+    def draw_simulation(self):
+        if self.counter != 0:
+            return
+        self.counter = (self.counter+1) % self.update_in_every_n_step
+
+        # Get data to plot
+        females_choosiness = self._get_female_choosiness_array()
+        males_choosiness = self._get_male_choosiness_array()
+
+        # assemble plot
+        self.canvas.figure.clf()  # clears the previous diagram
+        plt.subplot(111) # 1 subplot
+        intervals = numpy.arange(0, 1, 1/self.num_bins) # use numpy to create a list of intervals/bins
+        plt.hist(females_choosiness, normed=False, facecolor='red', alpha=0.5, label='females',
+                 bins=intervals)
+        plt.hist(males_choosiness, normed=False, facecolor='blue', alpha=0.5, label='males',
+                 bins=intervals)
+
+        plt.legend()
+        plt.xlabel('choosiness (fixed bins)')
+        plt.ylabel('number of individuals')
+        plt.title('Distribution of Choosiness')
+
+        self._plot()

@@ -4,6 +4,7 @@ from Visualization.CVisualizationBaseClass import CSimpleVisualization
 from Visualization.VisualizationWithPygame import CDiagramVisualizationOfSimulation
 from Visualization.VisualizationWithPygame import CNoVisualizationOfSimulation
 from Visualization.VisualizationWithPygame import CVisualizationWithMatplotlib
+from Visualization.VisualizationWithPygame import CHistogramVisualization
 import pickle
 
 
@@ -55,6 +56,7 @@ class CSimulation:
         self.visualizations_of_simulation.append(CDiagramVisualizationOfSimulation(self))
         self.visualizations_of_simulation.append(CNoVisualizationOfSimulation(self))  # no visualization
         self.visualizations_of_simulation.append(CVisualizationWithMatplotlib(self))
+        self.visualizations_of_simulation.append(CHistogramVisualization(self))
         self.graphicsSimulation = self.visualizations_of_simulation[0]
         self.visualization_pointer = 0  # which visualization
 
