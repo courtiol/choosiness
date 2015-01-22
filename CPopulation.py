@@ -178,4 +178,16 @@ class CPopulation:
         z += "males: "+str(self.get_current_males_size())+"\n"
         z += "maximal number of saved couples: "+str(self.maximal_number_of_saved_couples)+"\n"
         z += "current number of couple in que: "+str(len(self.couples))+"\n"
+
+        # ToDo: check the two following alternatives by Ilja!
+        # z = ("total population: "+str(self.get_current_population_size())+"\n" +
+        #      "females: "+str(self.get_current_females_size())+"\n" +
+        #      "males: "+str(self.get_current_males_size())+"\n" +
+        #      "maximal number of saved couples: "+str(self.maximal_number_of_saved_couples)+"\n" +
+        #      "current number of couple in que: "+str(len(self.couples))+"\n")
+
+        # return """total population: {0}\nfemales: {1}\nmales: {2}\nmaximal number of saved couples: {3}\n
+        # current number of couple in que: {4}\n""".format(self.get_current_population_size(),
+        # self.get_current_females_size(), self.get_current_males_size(), self.maximal_number_of_saved_couples(),
+        # len(self.couples))
         return z
