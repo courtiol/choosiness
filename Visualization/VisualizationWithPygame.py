@@ -15,11 +15,13 @@ screen = None
 class CVisualizationWithPygame(CVisualizationBaseClass):
     def __init__(self, simulation):
         CVisualizationBaseClass.__init__(self, simulation)
+        self.width_of_window = self.simulation.settings.width #ToDo: Assign better with parameters of constructor
+        self.height_of_window = self.simulation.settings.height
 
     # overwrite
     def init_display(self):
         global screen
-        screen = pygame.display.set_mode((self.simulation.settings.width, self.simulation.settings.height))
+        screen = pygame.display.set_mode((self.width_of_window, self.height_of_window))
         pygame.display.set_caption("Simulation with "+str(self.simulation.population.get_current_females_size()) +
                                    ' females in red and '+str(self.simulation.population.get_current_males_size()) +
                                    ' males in blue')
@@ -277,61 +279,67 @@ import matplotlib.pyplot as plt
 # useful tutorial for matplotlib http://matplotlib.org/users/pyplot_tutorial.html
 
 
-class CTestVisualization(CVisualizationWithPygame):
+class CVisualizationWithMatplotlib(CVisualizationWithPygame):
+    """
+    Display statistics of the the simulation with 4 histograms (for female choosiness, male choosiness, female quality,
+    male quality)
+    """
     def __init__(self, simulation):
         CVisualizationWithPygame.__init__(self, simulation)
-        self.fig = pylab.figure(figsize=[4, 4], dpi=100)
-        self.ax = self.fig.add_subplot(111)
+
+        x_size = int(self.width_of_window/100)
+        y_size = int(self.height_of_window/100)
+        self.fig = pylab.figure(figsize=[x_size, y_size], dpi=100)
+
         self.canvas = agg.FigureCanvasAgg(self.fig)
         self.num_bins = 20
-        # it not necessary to update in every step the graphics
+
+        # it is not necessary to update in every step the graphics
         # take expected life = average time of one generation as update rate
-        self.update_in_every_n_step = int(round(1/(1-self.simulation.settings.s)))
+        # self.update_in_every_n_step = int(round(1/(1-self.simulation.settings.s)))
+        self.update_in_every_n_step = 1 # ToDo: comment and take line up
         self.counter = 0
 
     def draw_simulation(self):
         if self.counter != 0:
             return
-        #ToDo: Make all plots as subplots. (See here: http://matplotlib.org/examples/pylab_examples/subplots_demo.html)
         self.counter = (self.counter+1) % self.update_in_every_n_step
 
-        # collect data for plots
+        # Get data to plot
         females_choosiness = self._get_female_choosiness_array()
         males_choosiness = self._get_male_choosiness_array()
         females_quality = self._get_female_quality_array()
         males_quality = self._get_male_quality_array()
 
-        # clears the previous diagram
-        self.canvas.figure.clf()
-
-        # make four subplots
-        f, axarr = plt.subplots(2, 2)
-        self._plot(females_choosiness, 'red', 'Choosiness of Females', 'choosiness', axarr[0, 0])
-        self._plot(males_choosiness, 'blue', 'Choosiness of Males', 'choosiness', axarr[0, 1])
-        self._plot(females_quality, 'red', 'Quality of Females', 'quality', axarr[1, 0])
-        self._plot(males_quality, 'blue', 'Quality of Males', 'quality', axarr[1, 1])
-
-        #draw the new diagram
+        # assemble plot
+        self.canvas.figure.clf()  # clears the previous diagram
+        plt.subplot(221) # first subplot of 2×2 subplots
+        self._plot(females_choosiness, 'red', 'Choosiness of Females', 'choosiness')
+        plt.subplot(222) # second subplot of 2×2 subplots
+        self._plot(males_choosiness, 'blue', 'Choosiness of Males', 'choosiness')
+        plt.subplot(223) # third subplot of 2×2 subplots
+        self._plot(females_quality, 'red', 'Quality of Females', 'quality')
+        plt.subplot(224) # fourth subplot of 2×2 subplots
+        self._plot(males_quality, 'blue', 'Quality of Males', 'quality')
         self.canvas.draw()
+
+        # prepare plot
         renderer = self.canvas.get_renderer()
         raw_data = renderer.tostring_rgb()
         size = self.canvas.get_width_height()
         surf = pygame.image.fromstring(raw_data, size, "RGB")
 
+        # plot it in pygame
         screen.blit(surf, (0, 0))
-        #screen.blit(male_surf, (400, 0))
-        #screen.blit(female_surf, (0, 400))
-        #screen.blit(male_surf, (400, 400))
 
         pygame.display.flip()
 
-    def _plot(self, data, colour, title, x_axis_label, fig):  # ToDo: fix this as data and colour are not used
+    def _plot(self, data, colour, title, x_axis_label):
         # n, bins, patches = plt.hist(data, self.num_bins, normed=False, facecolor=colour, alpha=0.5)
-        fig.hist(data, self.num_bins, normed=False, facecolor=colour, alpha=0.5)
-        #fig.xlabel(x_axis_label)
-        #fig.ylabel("Frequency")
-        fig.set_title(title)
-        #fig.plot(0,0)
+        plt.hist(data, self.num_bins, normed=False, facecolor=colour, alpha=0.5)
+        plt.xlabel(x_axis_label)
+        plt.ylabel("Frequency")
+        plt.title(title)
 
     def _get_male_choosiness_array(self):
         return [ind.phi for ind in self.simulation.population.males]
