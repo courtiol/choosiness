@@ -1,11 +1,13 @@
-import Environment, CPopulation
-from Visualization.VisualizationWithPygame import C2DVisualizationOfSimulation
+import Environment
+import CPopulation
+from Visualization.VisualizationWithPygame.VisualizationWithPygame import C2DVisualizationOfSimulation
 from Visualization.CVisualizationBaseClass import CSimpleVisualization
-from Visualization.VisualizationWithPygame import CDiagramVisualizationOfSimulation
-from Visualization.VisualizationWithPygame import CNoVisualizationOfSimulation
-from Visualization.VisualizationWithPygame import CVisualizationWithMatplotlib
-from Visualization.VisualizationWithPygame import CHistogramVisualization
+from Visualization.VisualizationWithPygame.notUsedAnymore import CDiagramVisualizationOfSimulation
+from Visualization.VisualizationWithPygame.VisualizationWithPygame import CNoVisualizationOfSimulation
+from Visualization.VisualizationWithPygame.VisualizationWithPygame import CVisualizationWithMatplotlib
+from Visualization.VisualizationWithPygame.VisualizationWithPygame import CHistogramVisualization
 import pickle
+
 
 
 # ----------------------------CSimulation-------------------------------------
