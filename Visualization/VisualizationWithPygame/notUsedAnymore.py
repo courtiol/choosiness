@@ -6,6 +6,10 @@ from Visualization.VisualizationWithPygame.CVisualizationWithPygameBaseClass imp
 
 # -------------------------------------diagrams (self made) -----------------------------------
 
+"""
+This class is not used anymore, since it is replaced by matplotlib.
+"""
+
 class CDiagramVisualizationOfSimulation(CVisualizationWithPygameBaseClass):
     def __init__(self, simulation):
         CVisualizationWithPygameBaseClass.__init__(self, simulation)
