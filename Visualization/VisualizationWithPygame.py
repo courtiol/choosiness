@@ -313,6 +313,7 @@ class CVisualizationWithMatplotlib(CVisualizationWithPygame):
         males_quality = self._get_male_quality_array()
 
         # assemble plot
+        plt.figure(1)
         self.canvas.figure.clf()  # clears the previous diagram
         plt.subplot(221) # first subplot of 2×2 subplots
         self._compute_subfigure(females_choosiness, 'red', 'Choosiness of Females', 'choosiness (dynamic bins)')
