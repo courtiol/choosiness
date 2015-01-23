@@ -55,10 +55,6 @@ class CVisualizationWithPygameBaseClass(CVisualizationBaseClass):
                     self._show_couples_array()
                 elif event.key == pygame.K_s:
                     self.simulation.save()
-                elif event.key == pygame.K_RIGHT:
-                    self.simulation.next_visualization()
-                elif event.key == pygame.K_LEFT:
-                    self.simulation.prior_visualization()
                 elif event.key == pygame.K_i:
                     print(str(self.simulation.settings.step_counter))
             if self.simulation.selected_individual:

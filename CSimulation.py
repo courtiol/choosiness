@@ -1,28 +1,13 @@
 import Environment
 import CPopulation
-from Visualization.VisualizationWithPygame.VisualizationOf2DEnvironment import C2DVisualizationOfSimulation
 from Visualization.CVisualizationBaseClass import CSimpleVisualization
-from Visualization.VisualizationWithPygame.VisualizationWithDiagrams import CVisualizationWithMatplotlib, \
-    CHistogramVisualization
-from Visualization.VisualizationWithPygame.notUsedAnymore import CDiagramVisualizationOfSimulation
-from Visualization.VisualizationWithPygame.VisualizationOf2DEnvironment import CNoVisualizationOfSimulation
-from Visualization.VisualizationWithPygame.VisualizationWithDiagrams import CHistogramVisualization
+
+from Visualization.VisualizationWithPygame.VisualizationCombination import CCombinationOfVisualizations
 import pickle
 
 
 
 # ----------------------------CSimulation-------------------------------------
-
-
-def rotate(array, n):
-    """
-    Rotates an array
-    :param array:
-    :param n:
-    :return:rotated array
-    """
-    return array[n:] + array[:n]
-
 
 class CSimulationSettings:
     """
@@ -53,15 +38,6 @@ class CSimulation:
         self.settings = CSimulationSettings()
 
         self.graphics_just_text = CSimpleVisualization(self)
-        self.visualizations_of_simulation = []
-        # different possible visualizations of the simulation
-        self.visualizations_of_simulation.append(C2DVisualizationOfSimulation(self))
-        self.visualizations_of_simulation.append(CDiagramVisualizationOfSimulation(self))
-        self.visualizations_of_simulation.append(CNoVisualizationOfSimulation(self))  # no visualization
-        self.visualizations_of_simulation.append(CVisualizationWithMatplotlib(self))
-        self.visualizations_of_simulation.append(CHistogramVisualization(self))
-        self.graphicsSimulation = self.visualizations_of_simulation[0]
-        self.visualization_pointer = 0  # which visualization
 
         # set the environment in which the population is placed
         self.env = Environment.Environment(self.settings.width, self.settings.height)
@@ -78,19 +54,7 @@ class CSimulation:
         self.pause = False
 
         # display information
-        self.graphicsSimulation.init_display()
-
-    def next_visualization(self):
-        self.visualization_pointer = (self.visualization_pointer+1) % len(self.visualizations_of_simulation)
-        self.graphicsSimulation = self.visualizations_of_simulation[self.visualization_pointer]
-        self.graphicsSimulation.init_screen()
-        print(self.graphicsSimulation)
-
-    def prior_visualization(self):
-        self.visualization_pointer = (self.visualization_pointer-1) % len(self.visualizations_of_simulation)
-        self.graphicsSimulation = self.visualizations_of_simulation[self.visualization_pointer]
-        self.graphicsSimulation.init_screen()
-        print(self.graphicsSimulation)
+        # self.graphicsSimulation.init_display()
 
     def show_only_text(self):
         """
@@ -107,7 +71,6 @@ class CSimulation:
         """
         self.population.update_states()
         self.env.update(self.population.males, self.population.females, self.collision_occured)
-        self.graphicsSimulation.draw_simulation()
         self.settings.step_counter += 1
 
     def run(self):
@@ -118,7 +81,7 @@ class CSimulation:
         while self.running:
             if not self.pause:
                 self._perform_time_step()
-            self.graphicsSimulation.do_interaction_with_user()
+            self.hook_for_user_control()
 
     def run_n_timesteps(self, n):
         """
@@ -130,8 +93,13 @@ class CSimulation:
             if self.running:
                 if not self.pause:
                     self._perform_time_step()
-                self.graphicsSimulation.do_interaction_with_user()
+                self.hook_for_user_control()
 
+    def hook_for_user_control(self):
+        """
+        This is a hook for decorators, that want to interact with users
+        """
+        pass
     def collision_occured(self, male, female):
         """
         The method is not called in this class. Instead it is given as a function pointer to the environment class

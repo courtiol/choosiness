@@ -1,9 +1,14 @@
 import CSimulation
 import time
 import pickle
+from Visualization.DecorationOfSimulation import add_visualization_to_simulation
+from Visualization.VisualizationWithPygame.VisualizationCombination import CCombinationOfVisualizations
 
 # Start simulation
 simulation = CSimulation.CSimulation()
+visualization = CCombinationOfVisualizations(simulation)
+visualization.init_display()
+add_visualization_to_simulation(simulation, visualization)
 
 """
 population = pickle.load( open( "saved/population878.p", "rb" ) )
