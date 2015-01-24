@@ -93,18 +93,18 @@ class C2DVisualizationOfSimulation(CVisualizationWithPygameBaseClass):
         if individual.get_gender() == CIndividual.MALE:
             if individual.state == CIndividual.IN_LATENCY:
                 pygame.draw.circle(CVisualizationWithPygameBaseClass.screen, self.colour_of_males, (int(individual.x), int(individual.y)),
-                                   self.simulation.env.objectSize, self.thickness_latency)
+                                   self.simulation.env.itemSize, self.thickness_latency)
             else:
                 pygame.draw.circle(CVisualizationWithPygameBaseClass.screen, self.colour_of_males, (int(individual.x), int(individual.y)),
-                                   self.simulation.env.objectSize, self.thickness_available)
+                                   self.simulation.env.itemSize, self.thickness_available)
             self.print_text_on_screen(str(round(individual.q, 4)), int(individual.x), int(individual.y), 15)
         else:
             if individual.state == CIndividual.IN_LATENCY:
                 pygame.draw.circle(CVisualizationWithPygameBaseClass.screen, self.colour_of_females, (int(individual.x), int(individual.y)),
-                                   self.simulation.env.objectSize, self.thickness_latency)
+                                   self.simulation.env.itemSize, self.thickness_latency)
             else:
                 pygame.draw.circle(CVisualizationWithPygameBaseClass.screen, self.colour_of_females, (int(individual.x), int(individual.y)),
-                                   self.simulation.env.objectSize, self.thickness_available)
+                                   self.simulation.env.itemSize, self.thickness_available)
             self.print_text_on_screen(str(round(individual.phi, 4)), int(individual.x), int(individual.y), 15)
 
     def give_information_about_selected_individual(self):

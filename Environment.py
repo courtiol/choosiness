@@ -26,7 +26,7 @@ class Environment():
     Defines the structure of the environment (e.g.boundary of a simulation and its properties)
     """
 
-    def __init__(self, width, height):
+    def __init__(self, width, height, itemSize, itemSpeed):
         """
 
         :param width: the width of the environment
@@ -35,7 +35,8 @@ class Environment():
         """
         self.width = width
         self.height = height
-        self.objectSize = 7
+        self.itemSize = itemSize
+        self.itemSpeed = itemSpeed
 
     def _move(self, item):
         """
@@ -52,12 +53,11 @@ class Environment():
         :param item: the object that should be placed in the environment
         :return:
         """
-        x = random.uniform(self.objectSize, self.width - self.objectSize)
-        y = random.uniform(self.objectSize, self.height - self.objectSize)
+        x = random.uniform(self.itemSize, self.width - self.itemSize)
+        y = random.uniform(self.itemSize, self.height - self.itemSize)
         item.x = x
         item.y = y
-        item.direction = (1, 2)  # ToDo: changed that ?
-        item.speed = 5  # ToDo: general parameter
+        item.speed = self.itemSpeed
         item.angle = random.uniform(0, math.pi * 2)
 
     # ALEX checked untill there!
@@ -87,20 +87,20 @@ class Environment():
         :return:
         """
 
-        if item.x > self.width - self.objectSize:
-            item.x = 2 * (self.width - self.objectSize) - item.x
+        if item.x > self.width - self.itemSize:
+            item.x = 2 * (self.width - self.itemSize) - item.x
             item.angle = - item.angle
 
-        elif item.x < self.objectSize:
-            item.x = 2 * self.objectSize - item.x
+        elif item.x < self.itemSize:
+            item.x = 2 * self.itemSize - item.x
             item.angle = - item.angle
 
-        if item.y > self.height - self.objectSize:
-            item.y = 2 * (self.height - self.objectSize) - item.y
+        if item.y > self.height - self.itemSize:
+            item.y = 2 * (self.height - self.itemSize) - item.y
             item.angle = math.pi - item.angle
 
-        elif item.y < self.objectSize:
-            item.y = 2 * self.objectSize - item.y
+        elif item.y < self.itemSize:
+            item.y = 2 * self.itemSize - item.y
             item.angle = math.pi - item.angle
 
     def find_item(self, x, y, groups_of_items):
@@ -113,10 +113,10 @@ class Environment():
         """
         for group in groups_of_items:
             for item in group.males:
-                if math.hypot(item.x - x, item.y - y) <= self.objectSize:
+                if math.hypot(item.x - x, item.y - y) <= self.itemSize:
                     return item
             for item in group.females:
-                if math.hypot(item.x - x, item.y - y) <= self.objectSize:
+                if math.hypot(item.x - x, item.y - y) <= self.itemSize:
                     return item
         return None
 
@@ -135,14 +135,14 @@ class Environment():
         dy = p1.y - p2.y
 
         dist = math.hypot(dx, dy)
-        if dist < 2 * self.objectSize:
+        if dist < 2 * self.itemSize:
             collision_handler(p1, p2)
             angle = math.atan2(dy, dx) + 0.5 * math.pi
 
             p1.angle, p1.speed = add_vectors(p1.angle, 0, angle, p2.speed)
             p2.angle, p2.speed = add_vectors(p2.angle, 0, angle + math.pi, p1.speed)
 
-            overlap = 0.5 * (2 * self.objectSize - dist + 1)
+            overlap = 0.5 * (2 * self.itemSize - dist + 1)
             p1.x += math.sin(angle) * overlap
             p1.y -= math.cos(angle) * overlap
             p2.x -= math.sin(angle) * overlap

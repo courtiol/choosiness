@@ -14,8 +14,7 @@ class CSimulationSettings:
     Stores the settings of the simulation
     """
     def __init__(self):
-        self.width = 800
-        self.height = 800
+        #parameters regarding the population and individuals
         self.size_of_population = 400
         self.sex_ratio = 0.5
         self.s = 0.999
@@ -23,6 +22,12 @@ class CSimulationSettings:
         self.latency_females = 0.95
         self.mutation_range = 0.05
         self.mutation_rate = 1
+
+        #parameters for environment
+        self.width = 800
+        self.height = 800
+        self.size_of_individuals = 5
+        self.speed_of_individuals = 7
 
         self.collision_counter = 0
         self.step_counter = 1
@@ -37,7 +42,9 @@ class CSimulation:
     def __init__(self):
         self.settings = CSimulationSettings()
         # set the environment in which the population is placed
-        self.env = Environment.Environment(self.settings.width, self.settings.height)
+        self.env = Environment.Environment(width=self.settings.width, height=self.settings.height,
+                                           itemSize=self.settings.size_of_individuals,
+                                           itemSpeed=self.settings.speed_of_individuals)
         # create a population of males on random positions in that environment
         self.population = CPopulation.CPopulation(self.settings.size_of_population, self.settings.sex_ratio,
                                                   self.settings.s, self.settings.latency_males,
