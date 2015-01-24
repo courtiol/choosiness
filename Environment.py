@@ -1,5 +1,6 @@
 import math
 import random
+from Tools.usefulDecorators import printAllParameters
 
 
 # Parameters of environment:
@@ -147,3 +148,7 @@ class Environment():
             p1.y -= math.cos(angle) * overlap
             p2.x -= math.sin(angle) * overlap
             p2.y += math.cos(angle) * overlap
+
+    @printAllParameters
+    def __str__(self):
+        return ""

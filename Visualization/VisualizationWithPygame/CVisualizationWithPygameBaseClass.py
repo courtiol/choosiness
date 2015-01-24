@@ -27,8 +27,8 @@ class CVisualizationWithPygameBaseClass(CVisualizationBaseClass):
     # overwrite
     def init_display(self):
         CVisualizationWithPygameBaseClass.screen = pygame.display.set_mode((self.width_of_window, self.height_of_window))
-        pygame.display.set_caption("Simulation with "+str(self.simulation.population.current_females_size) +
-                                   ' females in red and '+str(self.simulation.population.current_males_size) +
+        pygame.display.set_caption("Simulation with "+str(self.simulation.population.current_number_of_females) +
+                                   ' females in red and '+str(self.simulation.population.current_number_of_males) +
                                    ' males in blue')
         pygame.init()
 

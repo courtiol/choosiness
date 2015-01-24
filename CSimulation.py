@@ -1,7 +1,7 @@
 import Environment
 import CPopulation
 from Visualization.CVisualizationBaseClass import CSimpleVisualization
-
+from Tools.usefulDecorators import printAllParameters
 from Visualization.VisualizationWithPygame.VisualizationCombination import CCombinationOfVisualizations
 import pickle
 
@@ -35,6 +35,10 @@ class CSimulationSettings:
         self.collision_counter = 0
         self.step_counter = 1
         self.average_number_of_collisions_per_timestep = 0
+
+    @printAllParameters
+    def __str__(self):
+        return ""
 
 
 class CSimulation:

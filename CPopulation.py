@@ -50,9 +50,15 @@ class CPopulation:
         self.set_initial_position_in_the_environment = set_initial_position_in_the_environment
         self.mutation_range = mutation_range
         self.mutation_rate = mutation_rate
-        self._add_individuals(self.populationSize)
-        self.a = a #weighted average for the quality of the offspring
+        self.a = a # weighted average for the quality of the offspring
         self.type_of_average = type_of_average # ARITHMETIC_MEAN / GEOMETRIC_MEAN
+
+        # Add individuals to population
+        # Set in_initialization to True to allow creating individuals from couples of the form (None, None)
+        # For details look in the method "_create_individual"
+        self.in_initialization = True
+        self._add_individuals(self.populationSize)
+        self.in_initialization = False
 
     # choose for get_position_in_the_Environment any function that returns a tuple of coordinates in the environment
     def _add_individuals(self, n):
@@ -65,6 +71,14 @@ class CPopulation:
         # Add n individuals
         for i in range(n):
             individual = self._create_individual()
+            # if for whatever reason there could no individual be created (e.g. no couple in the queue), skip the step
+            # This happens if the queue of couples is empty and the class is not anymore in the initialization mode
+            if individual is None:
+                # Here could be also written return. However for future use if the filling of the couples array runs
+                # parallel it is more reasonable to use continue, since the couples array could be filled up during
+                # execution of this step.
+                print("Couples array was empty. No individual added.")
+                continue
             if individual.gender == CIndividual.MALE:
                 self.males.append(individual)
             else:
@@ -75,11 +89,11 @@ class CPopulation:
         return len(self.males)+len(self.females)
 
     @property
-    def current_males_size(self):
+    def current_number_of_males(self):
         return len(self.males)
 
     @property
-    def current_females_size(self):
+    def current_number_of_females(self):
         return len(self.females)
 
     def _create_individual(self):
@@ -92,6 +106,9 @@ class CPopulation:
         :return: created individuals (an instance of CIndividual)
         """
         (father, mother) = self._choose_couple()
+        # if no couple could be found and we are not anymore in the initialization step return none
+        if not self.in_initialization and father is None and mother is None:
+            return None
         if random.random() >= self.sex_ratio:
             new_individual = CIndividual.CIndividual(gender=CIndividual.MALE, latency=self.latency_males,
                                                      mutation_range=self.mutation_range,
@@ -115,25 +132,13 @@ class CPopulation:
             male.update_state()
             if male.state == CIndividual.DEAD:
                 del self.males[i]
-                self._add_individual_of_next_generation()
         for i, female in enumerate(self.females):
             female.update_state()
             if female.state == CIndividual.DEAD:
                 del self.females[i]
-                self._add_individual_of_next_generation()
-
-    # Creates a new individual and appends it to "males" or "females"
-    def _add_individual_of_next_generation(self):
-        """
-        Creates a new individual with the method "createIndividual". If the newly created individual is male it is
-        appended to "males" otherwise it is appended to "females"
-        :return:
-        """
-        individual = self._create_individual()
-        if individual.gender == CIndividual.MALE:
-            self.males.append(individual)
-        else:
-            self.females.append(individual)
+        # Fill up the population again
+        number_of_new_individuals = self.populationSize-self.current_population_size
+        self._add_individuals(number_of_new_individuals)
 
     def _choose_couple(self):
         """
@@ -142,9 +147,7 @@ class CPopulation:
         :return: element of "couples"
         """
         if len(self.couples) == 0:
-            print("No couple in queue => Create individual with initial values")
-            return None, None  # ToDo: Better possible //
-            #  ToDo ALEX: No, you should keep these places free and fill them up later on!!
+            return None, None
         else:
             # most stupid implementation since Alias is created every time even when "couples"
             # doesn't change => ToDo. Change
@@ -194,6 +197,6 @@ class CPopulation:
 
     def __str__(self):
         return """total population: {0}\nfemales: {1}\nmales: {2}\nmaximal number of saved couples: {3}\n
-        current number of couple in que: {4}\n""".format(self.current_population_size(),
-        self.current_females_size(), self.current_males_size(), self.maximal_number_of_saved_couples(),
+        current number of couple in que: {4}\n""".format(self.current_population_size,
+        self.current_number_of_females, self.current_number_of_males, self.maximal_number_of_saved_couples,
         len(self.couples))

@@ -1,5 +1,6 @@
 import random
 import CChromosome
+from Tools.usefulDecorators import printAllParameters
 
 # constants:
 ALIVE = 0
@@ -15,7 +16,7 @@ class CIndividual:
     can be created by its "parents". The inheritable information of each individual is saved in a pair of
     chromosomes.
     """
-    def __init__(self, gender, latency, mutation_range, mutation_rate, survival_prob, mother=None, father=None):  # ToDo: pass survival proba
+    def __init__(self, gender, latency, mutation_range, mutation_rate, survival_prob, mother=None, father=None):
         """
 
         :type self: object
@@ -86,9 +87,6 @@ class CIndividual:
         # is the same at the mating step as for other states
         self.state = IN_LATENCY
 
+    @printAllParameters
     def __str__(self):
-        str_n = "Chromosome 1:\n" + str(self.ch1)
-        str_n += "Chromosome 2:\n" + str(self.ch2)
-        str_n += "choosiness: " + str(self.phi) + "\n"
-        str_n += "quality: " + str(self.q) + "\n"
-        return str_n
+        return ""

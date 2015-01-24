@@ -6,9 +6,11 @@ from Visualization.VisualizationWithPygame.VisualizationCombination import CComb
 
 # Start simulation
 simulation = CSimulation.CSimulation()
+print(simulation.env)
 visualization = CCombinationOfVisualizations(simulation)
 visualization.init_display()
 add_visualization_to_simulation(simulation, visualization)
+simulation.run()
 
 """
 population = pickle.load( open( "saved/population878.p", "rb" ) )
@@ -20,9 +22,10 @@ simulation.settings = settings
 """
 
 
-print("Start simulation")
-print(simulation)
-simulation.run()
+
+#print("Start simulation")
+#print(simulation)
+#simulation.run()
 # simulation.run_n_timesteps(500)
 # pickle.dump( simulation.population, open( "saved/population"+str(simulation.settings.step_counter)+".p", "wb" ) )
 # pickle.dump( simulation.env, open( "saved/environment"+str(simulation.settings.step_counter)+".p", "wb" ) )

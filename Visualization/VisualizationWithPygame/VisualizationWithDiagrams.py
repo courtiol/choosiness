@@ -37,8 +37,8 @@ class CVisualization4Histograms(CVisualizationWithPygameBaseClass):
 
         # it is not necessary to update in every step the graphics
         # take expected life = average time of one generation as update rate
-        # self.update_in_every_n_step = int(round(1/(1-self.simulation.settings.s)))
-        self.update_in_every_n_step = 1 # ToDo: comment and take line up
+        max_s = max([self.simulation.settings.s_males, self.simulation.settings.s_females])
+        self.update_in_every_n_step = int(round(1/(1-max_s)))
         self.counter = 0
 
         # since there is only one plt object we need to count the number of instances of this class
