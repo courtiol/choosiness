@@ -17,12 +17,20 @@ class CPopulation:
      quality of the individuals.
     """
 
-    def __init__(self, population_size, sex_ratio, s, latency_males,
+    def __init__(self, population_size, sex_ratio, s_males, s_females, latency_males,
                  latency_females, mutation_range, mutation_rate, set_initial_position_in_the_environment):
-                 # ToDo: create a s_males and s_females!!!
         """
-        ToDo
+        Initializes a population.
         :param population_size: Integer which is the maximal number of the population
+        :param s_males: survival prob. of males for a time step
+        :param s_females: survival prob. of females for a time step
+        :param sex_ratio: ratio between the sexes
+        :param latency_males: prob. to remain in latency of males after reproduction
+        :param latency_females: prob. to remain in latency of females after reproduction
+        :param mutation_range: effect of one mutation / possible range of change in one mutation
+        :param mutation_rate: frequency of mutations
+        :param set_initial_position_in_the_environment: function handler for a function which determines the initial
+        position of a new individual in the environment
         :return:
         """
         self.males = []
@@ -32,7 +40,8 @@ class CPopulation:
         self.couples = []
         self.maximal_number_of_saved_couples = 1000
         self.sex_ratio = sex_ratio
-        self.s = s  # survival rate; ToDo: create a s_males and s_females!!!
+        self.s_males = s_males  # survival rate of males
+        self.s_females = s_females  # survival rate of males
         self.latency_males = latency_males
         self.latency_females = latency_females
         self.populationSize = population_size
@@ -44,7 +53,7 @@ class CPopulation:
     # choose for get_position_in_the_Environment any function that returns a tuple of coordinates in the environment
     def _add_individuals(self, n):
         """
-        TO DO
+        ToDo: add
         Adds n individuals on positions given by get_position_in_the_Environment
         :param n: number of individuals which should be added
         :return:
@@ -52,7 +61,7 @@ class CPopulation:
         # Add n individuals
         for i in range(n):
             individual = self._create_individual()
-            if individual.get_gender() == CIndividual.MALE:  # ToDO do not use get_gender
+            if individual.gender == CIndividual.MALE:
                 self.males.append(individual)
             else:
                 self.females.append(individual)
@@ -77,13 +86,15 @@ class CPopulation:
         """
         (father, mother) = self._choose_couple()
         if random.random() >= self.sex_ratio:
-            # ToDo: pass survival proba
-            new_individual = CIndividual.CIndividual(CIndividual.MALE, self.latency_males,
-                                                     self.mutation_range, self.mutation_rate, mother, father)
+            new_individual = CIndividual.CIndividual(gender=CIndividual.MALE, latency=self.latency_males,
+                                                     mutation_range=self.mutation_range,
+                                                     mutation_rate=self.mutation_rate, survival_prob=self.s_males,
+                                                     mother=mother, father=father)
         else:
-            # ToDo: pass survival proba
-            new_individual = CIndividual.CIndividual(CIndividual.FEMALE, self.latency_females,
-                                                     self.mutation_range, self.mutation_rate, mother, father)
+            new_individual = CIndividual.CIndividual(gender=CIndividual.FEMALE, latency=self.latency_females,
+                                                     mutation_range=self.mutation_range,
+                                                     mutation_rate=self.mutation_rate, survival_prob=self.s_females,
+                                                     mother=mother, father=father)
         self.set_initial_position_in_the_environment(new_individual)
         return new_individual
 
@@ -94,12 +105,12 @@ class CPopulation:
         :return:
         """
         for i, male in enumerate(self.males):
-            male.update_state(self.s)
+            male.update_state()
             if male.state == CIndividual.DEAD:
                 del self.males[i]
                 self._add_individual_of_next_generation()
         for i, female in enumerate(self.females):
-            female.update_state(self.s)
+            female.update_state()
             if female.state == CIndividual.DEAD:
                 del self.females[i]
                 self._add_individual_of_next_generation()
@@ -112,7 +123,7 @@ class CPopulation:
         :return:
         """
         individual = self._create_individual()
-        if individual.get_gender() == CIndividual.MALE:
+        if individual.gender == CIndividual.MALE:
             self.males.append(individual)
         else:
             self.females.append(individual)

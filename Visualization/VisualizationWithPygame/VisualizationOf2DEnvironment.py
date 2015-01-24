@@ -90,7 +90,7 @@ class C2DVisualizationOfSimulation(CVisualizationWithPygameBaseClass):
         :return:
         """
         # thickness = 2
-        if individual.get_gender() == CIndividual.MALE:
+        if individual.gender == CIndividual.MALE:
             if individual.state == CIndividual.IN_LATENCY:
                 pygame.draw.circle(CVisualizationWithPygameBaseClass.screen, self.colour_of_males, (int(individual.x), int(individual.y)),
                                    self.simulation.env.itemSize, self.thickness_latency)

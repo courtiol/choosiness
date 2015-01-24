@@ -15,13 +15,14 @@ class CIndividual:
     can be created by its "parents". The inheritable information of each individual is saved in a pair of
     chromosomes.
     """
-    def __init__(self, gender, latency, mutation_range, mutation_rate, mother=None, father=None):  # ToDo: pass survival proba
+    def __init__(self, gender, latency, mutation_range, mutation_rate, survival_prob, mother=None, father=None):  # ToDo: pass survival proba
         """
 
         :type self: object
         """
         self.state = ALIVE  # possible states: alive, dead, in_latency
         self.gender = gender
+        self.s = survival_prob
 
         if mother is None or father is None:
             # 4 loci are needed (phi_a_male, phi_b_male, phi_a_female, phi_b_female)
@@ -33,7 +34,8 @@ class CIndividual:
             # random segregation as if loci where independent (on different chromosomes)
             self.ch1 = mother.ch1 + mother.ch2
             self.ch2 = father.ch1 + father.ch2
-            # ToDo: add mutation here (after removing it from __add__)!
+            self.ch1.mutate()
+            self.ch2.mutate()
         self.l = latency  # latency #change
         self.q = random.uniform(0, 1)  # correct?
         self._express_genes()
@@ -55,16 +57,13 @@ class CIndividual:
             phi_b_ch2 = self.ch2.loci[3][0]
         self.phi = ((phi_a_ch1 + phi_a_ch2) * self.q + phi_b_ch1 + phi_b_ch2) / 2
 
-    def get_gender(self):  # ToDo: remove!!
-        return self.gender
-
-    def update_state(self, s):
+    def update_state(self):
         """
          Changes the states of the individuals according to their transition probabilities.
         :param s: survival probability
         :return:
         """
-        if random.random() > s:  # 1-s is the probability to die in one time step
+        if random.random() > self.s:  # 1-s is the probability to die in one time step
             self.state = DEAD
         elif self.state == IN_LATENCY and random.random() > self.l:
             self.state = ALIVE

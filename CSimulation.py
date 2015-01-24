@@ -17,7 +17,8 @@ class CSimulationSettings:
         #parameters regarding the population and individuals
         self.size_of_population = 400
         self.sex_ratio = 0.5
-        self.s = 0.999
+        self.s_males = 0.999
+        self.s_females = 0.999
         self.latency_males = 0.95
         self.latency_females = 0.95
         self.mutation_range = 0.05
@@ -46,10 +47,15 @@ class CSimulation:
                                            itemSize=self.settings.size_of_individuals,
                                            itemSpeed=self.settings.speed_of_individuals)
         # create a population of males on random positions in that environment
-        self.population = CPopulation.CPopulation(self.settings.size_of_population, self.settings.sex_ratio,
-                                                  self.settings.s, self.settings.latency_males,
-                                                  self.settings.latency_females, self.settings.mutation_range,
-                                                  self.settings.mutation_rate, self.env.place_item_in_environment)
+        self.population = CPopulation.CPopulation(population_size=self.settings.size_of_population,
+                                                  sex_ratio=self.settings.sex_ratio,
+                                                  s_females=self.settings.s_females, s_males=self.settings.s_males,
+                                                  latency_males=self.settings.latency_males,
+                                                  latency_females=self.settings.latency_females,
+                                                  mutation_range=self.settings.mutation_range,
+                                                  mutation_rate=self.settings.mutation_rate,
+                                                  set_initial_position_in_the_environment
+                                                  =self.env.place_item_in_environment)
 
         # information about the current simulation
         self.selected_individual = None
@@ -118,7 +124,8 @@ class CSimulation:
     def __str__(self):
         z = "total population: "+str(self.settings.size_of_population)+"\n"
         z += "sex_ratio: "+str(self.settings.sex_ratio)+"\n"
-        z += "s: "+str(self.settings.s)+"\n"
+        z += "s_males: "+str(self.settings.s_males)+"\n"
+        z += "s_females: "+str(self.settings.s_females)+"\n"
         z += "latency of males: "+str(self.settings.latency_males)+"\n"
         z += "latency of females: "+str(self.settings.latency_females)+"\n"
         z += "area: "+str(self.settings.width)+"times"+str(self.settings.height)+"\n"

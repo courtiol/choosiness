@@ -43,7 +43,6 @@ class CChromosome:
             else:
                 novi_loci.append((locus_b * 1, locus_b_evolves))
         new_chromosome = CChromosome(self.mutation_range, self.mutation_rate, novi_loci)
-        new_chromosome.mutate()  # ToDo: put this outside this function!!!!
         return new_chromosome
 
     def __str__(self):
