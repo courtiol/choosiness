@@ -4,6 +4,8 @@ import alias
 
 # Parameters of environment:
 
+ARITHMETIC_MEAN = 0
+GEOMETRIC_MEAN = 1
 
 class CPopulation:
     """
@@ -18,7 +20,7 @@ class CPopulation:
     """
 
     def __init__(self, population_size, sex_ratio, s_males, s_females, latency_males,
-                 latency_females, mutation_range, mutation_rate, set_initial_position_in_the_environment):
+                 latency_females, mutation_range, mutation_rate, a, type_of_average, set_initial_position_in_the_environment):
         """
         Initializes a population.
         :param population_size: Integer which is the maximal number of the population
@@ -49,6 +51,8 @@ class CPopulation:
         self.mutation_range = mutation_range
         self.mutation_rate = mutation_rate
         self._add_individuals(self.populationSize)
+        self.a = a #weighted average for the quality of the offspring
+        self.type_of_average = type_of_average # ARITHMETIC_MEAN / GEOMETRIC_MEAN
 
     # choose for get_position_in_the_Environment any function that returns a tuple of coordinates in the environment
     def _add_individuals(self, n):
@@ -161,11 +165,13 @@ class CPopulation:
         if male_parent.accepts_for_mating(female_parent) and female_parent.accepts_for_mating(male_parent):
             male_parent.mate()
             female_parent.mate()
-            a = 1/2  # weighted average of quality of the male and female
-            # ToDo: the parameter "a" should be global and defined with the other ones!
-            # ToDo: you should also consider the multiplicative case (quality of offspring = product of parents quality)
             # Compute quality of possible offspring
-            quality_of_couple = male_parent.q*a+female_parent.q*(1-a)
+            if self.type_of_average == ARITHMETIC_MEAN:
+                quality_of_couple = male_parent.q*self.a+female_parent.q*(1-self.a)
+            elif self.type_of_average == GEOMETRIC_MEAN:
+                quality_of_couple = male_parent.q**self.a * female_parent.q**(1-self.a)
+            else:
+                print("You did not choose a correct value for the type of average in the constructor.")
             if len(self.couples) > self.maximal_number_of_saved_couples:
                 self._update_couple_list()
             self.couples.append(((male_parent, female_parent), quality_of_couple))

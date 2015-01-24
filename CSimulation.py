@@ -14,7 +14,7 @@ class CSimulationSettings:
     Stores the settings of the simulation
     """
     def __init__(self):
-        #parameters regarding the population and individuals
+        # parameters regarding the population and individuals
         self.size_of_population = 400
         self.sex_ratio = 0.5
         self.s_males = 0.999
@@ -23,8 +23,10 @@ class CSimulationSettings:
         self.latency_females = 0.95
         self.mutation_range = 0.05
         self.mutation_rate = 1
+        self.a = 1/2 # factor that influences the weighted average of the qualities of the offspring
+        self.type_of_average = CPopulation.ARITHMETIC_MEAN # choose between ARITHMETIC_MEAN and GEOMETRIC_MEAN
 
-        #parameters for environment
+        # parameters for environment
         self.width = 800
         self.height = 800
         self.size_of_individuals = 5
@@ -55,7 +57,8 @@ class CSimulation:
                                                   mutation_range=self.settings.mutation_range,
                                                   mutation_rate=self.settings.mutation_rate,
                                                   set_initial_position_in_the_environment
-                                                  =self.env.place_item_in_environment)
+                                                  =self.env.place_item_in_environment, a=self.settings.a,
+                                                  type_of_average=self.settings.type_of_average)
 
         # information about the current simulation
         self.selected_individual = None
