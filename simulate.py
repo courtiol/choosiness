@@ -1,12 +1,10 @@
 import CSimulation
-import time
-import pickle
 from Visualization.decorateSimulation import add_visualization_to_simulation
 from Visualization.VisualizationWithPygame.VisualizationCombination import CCombinationOfVisualizations
 
 # Start simulation
 simulation = CSimulation.CSimulation()
-print(simulation.env)
+
 visualization = CCombinationOfVisualizations(simulation)
 visualization.init_display()
 add_visualization_to_simulation(simulation, visualization)

@@ -46,6 +46,10 @@ class CCombinationOfVisualizations(CVisualizationWithPygameBaseClass):
             self.current_visualization.draw_simulation()
 
         def _next_visualization(self):
+            #if the visualization is not updated in every step, add the counter to zero before changing the
+            # visualization
+            if hasattr(self.current_visualization, 'counter'):
+                self.current_visualization.counter = 0
             self.visualization_pointer = (self.visualization_pointer+1) % len(self.list_of_visualizations)
             self.current_visualization = self.list_of_visualizations[self.visualization_pointer]
             self.current_visualization.init_screen()

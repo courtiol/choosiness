@@ -12,6 +12,9 @@ Simple example for using the Simulation class together with any Visualization
 
 # Create simulation object
 simulation = CSimulation.CSimulation()
+print("100 iterations without graphics")
+simulation.run_n_timesteps(100)
+print("now with graphics")
 #choose a visualization and initialize it
 visualization = CCombinationOfVisualizations(simulation)
 visualization.init_display()

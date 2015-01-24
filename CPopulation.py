@@ -40,7 +40,7 @@ class CPopulation:
         # potential parents for offspring
         # [...(male_parent, female_parent, quality_of_couple)...]
         self.couples = []
-        self.maximal_number_of_saved_couples = 1000
+        self.maximal_number_of_saved_couples = 1000 #ToDo: Either in constructor of a completley different solution
         self.sex_ratio = sex_ratio
         self.s_males = s_males  # survival rate of males
         self.s_females = s_females  # survival rate of males

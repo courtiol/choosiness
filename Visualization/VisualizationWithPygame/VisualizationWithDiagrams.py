@@ -42,14 +42,14 @@ class CVisualization4Histograms(CVisualizationWithPygameBaseClass):
         self.counter = 0
 
         # since there is only one plt object we need to count the number of instances of this class
-        # ToDo: not clean what happens when for some instance one instance of a class is closed
+        # ToDo: not so good. What happens when for some instance one instance of a class is closed
         CVisualization4Histograms.number_of_class_instances += 1
         self.current_class_instance_number = CVisualization4Histograms.number_of_class_instances
 
     def draw_simulation(self):
         if self.counter != 0:
+            self.counter = (self.counter+1) % self.update_in_every_n_step
             return
-        self.counter = (self.counter+1) % self.update_in_every_n_step
 
         # Get data to plot
         females_choosiness = self._get_female_choosiness_array()
@@ -117,8 +117,8 @@ class C1HistogramVisualization(CVisualization4Histograms):
 
     def draw_simulation(self):
         if self.counter != 0:
+            self.counter = (self.counter+1) % self.update_in_every_n_step
             return
-        self.counter = (self.counter+1) % self.update_in_every_n_step
 
         # Get data to plot
         females_choosiness = self._get_female_choosiness_array()
