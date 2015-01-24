@@ -74,8 +74,8 @@ class C2DVisualizationOfSimulation(CVisualizationWithPygameBaseClass):
         self.print_text_on_screen(text, self.simulation.settings.width/2, self.simulation.settings.height/2)
 
     def _draw_population(self, population):
-        pygame.display.set_caption("Simulation with "+str(self.simulation.population.get_current_females_size()) +
-                                   ' females in red and '+str(self.simulation.population.get_current_males_size()) +
+        pygame.display.set_caption("Simulation with "+str(self.simulation.population.current_females_size) +
+                                   ' females in red and '+str(self.simulation.population.current_males_size) +
                                    ' males in blue')
         for p in population.males:
             self._draw_individual(p)

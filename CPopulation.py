@@ -70,13 +70,16 @@ class CPopulation:
             else:
                 self.females.append(individual)
 
-    def get_current_population_size(self):  # ToDO ?? do not use get_XX
+    @property
+    def current_population_size(self):
         return len(self.males)+len(self.females)
 
-    def get_current_males_size(self):  # ToDO do not use get_XX
+    @property
+    def current_males_size(self):
         return len(self.males)
 
-    def get_current_females_size(self):  # ToDO do not use get_XX
+    @property
+    def current_females_size(self):
         return len(self.females)
 
     def _create_individual(self):
@@ -178,7 +181,7 @@ class CPopulation:
 
     def _update_couple_list(self):
         """
-        placeholder for the case that the size of self.couples exceeds its maximal size
+        This method is a placeholder for the case that the size of self.couples exceeds its maximal size
 
         In Detail: Every time a mating occurs the participating male and female are appended to the couples array.
         Therefore the array can only grow. To prevent the array from unlimited grow every time the size of couples
@@ -190,21 +193,7 @@ class CPopulation:
         self.couples = self.couples[1:]  # kick oldest element
 
     def __str__(self):
-        z = "total population: "+str(self.get_current_population_size())+"\n"
-        z += "females: "+str(self.get_current_females_size())+"\n"
-        z += "males: "+str(self.get_current_males_size())+"\n"
-        z += "maximal number of saved couples: "+str(self.maximal_number_of_saved_couples)+"\n"
-        z += "current number of couple in que: "+str(len(self.couples))+"\n"
-
-        # ToDo: check the two following alternatives by Ilja!
-        # z = ("total population: "+str(self.get_current_population_size())+"\n" +
-        #      "females: "+str(self.get_current_females_size())+"\n" +
-        #      "males: "+str(self.get_current_males_size())+"\n" +
-        #      "maximal number of saved couples: "+str(self.maximal_number_of_saved_couples)+"\n" +
-        #      "current number of couple in que: "+str(len(self.couples))+"\n")
-
-        # return """total population: {0}\nfemales: {1}\nmales: {2}\nmaximal number of saved couples: {3}\n
-        # current number of couple in que: {4}\n""".format(self.get_current_population_size(),
-        # self.get_current_females_size(), self.get_current_males_size(), self.maximal_number_of_saved_couples(),
-        # len(self.couples))
-        return z
+        return """total population: {0}\nfemales: {1}\nmales: {2}\nmaximal number of saved couples: {3}\n
+        current number of couple in que: {4}\n""".format(self.current_population_size(),
+        self.current_females_size(), self.current_males_size(), self.maximal_number_of_saved_couples(),
+        len(self.couples))
