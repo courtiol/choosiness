@@ -1,7 +1,7 @@
 import CSimulation
 import time
 import pickle
-from Visualization.DecorationOfSimulation import add_visualization_to_simulation
+from Visualization.decorateSimulation import add_visualization_to_simulation
 from Visualization.VisualizationWithPygame.VisualizationCombination import CCombinationOfVisualizations
 
 # Start simulation

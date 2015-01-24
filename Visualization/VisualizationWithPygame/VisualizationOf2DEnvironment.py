@@ -2,7 +2,7 @@ import pygame
 import math
 import CIndividual
 from Visualization.VisualizationWithPygame.CVisualizationWithPygameBaseClass import CVisualizationWithPygameBaseClass
-from Visualization.VisualizationWithPygame.VisualizationWithDiagrams import CVisualizationWithMatplotlib
+from Visualization.VisualizationWithPygame.VisualizationWithDiagrams import CVisualization4Histograms
 
 """
 Visualization of a 2D-Environment. Individuals are represented as circles. States and gender of the individuals are
@@ -16,6 +16,7 @@ class CNoVisualizationOfSimulation(CVisualizationWithPygameBaseClass):
     def __init__(self, simulation):
         CVisualizationWithPygameBaseClass.__init__(self, simulation)
         self.colour_of_background = (255, 255, 255)
+        self.selected_individual = None
 
     # overwrite
     def init_screen(self):
@@ -34,6 +35,11 @@ class CNoVisualizationOfSimulation(CVisualizationWithPygameBaseClass):
     def __str__(self):
         return "No visualization"
 
+
+    def give_information_about_selected_individual(self):
+        if self.selected_individual is not None:
+            print(str(self.selected_individual))
+
 # ---------------------------------------2D-Visualization-----------------------------------
 class C2DVisualizationOfSimulation(CVisualizationWithPygameBaseClass):
     """
@@ -48,6 +54,7 @@ class C2DVisualizationOfSimulation(CVisualizationWithPygameBaseClass):
         self.thickness_available = 0
         self.colour_of_females = (255, 0, 0)  # red
         self.colour_of_dead_individual = (0, 0, 0)  # black
+        self.selected_individual = None
 
     def draw_simulation(self):
         self._draw_environment()
@@ -100,9 +107,39 @@ class C2DVisualizationOfSimulation(CVisualizationWithPygameBaseClass):
                                    self.simulation.env.objectSize, self.thickness_available)
             self.print_text_on_screen(str(round(individual.phi, 4)), int(individual.x), int(individual.y), 15)
 
-    def _show_information_about_selected_individual(self):
-        if self.simulation.selected_individual is not None:
-            print(str(self.simulation.selected_individual))
+    def give_information_about_selected_individual(self):
+        """
+        shows __str of individual
+        :return:
+        """
+        if self.selected_individual is not None:
+            print(str(self.selected_individual))
+
+    def select_individual(self, x, y):
+        """
+        Searches in the environment for an individual with coordinates (x,y) and selects this individual
+        :param x: x-coordinate
+        :param y: y-coordinate
+        :return:-
+        """
+        self.selected_individual = self.simulation.env.find_item(x, y, [self.simulation.population])
 
     def __str__(self):
         return "2D visualization"
+
+    def handle_user_event(self, event):
+        """
+        overwritten method from the super class
+        :param event: user event
+        :return:
+        """
+        #add user events for selecting individuals in the environment
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            (mouse_x, mouse_y) = pygame.mouse.get_pos()
+            self.select_individual(mouse_x, mouse_y)
+            if self.selected_individual is not None:
+                self.give_information_about_selected_individual()
+        elif event.type == pygame.MOUSEBUTTONUP:
+            self.selected_individual = None
+        #deal with other possible user events in the super class
+        CVisualizationWithPygameBaseClass.handle_user_event(self,event)

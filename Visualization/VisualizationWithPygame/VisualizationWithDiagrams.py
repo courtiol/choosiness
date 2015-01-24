@@ -19,7 +19,7 @@ kind of environments.
 
 # useful tutorial for matplotlib http://matplotlib.org/users/pyplot_tutorial.html
 # ------------------4 histograms for choosiness/quality of males and females-----------------------
-class CVisualizationWithMatplotlib(CVisualizationWithPygameBaseClass):
+class CVisualization4Histograms(CVisualizationWithPygameBaseClass):
     """
     Display statistics of the the simulation with 4 histograms (for female choosiness, male choosiness, female quality,
     male quality)
@@ -43,8 +43,8 @@ class CVisualizationWithMatplotlib(CVisualizationWithPygameBaseClass):
 
         # since there is only one plt object we need to count the number of instances of this class
         # ToDo: not clean what happens when for some instance one instance of a class is closed
-        CVisualizationWithMatplotlib.number_of_class_instances += 1
-        self.current_class_instance_number = CVisualizationWithMatplotlib.number_of_class_instances
+        CVisualization4Histograms.number_of_class_instances += 1
+        self.current_class_instance_number = CVisualization4Histograms.number_of_class_instances
 
     def draw_simulation(self):
         if self.counter != 0:
@@ -108,12 +108,12 @@ class CVisualizationWithMatplotlib(CVisualizationWithPygameBaseClass):
 
 
 #---------------------1 histogram with female & male choosiness------------------------------------
-class CHistogramVisualization(CVisualizationWithMatplotlib):
+class C1HistogramVisualization(CVisualization4Histograms):
     """
     Histograms for the distribution of choosiness within the population
     """
     def __init__(self, simulation):
-        CVisualizationWithMatplotlib.__init__(self, simulation)
+        CVisualization4Histograms.__init__(self, simulation)
 
     def draw_simulation(self):
         if self.counter != 0:

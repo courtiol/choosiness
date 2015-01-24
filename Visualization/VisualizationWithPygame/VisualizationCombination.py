@@ -5,10 +5,10 @@ import pygame
 from Visualization.VisualizationWithPygame.CVisualizationWithPygameBaseClass import CVisualizationWithPygameBaseClass
 from Visualization.VisualizationWithPygame.VisualizationOf2DEnvironment import C2DVisualizationOfSimulation
 from Visualization.CVisualizationBaseClass import CSimpleVisualization
-from Visualization.VisualizationWithPygame.VisualizationWithDiagrams import CVisualizationWithMatplotlib, \
-    CHistogramVisualization
+from Visualization.VisualizationWithPygame.VisualizationWithDiagrams import CVisualization4Histograms, \
+    C1HistogramVisualization
 from Visualization.VisualizationWithPygame.VisualizationOf2DEnvironment import CNoVisualizationOfSimulation
-from Visualization.VisualizationWithPygame.VisualizationWithDiagrams import CHistogramVisualization
+from Visualization.VisualizationWithPygame.VisualizationWithDiagrams import C1HistogramVisualization
 
 class CCombinationOfVisualizations(CVisualizationWithPygameBaseClass):
         def __init__(self, simulation):
@@ -17,42 +17,27 @@ class CCombinationOfVisualizations(CVisualizationWithPygameBaseClass):
             self.visualization_pointer = 0  # which visualization
             self.list_of_visualizations.append(C2DVisualizationOfSimulation(self.simulation))
             self.list_of_visualizations.append(CNoVisualizationOfSimulation(self.simulation))  # no visualization
-            self.list_of_visualizations.append(CVisualizationWithMatplotlib(self.simulation))
-            self.list_of_visualizations.append(CHistogramVisualization(self.simulation))
+            self.list_of_visualizations.append(CVisualization4Histograms(self.simulation))
+            self.list_of_visualizations.append(C1HistogramVisualization(self.simulation))
             self.current_visualization = self.list_of_visualizations[self.visualization_pointer]
 
         def init_display(self):
             self.current_visualization.init_display()
 
-        def do_interaction_with_user(self):
+        def handle_user_event(self, event):
             """
             Encapsulates all possible user interactions. (Hot keys, click events)
             :return:
             """
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    self.simulation.quit_simulation()
-                elif event.type == pygame.MOUSEBUTTONDOWN:
-                    (mouse_x, mouse_y) = pygame.mouse.get_pos()
-                    self.simulation.select_individual(mouse_x, mouse_y)
-                elif event.type == pygame.MOUSEBUTTONUP:
-                    self.simulation.selected_individual = None
-                elif event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_p:
-                        self.simulation.pause_simulation()
-                    elif event.key == pygame.K_c:
-                        self._show_couples_array()
-                    elif event.key == pygame.K_s:
-                        self.simulation.save()
-                    elif event.key == pygame.K_i:
-                        print(str(self.simulation.settings.step_counter))
-                    elif event.key == pygame.K_RIGHT:
-                        self._next_visualization()
-                    elif event.key == pygame.K_LEFT:
+            #add user events for changing the visualization then call
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RIGHT:
+                    self._next_visualization()
+                elif event.key == pygame.K_LEFT:
                         self._prior_visualization()
-            if self.simulation.selected_individual:
-                self.simulation.give_information_about_selected_individual()
-                self._show_information_about_selected_individual()
+            #deal with remaining user events in the current visualization
+            self.current_visualization.handle_user_event(event)
+
 
         def print_information_about_population(self):
             self.current_visualization.print_information_about_population()

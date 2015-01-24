@@ -10,7 +10,7 @@ should be derived from the the following abstract base class:
 
 class CVisualizationBaseClass:
     """
-    Abstract base class for any visualization of the simulation
+    This class defines the 'contract' for the interaction with the simulation class
     """
 
     def __init__(self, simulation):
@@ -19,8 +19,6 @@ class CVisualizationBaseClass:
     def print_information_about_population(self):
         print(self.simulation.population)
 
-    # overwrite me
-    # These functions are necessary
     def draw_simulation(self):
         pass
 

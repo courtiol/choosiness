@@ -36,12 +36,8 @@ class CSimulation:
     """
     def __init__(self):
         self.settings = CSimulationSettings()
-
-        self.graphics_just_text = CSimpleVisualization(self)
-
         # set the environment in which the population is placed
         self.env = Environment.Environment(self.settings.width, self.settings.height)
-
         # create a population of males on random positions in that environment
         self.population = CPopulation.CPopulation(self.settings.size_of_population, self.settings.sex_ratio,
                                                   self.settings.s, self.settings.latency_males,
@@ -56,15 +52,7 @@ class CSimulation:
         # display information
         # self.graphicsSimulation.init_display()
 
-    def show_only_text(self):
-        """
-        Turnes off the visual effects of the simulation. Instead information is shown in the terminal.
-        This serves for speeding up the simulation
-        :return:
-        """
-        self.graphicsSimulation = self.graphics_just_text
-
-    def _perform_time_step(self):
+    def perform_time_step(self):
         """
         Performes one iteration of the simulation
         :return:
@@ -80,7 +68,7 @@ class CSimulation:
         """
         while self.running:
             if not self.pause:
-                self._perform_time_step()
+                self.perform_time_step()
             self.hook_for_user_control()
 
     def run_n_timesteps(self, n):
@@ -92,7 +80,7 @@ class CSimulation:
         for i in range(n):
             if self.running:
                 if not self.pause:
-                    self._perform_time_step()
+                    self.perform_time_step()
                 self.hook_for_user_control()
 
     def hook_for_user_control(self):
@@ -120,27 +108,6 @@ class CSimulation:
     def pause_simulation(self):
         self.pause = False if self.pause else True
 
-    def give_information_about_selected_individual(self):
-        """
-        Place holder for potential later use
-        :return:
-        """
-        # (mouseX, mouseY) = pygame.mouse.get_pos()
-        # do smth with it
-        pass
-    
-    def select_individual(self, x, y):
-        self.selected_individual = self.env.find_item(x, y, [self.population])
-
-    def show_information_about_population(self):
-        self.graphicsSimulation.print_information_about_population()
-
-    def save(self):
-        print("Save simulation")
-        pickle.dump(self.population, open("saved/population"+str(self.settings.step_counter)+".p", "wb"))
-        pickle.dump(self.env, open("saved/environment"+str(self.settings.step_counter)+".p", "wb"))
-        pickle.dump(self.settings, open("saved/settings"+str(self.settings.step_counter)+".p", "wb"))
-
     def __str__(self):
         z = "total population: "+str(self.settings.size_of_population)+"\n"
         z += "sex_ratio: "+str(self.settings.sex_ratio)+"\n"
@@ -149,3 +116,9 @@ class CSimulation:
         z += "latency of females: "+str(self.settings.latency_females)+"\n"
         z += "area: "+str(self.settings.width)+"times"+str(self.settings.height)+"\n"
         return z
+
+    def save(self):
+        print("Save simulation")
+        pickle.dump(self.population, open("saved/population"+str(self.settings.step_counter)+".p", "wb"))
+        pickle.dump(self.env, open("saved/environment"+str(self.settings.step_counter)+".p", "wb"))
+        pickle.dump(self.settings, open("saved/settings"+str(self.settings.step_counter)+".p", "wb"))

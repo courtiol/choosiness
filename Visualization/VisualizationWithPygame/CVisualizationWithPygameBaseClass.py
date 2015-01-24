@@ -6,8 +6,10 @@ import CIndividual
 from Visualization.CVisualizationBaseClass import CVisualizationBaseClass
 
 """
-In this module you find different graphical representations of the simulation. Each representation of the simulation
-should be derived from the the following abstract base class:
+In this module all visualization using pyGame are stored. You find here also the base class which deals with standard
+user interactions and the initialization of pygame. Since in pyGame it is only possible to have one window open in the
+same time we use a static parameter screen which circumvents the problems that several visualizations are used in the
+same time.
 """
 
 # ---------------------------------------Visualization with pygame--------------------------
@@ -24,7 +26,6 @@ class CVisualizationWithPygameBaseClass(CVisualizationBaseClass):
 
     # overwrite
     def init_display(self):
-        #global screen
         CVisualizationWithPygameBaseClass.screen = pygame.display.set_mode((self.width_of_window, self.height_of_window))
         pygame.display.set_caption("Simulation with "+str(self.simulation.population.get_current_females_size()) +
                                    ' females in red and '+str(self.simulation.population.get_current_males_size()) +
@@ -32,7 +33,6 @@ class CVisualizationWithPygameBaseClass(CVisualizationBaseClass):
         pygame.init()
 
     def init_screen(self):
-        #global screen
         CVisualizationWithPygameBaseClass.screen = pygame.display.set_mode((self.simulation.settings.width, self.simulation.settings.height))
 
     def do_interaction_with_user(self):
@@ -41,25 +41,27 @@ class CVisualizationWithPygameBaseClass(CVisualizationBaseClass):
         :return:
         """
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                self.simulation.quit_simulation()
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                (mouse_x, mouse_y) = pygame.mouse.get_pos()
-                self.simulation.select_individual(mouse_x, mouse_y)
-            elif event.type == pygame.MOUSEBUTTONUP:
-                self.simulation.selected_individual = None
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_p:
-                    self.simulation.pause_simulation()
-                elif event.key == pygame.K_c:
-                    self._show_couples_array()
-                elif event.key == pygame.K_s:
-                    self.simulation.save()
-                elif event.key == pygame.K_i:
-                    print(str(self.simulation.settings.step_counter))
-            if self.simulation.selected_individual:
-                self.simulation.give_information_about_selected_individual()
-                self._show_information_about_selected_individual()
+            self.handle_user_event(event)
+
+
+    def handle_user_event(self, event):
+        """
+        Deal with user events - like pressed keyboard buttoms & mouse
+        :param event: event which needs to be dealt with
+        :return:-
+        """
+        #deal with standard events like quitting, pausing the simulation
+        if event.type == pygame.QUIT:
+            self.simulation.quit_simulation()
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_p:
+                self.simulation.pause_simulation()
+            elif event.key == pygame.K_c:
+                self._show_couples_array()
+            elif event.key == pygame.K_s:
+                self.simulation.save()
+            elif event.key == pygame.K_i:
+                print(str(self.simulation.settings.step_counter))
 
     def print_text_on_screen(self, text, pos_x, pos_y, size=30, colour=(0, 0, 0)):
         large_text = pygame.font.Font('freesansbold.ttf', size)
