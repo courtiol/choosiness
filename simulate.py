@@ -1,14 +1,16 @@
 import CSimulation
 from Visualization.decorateSimulation import add_visualization_to_simulation
 from Visualization.VisualizationWithPygame.VisualizationCombination import CCombinationOfVisualizations
+from Tools.usefulDecorators import measure_percentage_of_time
 
 # Start simulation
 simulation = CSimulation.CSimulation()
 
-visualization = CCombinationOfVisualizations(simulation)
-visualization.init_display()
-add_visualization_to_simulation(simulation, visualization)
-simulation.run()
+#visualization = CCombinationOfVisualizations(simulation)
+#visualization.init_display()
+#padd_visualization_to_simulation(simulation, visualization)
+simulation.run_n_timesteps(100)
+#measure_percentage_of_time.print_results()
 
 """
 population = pickle.load( open( "saved/population878.p", "rb" ) )

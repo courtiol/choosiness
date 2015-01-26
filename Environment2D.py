@@ -1,6 +1,7 @@
 import math
 import random
 from Tools.usefulDecorators import printAllParameters
+from Tools.usefulDecorators import measure_percentage_of_time
 
 
 # Parameters of environment:
@@ -22,7 +23,7 @@ def add_vectors(angle1, length1, angle2, length2):
 # -----------End-----------------
 
 
-class Environment():
+class Environment2D():
     """
     Defines the structure of the environment (e.g.boundary of a simulation and its properties)
     """
@@ -62,24 +63,24 @@ class Environment():
         item.angle = random.uniform(0, math.pi * 2)
 
     # ALEX checked untill there!
-    def update(self, item1, item2, collision_handler):
+    def update(self, group1, group2, collision_handler):
         """
         Moves individuals and tests for collisions with the walls and each other
-        :param item1:
-        :param item2:
+        :param group1: group of objects
+        :param group2: group of objects
         :param collision_handler: method of type collision_handler(CIndividual,CIndividual). The method is called
         when a collision occurs.
         :return:
         """
-        for i, objectA in enumerate(item1):
-            self._move(objectA)
-            self._bounce(objectA)
+        for i, object1 in enumerate(group1):
+            self._move(object1)
+            self._bounce(object1)
             # for object in population1.individuals[i+1:]:
-            for objectB in item2:
-                self._collide(objectA, objectB, collision_handler)
-        for objectB in item2:
-            self._move(objectB)
-            self._bounce(objectB)
+            for object2 in group2:
+                self._collide(object1, object2, collision_handler)
+        for object2 in group2:
+            self._move(object2)
+            self._bounce(object2)
 
     def _bounce(self, item):
         """
@@ -152,3 +153,17 @@ class Environment():
     @printAllParameters
     def __str__(self):
         return ""
+
+
+class Environment2DNoBounce(Environment2D):
+    """
+    No bouncing at the borders of the area.
+    """
+    def _bounce(self, item):
+        """
+        Tests whether an individual has hit the boundary of the environment
+        :param item:
+        :return:
+        """
+        item.x %= self.width
+        item.y %= self.height

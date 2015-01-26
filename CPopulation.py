@@ -1,6 +1,7 @@
 import random
 import CIndividual
 import alias
+from Tools.usefulDecorators import measure_percentage_of_time
 
 # Parameters of environment:
 

@@ -1,4 +1,4 @@
-import Environment
+import Environment2D
 import CPopulation
 from Visualization.CVisualizationBaseClass import CSimpleVisualization
 from Tools.usefulDecorators import printAllParameters
@@ -15,7 +15,7 @@ class CSimulationSettings:
     """
     def __init__(self):
         # parameters regarding the population and individuals
-        self.size_of_population = 400
+        self.size_of_population = 20
         self.sex_ratio = 0.5
         self.s_males = 0.999
         self.s_females = 0.999
@@ -27,6 +27,7 @@ class CSimulationSettings:
         self.type_of_average = CPopulation.ARITHMETIC_MEAN # choose between ARITHMETIC_MEAN and GEOMETRIC_MEAN
 
         # parameters for environment
+        self.type_of_environment = Environment2D.Environment2D # options: Environment2D/Environment2DNoBounce
         self.width = 800
         self.height = 800
         self.size_of_individuals = 5
@@ -49,7 +50,7 @@ class CSimulation:
     def __init__(self):
         self.settings = CSimulationSettings()
         # set the environment in which the population is placed
-        self.env = Environment.Environment(width=self.settings.width, height=self.settings.height,
+        self.env = self.settings.type_of_environment(width=self.settings.width, height=self.settings.height,
                                            itemSize=self.settings.size_of_individuals,
                                            itemSpeed=self.settings.speed_of_individuals)
         # create a population of males on random positions in that environment
@@ -71,7 +72,6 @@ class CSimulation:
 
         # display information
         # self.graphicsSimulation.init_display()
-
     def perform_time_step(self):
         """
         Performes one iteration of the simulation
