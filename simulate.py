@@ -10,7 +10,11 @@ simulation = CSimulation.CSimulation()
 #visualization.init_display()
 #padd_visualization_to_simulation(simulation, visualization)
 simulation.run_n_timesteps(100)
-#measure_percentage_of_time.print_results()
+measure_percentage_of_time.print_results()
+print("col: "+str(simulation.settings.collision_counter))
+print("average: "+str(simulation.settings.average_number_of_collisions_per_timestep))
+#(col: 1917, average: 63.9)
+#col: 368, average: 12.266666666666667
 
 """
 population = pickle.load( open( "saved/population878.p", "rb" ) )

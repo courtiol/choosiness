@@ -5,6 +5,10 @@ from Visualization.decorateSimulation import add_visualization_to_simulation
 from Visualization.VisualizationWithPygame.VisualizationCombination import CCombinationOfVisualizations
 from Tools.timer import Timer
 
+"""
+Example how to measure a certain number of cycles
+"""
+
 # Start simulation
 simulation = CSimulation.CSimulation()
 

@@ -21,7 +21,8 @@ class CPopulation:
     """
 
     def __init__(self, population_size, sex_ratio, s_males, s_females, latency_males,
-                 latency_females, mutation_range, mutation_rate, a, type_of_average, set_initial_position_in_the_environment):
+                 latency_females, mutation_range, mutation_rate, a, type_of_average, maximal_number_of_saved_couples,
+                 set_initial_position_in_the_environment):
         """
         Initializes a population.
         :param population_size: Integer which is the maximal number of the population
@@ -41,7 +42,7 @@ class CPopulation:
         # potential parents for offspring
         # [...(male_parent, female_parent, quality_of_couple)...]
         self.couples = []
-        self.maximal_number_of_saved_couples = 1000 #ToDo: Either in constructor of a completley different solution
+        self.maximal_number_of_saved_couples = maximal_number_of_saved_couples
         self.sex_ratio = sex_ratio
         self.s_males = s_males  # survival rate of males
         self.s_females = s_females  # survival rate of males
@@ -78,7 +79,7 @@ class CPopulation:
                 # Here could be also written return. However for future use if the filling of the couples array runs
                 # parallel it is more reasonable to use continue, since the couples array could be filled up during
                 # execution of this step.
-                print("Couples array was empty. No individual added.")
+                # print("Couples array was empty. No individual added.")
                 continue
             if individual.gender == CIndividual.MALE:
                 self.males.append(individual)
@@ -123,6 +124,7 @@ class CPopulation:
         self.set_initial_position_in_the_environment(new_individual)
         return new_individual
 
+    @measure_percentage_of_time
     def update_states(self):
         """
         Updates the states of all individuals. Dead individuals are replaced with children obtained from the couples

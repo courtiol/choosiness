@@ -8,6 +8,8 @@ from Visualization.VisualizationWithPygame.VisualizationWithDiagrams import CVis
 Visualization of a 2D-Environment. Individuals are represented as circles. States and gender of the individuals are
 represented as colours.
 """
+
+
 # ---------------------------------------No visualization-----------------------------------
 class CNoVisualizationOfSimulation(CVisualizationWithPygameBaseClass):
     """
@@ -35,10 +37,10 @@ class CNoVisualizationOfSimulation(CVisualizationWithPygameBaseClass):
     def __str__(self):
         return "No visualization"
 
-
     def give_information_about_selected_individual(self):
         if self.selected_individual is not None:
             print(str(self.selected_individual))
+
 
 # ---------------------------------------2D-Visualization-----------------------------------
 class C2DVisualizationOfSimulation(CVisualizationWithPygameBaseClass):
@@ -92,18 +94,22 @@ class C2DVisualizationOfSimulation(CVisualizationWithPygameBaseClass):
         # thickness = 2
         if individual.gender == CIndividual.MALE:
             if individual.state == CIndividual.IN_LATENCY:
-                pygame.draw.circle(CVisualizationWithPygameBaseClass.screen, self.colour_of_males, (int(individual.x), int(individual.y)),
+                pygame.draw.circle(CVisualizationWithPygameBaseClass.screen, self.colour_of_males, (int(individual.x),
+                                                                                                    int(individual.y)),
                                    self.simulation.env.itemSize, self.thickness_latency)
             else:
-                pygame.draw.circle(CVisualizationWithPygameBaseClass.screen, self.colour_of_males, (int(individual.x), int(individual.y)),
+                pygame.draw.circle(CVisualizationWithPygameBaseClass.screen, self.colour_of_males, (int(individual.x),
+                                                                                                    int(individual.y)),
                                    self.simulation.env.itemSize, self.thickness_available)
             self.print_text_on_screen(str(round(individual.q, 4)), int(individual.x), int(individual.y), 15)
         else:
             if individual.state == CIndividual.IN_LATENCY:
-                pygame.draw.circle(CVisualizationWithPygameBaseClass.screen, self.colour_of_females, (int(individual.x), int(individual.y)),
+                pygame.draw.circle(CVisualizationWithPygameBaseClass.screen, self.colour_of_females, (int(individual.x),
+                                                                                                      int(individual.y)),
                                    self.simulation.env.itemSize, self.thickness_latency)
             else:
-                pygame.draw.circle(CVisualizationWithPygameBaseClass.screen, self.colour_of_females, (int(individual.x), int(individual.y)),
+                pygame.draw.circle(CVisualizationWithPygameBaseClass.screen, self.colour_of_females, (int(individual.x),
+                                                                                                      int(individual.y)),
                                    self.simulation.env.itemSize, self.thickness_available)
             self.print_text_on_screen(str(round(individual.phi, 4)), int(individual.x), int(individual.y), 15)
 
@@ -133,7 +139,7 @@ class C2DVisualizationOfSimulation(CVisualizationWithPygameBaseClass):
         :param event: user event
         :return:
         """
-        #add user events for selecting individuals in the environment
+        # add user events for selecting individuals in the environment
         if event.type == pygame.MOUSEBUTTONDOWN:
             (mouse_x, mouse_y) = pygame.mouse.get_pos()
             self.select_individual(mouse_x, mouse_y)

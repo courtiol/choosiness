@@ -63,6 +63,7 @@ class Environment2D():
         item.angle = random.uniform(0, math.pi * 2)
 
     # ALEX checked untill there!
+    @measure_percentage_of_time
     def update(self, group1, group2, collision_handler):
         """
         Moves individuals and tests for collisions with the walls and each other
@@ -72,7 +73,7 @@ class Environment2D():
         when a collision occurs.
         :return:
         """
-        for i, object1 in enumerate(group1):
+        for object1 in group1:
             self._move(object1)
             self._bounce(object1)
             # for object in population1.individuals[i+1:]:

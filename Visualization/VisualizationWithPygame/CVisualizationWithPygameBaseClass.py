@@ -1,7 +1,6 @@
 __author__ = 'robert'
 
 import pygame
-#import math
 import CIndividual
 from Visualization.CVisualizationBaseClass import CVisualizationBaseClass
 
@@ -12,6 +11,7 @@ same time we use a static parameter screen which circumvents the problems that s
 same time.
 """
 
+
 # ---------------------------------------Visualization with pygame--------------------------
 class CVisualizationWithPygameBaseClass(CVisualizationBaseClass):
 
@@ -21,19 +21,21 @@ class CVisualizationWithPygameBaseClass(CVisualizationBaseClass):
 
     def __init__(self, simulation):
         CVisualizationBaseClass.__init__(self, simulation)
-        self.width_of_window = self.simulation.settings.width #ToDo: Assign better with parameters of constructor
+        self.width_of_window = self.simulation.settings.width # ToDo: Assign better with parameters of constructor
         self.height_of_window = self.simulation.settings.height
 
     # overwrite
     def init_display(self):
-        CVisualizationWithPygameBaseClass.screen = pygame.display.set_mode((self.width_of_window, self.height_of_window))
+        CVisualizationWithPygameBaseClass.screen = pygame.display.set_mode((self.width_of_window,
+                                                                            self.height_of_window))
         pygame.display.set_caption("Simulation with "+str(self.simulation.population.current_number_of_females) +
                                    ' females in red and '+str(self.simulation.population.current_number_of_males) +
                                    ' males in blue')
         pygame.init()
 
     def init_screen(self):
-        CVisualizationWithPygameBaseClass.screen = pygame.display.set_mode((self.simulation.settings.width, self.simulation.settings.height))
+        CVisualizationWithPygameBaseClass.screen = pygame.display.set_mode((self.simulation.settings.width,
+                                                                            self.simulation.settings.height))
 
     def do_interaction_with_user(self):
         """
@@ -43,14 +45,13 @@ class CVisualizationWithPygameBaseClass(CVisualizationBaseClass):
         for event in pygame.event.get():
             self.handle_user_event(event)
 
-
     def handle_user_event(self, event):
         """
         Deal with user events - like pressed keyboard buttoms & mouse
         :param event: event which needs to be dealt with
         :return:-
         """
-        #deal with standard events like quitting, pausing the simulation
+        # deal with standard events like quitting, pausing the simulation
         if event.type == pygame.QUIT:
             self.simulation.quit_simulation()
         elif event.type == pygame.KEYDOWN:
@@ -86,4 +87,3 @@ class CVisualizationWithPygameBaseClass(CVisualizationBaseClass):
         text += "i - current time step\n"
         text += "left click on circle - information about individual in terminal"
         return text
-

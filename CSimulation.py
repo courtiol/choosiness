@@ -1,21 +1,20 @@
-import Environment2D
+import Environments.Environment2D
 import CPopulation
+from Environments import Environment2DDelaunay, Environment2D
 from Visualization.CVisualizationBaseClass import CSimpleVisualization
 from Tools.usefulDecorators import printAllParameters
 from Visualization.VisualizationWithPygame.VisualizationCombination import CCombinationOfVisualizations
 import pickle
 
 
-
 # ----------------------------CSimulation-------------------------------------
-
 class CSimulationSettings:
     """
     Stores the settings of the simulation
     """
     def __init__(self):
         # parameters regarding the population and individuals
-        self.size_of_population = 20
+        self.size_of_population = 200
         self.sex_ratio = 0.5
         self.s_males = 0.999
         self.s_females = 0.999
@@ -23,14 +22,19 @@ class CSimulationSettings:
         self.latency_females = 0.95
         self.mutation_range = 0.05
         self.mutation_rate = 1
-        self.a = 1/2 # factor that influences the weighted average of the qualities of the offspring
-        self.type_of_average = CPopulation.ARITHMETIC_MEAN # choose between ARITHMETIC_MEAN and GEOMETRIC_MEAN
+        self.a = 1/2  # factor that influences the weighted average of the qualities of the offspring
+        self.type_of_average = CPopulation.ARITHMETIC_MEAN  # choose between ARITHMETIC_MEAN and GEOMETRIC_MEAN
+        self.maximal_number_of_saved_couples = 1000
 
         # parameters for environment
-        self.type_of_environment = Environment2D.Environment2D # options: Environment2D/Environment2DNoBounce
+        # The following environments can be chosen:
+        # Environment2D.Environment2D
+        # Environment2D.Environment2DNoBounce
+        # Environment2DDelaunay.Environment2DDelaunay
+        self.type_of_environment = Environment2DDelaunay.Environment2DDelaunay
         self.width = 800
         self.height = 800
-        self.size_of_individuals = 5
+        self.size_of_individuals = 6
         self.speed_of_individuals = 7
 
         self.collision_counter = 0
@@ -51,8 +55,8 @@ class CSimulation:
         self.settings = CSimulationSettings()
         # set the environment in which the population is placed
         self.env = self.settings.type_of_environment(width=self.settings.width, height=self.settings.height,
-                                           itemSize=self.settings.size_of_individuals,
-                                           itemSpeed=self.settings.speed_of_individuals)
+                                                     itemSize=self.settings.size_of_individuals,
+                                                     itemSpeed=self.settings.speed_of_individuals)
         # create a population of males on random positions in that environment
         self.population = CPopulation.CPopulation(population_size=self.settings.size_of_population,
                                                   sex_ratio=self.settings.sex_ratio,
@@ -61,9 +65,9 @@ class CSimulation:
                                                   latency_females=self.settings.latency_females,
                                                   mutation_range=self.settings.mutation_range,
                                                   mutation_rate=self.settings.mutation_rate,
-                                                  set_initial_position_in_the_environment
-                                                  =self.env.place_item_in_environment, a=self.settings.a,
-                                                  type_of_average=self.settings.type_of_average)
+                                                  set_initial_position_in_the_environment=self.env.place_item_in_environment,
+                                                  a=self.settings.a, type_of_average=self.settings.type_of_average,
+                                                  maximal_number_of_saved_couples=self.settings.maximal_number_of_saved_couples)
 
         # information about the current simulation
         self.selected_individual = None
@@ -97,7 +101,7 @@ class CSimulation:
         :param n: number of timesteps
         :return:
         """
-        for i in range(n):
+        for _ in range(n):
             if self.running:
                 if not self.pause:
                     self.perform_time_step()
@@ -108,6 +112,7 @@ class CSimulation:
         This is a hook for decorators, that want to interact with users
         """
         pass
+
     def collision_occured(self, male, female):
         """
         The method is not called in this class. Instead it is given as a function pointer to the environment class

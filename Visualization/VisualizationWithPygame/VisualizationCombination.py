@@ -10,6 +10,7 @@ from Visualization.VisualizationWithPygame.VisualizationWithDiagrams import CVis
 from Visualization.VisualizationWithPygame.VisualizationOf2DEnvironment import CNoVisualizationOfSimulation
 from Visualization.VisualizationWithPygame.VisualizationWithDiagrams import C1HistogramVisualization
 
+
 class CCombinationOfVisualizations(CVisualizationWithPygameBaseClass):
         def __init__(self, simulation):
             CVisualizationWithPygameBaseClass.__init__(self, simulation)
@@ -29,15 +30,14 @@ class CCombinationOfVisualizations(CVisualizationWithPygameBaseClass):
             Encapsulates all possible user interactions. (Hot keys, click events)
             :return:
             """
-            #add user events for changing the visualization then call
+            # add user events for changing the visualization then call
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RIGHT:
                     self._next_visualization()
                 elif event.key == pygame.K_LEFT:
                         self._prior_visualization()
-            #deal with remaining user events in the current visualization
+            # deal with remaining user events in the current visualization
             self.current_visualization.handle_user_event(event)
-
 
         def print_information_about_population(self):
             self.current_visualization.print_information_about_population()
@@ -46,7 +46,7 @@ class CCombinationOfVisualizations(CVisualizationWithPygameBaseClass):
             self.current_visualization.draw_simulation()
 
         def _next_visualization(self):
-            #if the visualization is not updated in every step, add the counter to zero before changing the
+            # if the visualization is not updated in every step, add the counter to zero before changing the
             # visualization
             if hasattr(self.current_visualization, 'counter'):
                 self.current_visualization.counter = 0

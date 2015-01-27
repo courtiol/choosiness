@@ -2,6 +2,7 @@ __author__ = 'robert'
 
 import time
 
+
 def printAllParameters(__str__):
     """
     Decorator for __str__. After applying the method prints the values of all parameters of the class
@@ -16,6 +17,7 @@ def printAllParameters(__str__):
         return z
     return new_str
 
+
 def measure_time(timed_method):
     """
     Decorator for measuring the executing time
@@ -28,7 +30,7 @@ def measure_time(timed_method):
         result = timed_method(*args, **kw)
         te = time.time()
 
-        #print('%r (%r, %r) %2.2f sec' % \
+        # print('%r (%r, %r) %2.2f sec' % \
         #      (timed_method.__name__, args, kw, te-ts))
         print(te-ts)
         return result
@@ -55,12 +57,12 @@ def measure_percentage_of_time(timed_method):
         print(measure_percentage_of_time.measured_times)
 
     def timed(*args, **kw):
-        #measure time to run the method
+        # measure time to run the method
         ts = time.time()
         result = timed_method(*args, **kw)
         te = time.time()
 
-        #check if function got measured before
+        # check if function got measured before
         runtime = measure_percentage_of_time.measured_times.get(timed_method.__name__)
         if runtime is not None:
             runtime += te-ts
@@ -73,15 +75,6 @@ def measure_percentage_of_time(timed_method):
     measure_percentage_of_time.total_time = 0
     measure_percentage_of_time.print_results = print_results
     return timed
-
-class Tester:
-    @measure_percentage_of_time
-    #@measure_time
-    def testA(self,nix):
-        print(nix)
-    @measure_percentage_of_time
-    def testB(self,nix):
-        print(nix)
 
 """
 Example of using @measure_percentage_of_time:
