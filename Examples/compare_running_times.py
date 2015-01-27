@@ -12,10 +12,14 @@ Set @measure_percentage_of_time from the package Tools in front of functions to 
 
 # Start simulation
 simulation = CSimulation.CSimulation()
+print("Create simulation: ")
+print(simulation.settings)
 # Run the simulation and measure the time
-simulation.run_n_timesteps(30)
+number_of_iterations = 10000
+print("Test running time with "+str(number_of_iterations)+" iterations.")
+simulation.run_n_timesteps(number_of_iterations)
 
 #Print the results
 measure_percentage_of_time.print_results()
-print("col: "+str(simulation.settings.collision_counter))
-print("average: "+str(simulation.settings.average_number_of_collisions_per_timestep))
+print("number of collisions: "+str(simulation.settings.collision_counter))
+print("average per timestep: "+str(simulation.settings.average_number_of_collisions_per_timestep))
