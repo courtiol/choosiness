@@ -1,8 +1,7 @@
 import numpy as np
 import math
 from scipy.spatial import Delaunay
-import matplotlib.pyplot as plt
-from Environments import Environment2D
+from Environments.Environment2D import Environment2D
 from Tools.usefulDecorators import measure_percentage_of_time
 
 
@@ -37,7 +36,7 @@ def check_for_collisions(points, dist, collision_handler):
             collision_handler(neighbor, index)
 
 
-class Environment2DDelaunay(Environment2D.Environment2D):
+class Environment2DDelaunay(Environment2D):
     """
     This class provides a faster method to check collisions using a delaunay triangulation, which can be computed in
     O(nlog n).
@@ -91,7 +90,7 @@ class Environment2DDelaunay(Environment2D.Environment2D):
         check_for_collisions(coord_1, self.itemSize*2, collision_detected)
 
 
-class Environment2DTest(Environment2D.Environment2D):
+class Environment2DTest(Environment2D):
     """
     Yet another collision handler for testing
     """
@@ -105,12 +104,12 @@ class Environment2DTest(Environment2D.Environment2D):
         """
         sq_radius = self.itemSize**2
         # compute bounding box to decrease the array to check
-        lowerx = int(max([object.x-self.itemSize,0]))
-        upperx = int(min([object.x+self.itemSize,self.width]))
-        for x in range(lowerx, upperx):
-            lowery = int(max([object.y-self.itemSize,0]))
-            uppery = int(min([object.y+self.itemSize,self.height]))
-            for y in range(lowery, uppery):
+        lower_x = int(max([object.x-self.itemSize,0]))
+        upper_x = int(min([object.x+self.itemSize,self.width]))
+        for x in range(lower_x, upper_x):
+            lower_y = int(max([object.y-self.itemSize,0]))
+            upper_y = int(min([object.y+self.itemSize,self.height]))
+            for y in range(lower_y, upper_y):
                 if (x-object.x)**2 + (y-object.y)**2 - sq_radius <= 0:
                     # if func return false don t check the others. This is necessary to prevent the algorithm from
                     # detecting several times the same pair of objects

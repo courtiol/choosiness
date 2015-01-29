@@ -2,6 +2,18 @@ __author__ = 'robert'
 
 import time
 
+class CDecorator():
+    """
+    Standard decorator class
+    """
+    def __init__(self, function_to_be_manipulated, list_of_functions):
+        self.old_function = function_to_be_manipulated
+        self.functions_after_performing_timestep = list_of_functions
+
+    def __call__(self):
+        self.old_function()
+        for func in self.functions_after_performing_timestep:
+            func()
 
 def printAllParameters(__str__):
     """

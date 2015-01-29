@@ -14,7 +14,7 @@ class CSimulationSettings:
     """
     def __init__(self):
         # parameters regarding the population and individuals
-        self.size_of_population = 200
+        self.size_of_population = 100
         self.sex_ratio = 0.5
         self.s_males = 0.999
         self.s_females = 0.999
@@ -31,7 +31,8 @@ class CSimulationSettings:
         # Environment2D.Environment2D
         # Environment2D.Environment2DNoBounce
         # Environment2DDelaunay.Environment2DDelaunay
-        self.type_of_environment =  EnvironmentL.EnvironmentL
+        # EnvironmentL.EnvironmentL
+        self.type_of_environment =  Environment2DDelaunay.Environment2DDelaunay
         self.width = 800
         self.height = 800
         self.size_of_individuals = 6
@@ -51,8 +52,11 @@ class CSimulation:
     In this class the parameters of the simulation are saved. The methods "run" and "performTimeStep" are the frame of
     the simulation.
     """
-    def __init__(self):
-        self.settings = CSimulationSettings()
+    def __init__(self, settings=None):
+        if settings is None:
+            self.settings = CSimulationSettings()
+        else:
+            self.settings = settings
         # set the environment in which the population is placed
         self.env = self.settings.type_of_environment(width=self.settings.width, height=self.settings.height,
                                                      itemSize=self.settings.size_of_individuals,

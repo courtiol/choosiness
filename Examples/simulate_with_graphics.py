@@ -18,7 +18,7 @@ simulation.run_n_timesteps(100)
 
 print("Now with graphics")
 # choose a visualization and initialize it
-visualization = C1HistogramVisualization(simulation) # CCombinationOfVisualizations(simulation)
+visualization = CCombinationOfVisualizations(simulation)  # or e.g. C1HistogramVisualization(simulation)
 visualization.init_display()
 # modify the simulation that it can be visualized
 add_visualization_to_simulation(simulation, visualization)
