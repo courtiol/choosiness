@@ -12,14 +12,18 @@ from Visualization.VisualizationWithPygame.VisualizationWithDiagrams import C1Hi
 
 
 class CCombinationOfVisualizations(CVisualizationWithPygameBaseClass):
-        def __init__(self, simulation):
-            CVisualizationWithPygameBaseClass.__init__(self, simulation)
+        def __init__(self, simulation, width_of_window, height_of_window):
+            CVisualizationWithPygameBaseClass.__init__(self, simulation, width_of_window, height_of_window)
             self.list_of_visualizations = []
             self.visualization_pointer = 0  # which visualization
-            self.list_of_visualizations.append(C2DVisualizationOfSimulation(self.simulation))
-            self.list_of_visualizations.append(CNoVisualizationOfSimulation(self.simulation))  # no visualization
-            self.list_of_visualizations.append(CVisualization4Histograms(self.simulation))
-            self.list_of_visualizations.append(C1HistogramVisualization(self.simulation))
+            self.list_of_visualizations.append(C2DVisualizationOfSimulation(self.simulation, width_of_window,
+                                                                            height_of_window))
+            self.list_of_visualizations.append(CNoVisualizationOfSimulation(self.simulation, width_of_window,
+                                                                            height_of_window))  # no visualization
+            self.list_of_visualizations.append(CVisualization4Histograms(self.simulation, width_of_window,
+                                                                         height_of_window))
+            self.list_of_visualizations.append(C1HistogramVisualization(self.simulation, width_of_window,
+                                                                        height_of_window))
             self.current_visualization = self.list_of_visualizations[self.visualization_pointer]
 
         def init_display(self):

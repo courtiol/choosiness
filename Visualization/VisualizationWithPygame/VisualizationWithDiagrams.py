@@ -25,8 +25,8 @@ class CVisualization4Histograms(CVisualizationWithPygameBaseClass):
     male quality)
     """
     number_of_class_instances = 0
-    def __init__(self, simulation):
-        CVisualizationWithPygameBaseClass.__init__(self, simulation)
+    def __init__(self, simulation, width_of_window, height_of_window):
+        CVisualizationWithPygameBaseClass.__init__(self, simulation, width_of_window, height_of_window)
 
         x_size = int(self.width_of_window/100)
         y_size = int(self.height_of_window/100)
@@ -112,8 +112,8 @@ class C1HistogramVisualization(CVisualization4Histograms):
     """
     Histograms for the distribution of choosiness within the population
     """
-    def __init__(self, simulation):
-        CVisualization4Histograms.__init__(self, simulation)
+    def __init__(self, simulation, width_of_window, height_of_window):
+        CVisualization4Histograms.__init__(self, simulation, width_of_window, height_of_window)
 
     def draw_simulation(self):
         if self.counter != 0:

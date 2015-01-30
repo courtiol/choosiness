@@ -9,8 +9,8 @@ class EnvironmentL():
     """
     The collisions are computed here without any geometry
     """
-    def __init__(self, width, height, itemSize, itemSpeed):  # ToDo: Change constructor
-        self.e = 0.9  # ToDo: Change that
+    def __init__(self, e):
+        self.e = e
         #self.number_of_calls = 0 # ToDo: Remove that
         #self.number_of_couples = 0 # ToDo: Remove that
         #self.minima = 0 # ToDo: Remove that

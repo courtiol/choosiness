@@ -28,7 +28,7 @@ class CIndividual:
         if mother is None or father is None:
             # 4 loci are needed (phi_a_male, phi_b_male, phi_a_female, phi_b_female)
             # each chromosome stores all loci
-            chromosome = [(0, False), (0.5, True), (0, False), (0.5, True)]
+            chromosome = [(0, False), (0.0, True), (0, False), (0.0, True)]
             self.ch1 = CChromosome.CChromosome(mutation_range, mutation_rate, list(chromosome))
             self.ch2 = CChromosome.CChromosome(mutation_range, mutation_rate, list(chromosome))
         else:
@@ -38,7 +38,7 @@ class CIndividual:
             self.ch1.mutate()
             self.ch2.mutate()
         self.l = latency  # latency #change
-        self.q = random.uniform(0, 1)  # correct?
+        self.q = random.uniform(0, 1)  # ToDo: correct?
         self._express_genes()
 
     def _express_genes(self):

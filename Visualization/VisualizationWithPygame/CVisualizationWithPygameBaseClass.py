@@ -19,10 +19,10 @@ class CVisualizationWithPygameBaseClass(CVisualizationBaseClass):
     # screen.
     screen = None
 
-    def __init__(self, simulation):
+    def __init__(self, simulation, width_of_window, height_of_window):
         CVisualizationBaseClass.__init__(self, simulation)
-        self.width_of_window = self.simulation.settings.width # ToDo: Assign better with parameters of constructor
-        self.height_of_window = self.simulation.settings.height
+        self.width_of_window = width_of_window
+        self.height_of_window = height_of_window
 
     # overwrite
     def init_display(self):

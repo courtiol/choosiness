@@ -14,17 +14,18 @@ class CSimulationSettings:
     """
     def __init__(self):
         # parameters regarding the population and individuals
-        self.size_of_population = 100
+        self.size_of_population = 500
         self.sex_ratio = 0.5
-        self.s_males = 0.999
-        self.s_females = 0.999
-        self.latency_males = 0.95
-        self.latency_females = 0.95
-        self.mutation_range = 0.05
-        self.mutation_rate = 1
+        self.s_males = 0.99
+        self.s_females = 0.99
+        self.latency_males = 0.98
+        self.latency_females = 0.99
+        self.mutation_range = 0.01
+        self.mutation_rate = 0.01
+        # + initial values of chromosomes in class CChromosome: Currently [(0, False), (0.0, True), (0, False), (0.0, True)]
         self.a = 1/2  # factor that influences the weighted average of the qualities of the offspring
         self.type_of_average = CPopulation.ARITHMETIC_MEAN  # choose between ARITHMETIC_MEAN and GEOMETRIC_MEAN
-        self.maximal_number_of_saved_couples = 1000
+        self.maximal_number_of_saved_couples = 10000
 
         # parameters for environment
         # The following environments can be chosen:
@@ -33,14 +34,18 @@ class CSimulationSettings:
         # Environment2DDelaunay.Environment2DDelaunay
         # EnvironmentL.EnvironmentL
         self.type_of_environment =  Environment2DDelaunay.Environment2DDelaunay
+        self.e = 0.99
+        # not necessary for this environment
         self.width = 800
         self.height = 800
         self.size_of_individuals = 6
         self.speed_of_individuals = 7
 
+
         self.collision_counter = 0
         self.step_counter = 1
         self.average_number_of_collisions_per_timestep = 0
+
 
     @printAllParameters
     def __str__(self):
@@ -58,11 +63,14 @@ class CSimulation:
         else:
             self.settings = settings
         # set the environment in which the population is placed
+        # self.env = self.settings.type_of_environment(self.settings.e)
+
         self.env = self.settings.type_of_environment(width=self.settings.width, height=self.settings.height,
                                                      itemSize=self.settings.size_of_individuals,
                                                      itemSpeed=self.settings.speed_of_individuals)
+
         # create a population of males on random positions in that environment
-        self.population = CPopulation.CPopulation(population_size=self.settings.size_of_population,
+        self.population = CPopulation.CPopulationImmediateFlush(population_size=self.settings.size_of_population,
                                                   sex_ratio=self.settings.sex_ratio,
                                                   s_females=self.settings.s_females, s_males=self.settings.s_males,
                                                   latency_males=self.settings.latency_males,

@@ -51,6 +51,7 @@ class Environment2DDelaunay(Environment2D):
         :param collision_handler: function pointer
         :return:
         """
+        # ToDo: Think about if the vectors of group1 and group2 should be shuffled before
         def collision_detected(index1, index2):
             """
             If a collision is detected this method is called. We convert the indices of objects that collided
@@ -75,7 +76,6 @@ class Environment2DDelaunay(Environment2D):
                     return
             # we deal with the collision
             self._collide(collided_object1, collided_object2, collision_handler)
-
         # First we move all the objects
         for object1 in group1:
             self._move(object1)

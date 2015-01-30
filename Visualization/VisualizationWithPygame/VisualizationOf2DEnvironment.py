@@ -3,6 +3,7 @@ import math
 import CIndividual
 from Visualization.VisualizationWithPygame.CVisualizationWithPygameBaseClass import CVisualizationWithPygameBaseClass
 from Visualization.VisualizationWithPygame.VisualizationWithDiagrams import CVisualization4Histograms
+from Tools.convertCollisionRateAndE import convert_collision_rate_to_e
 
 """
 Visualization of a 2D-Environment. Individuals are represented as circles. States and gender of the individuals are
@@ -15,8 +16,8 @@ class CNoVisualizationOfSimulation(CVisualizationWithPygameBaseClass):
     """
     No visualization at all. Just information about shortcuts on the screen.
     """
-    def __init__(self, simulation):
-        CVisualizationWithPygameBaseClass.__init__(self, simulation)
+    def __init__(self, simulation, width_of_window, height_of_window):
+        CVisualizationWithPygameBaseClass.__init__(self, simulation, width_of_window, height_of_window)
         self.colour_of_background = (255, 255, 255)
         self.selected_individual = None
 
@@ -48,8 +49,8 @@ class C2DVisualizationOfSimulation(CVisualizationWithPygameBaseClass):
     The class encapsulates the visual output of the simulation. In order to that it makes use of pygame.
     It requires also a pointer to the instance of the simulation.
     """
-    def __init__(self, simulation):
-        CVisualizationWithPygameBaseClass.__init__(self, simulation)
+    def __init__(self, simulation, width_of_window, height_of_window):
+        CVisualizationWithPygameBaseClass.__init__(self, simulation, width_of_window, height_of_window)
         self.colour_of_environment = (255, 255, 255)
         self.colour_of_males = (0, 0, 255)  # blue
         self.thickness_latency = 2
@@ -71,8 +72,13 @@ class C2DVisualizationOfSimulation(CVisualizationWithPygameBaseClass):
         :return:
         """
         CVisualizationWithPygameBaseClass.screen.fill(self.colour_of_environment)
+        estimated_e = convert_collision_rate_to_e(
+            collisions_per_time_step=self.simulation.settings.average_number_of_collisions_per_timestep,
+            population_size=self.simulation.settings.size_of_population,
+            proportion_males=self.simulation.settings.sex_ratio)
         text = 'collisions: '+str(self.simulation.settings.collision_counter)
         text += " average: "+str(round(self.simulation.settings.average_number_of_collisions_per_timestep, 4))
+        text += " e: "+str(round(estimated_e, 4))
         self.print_text_on_screen(text, self.simulation.settings.width/2, self.simulation.settings.height/2)
 
     def _draw_population(self, population):

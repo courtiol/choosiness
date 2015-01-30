@@ -15,7 +15,7 @@ simulation = CSimulation.CSimulation()
 print("Create simulation: ")
 print(simulation.settings)
 # Run the simulation and measure the time
-number_of_iterations = 10000
+number_of_iterations = 100
 print("Test running time with "+str(number_of_iterations)+" iterations.")
 simulation.run_n_timesteps(number_of_iterations)
 

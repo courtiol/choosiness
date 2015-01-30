@@ -59,6 +59,7 @@ class CPopulation:
         # Set in_initialization to True to allow creating individuals from couples of the form (None, None)
         # For details look in the method "_create_individual"
         self.in_initialization = True
+        self.alias_method = None  # initialize alias method
         self._add_individuals(self.populationSize)
         self.in_initialization = False
 
@@ -141,6 +142,11 @@ class CPopulation:
                 del self.females[i]
         # Fill up the population again
         number_of_new_individuals = self.populationSize-self.current_population_size
+        # update alias method since since the last call the couples changed
+        if len(self.couples) > 0:
+            self.alias_method = alias.Alias(self.couples)
+        else:
+            self.alias_method = None
         self._add_individuals(number_of_new_individuals)
 
     def _choose_couple(self):
@@ -152,10 +158,7 @@ class CPopulation:
         if len(self.couples) == 0:
             return None, None
         else:
-            # most stupid implementation since Alias is created every time even when "couples"
-            # doesn't change => ToDo. Change
-            alias_method = alias.Alias(self.couples)
-            return alias_method.get()
+            return self.alias_method.get()
        
     # checks if two individuals mate and computes the quality of their (potential) offspring
     # The result is appended to couples
@@ -203,3 +206,28 @@ class CPopulation:
         current number of couple in que: {4}\n""".format(self.current_population_size,
         self.current_number_of_females, self.current_number_of_males, self.maximal_number_of_saved_couples,
         len(self.couples))
+
+
+# -------------------------------------slightly different implementation---------------------------------------------------------
+class CPopulationImmediateFlush(CPopulation):
+    """
+    The couples array is not kept over several birth cycles here. After each refilling of the males and females it is
+    set again to an emtpy list. This corresponds to the reference implementation.
+    Keep care that the
+
+    """
+    def __init__(self, population_size, sex_ratio, s_males, s_females, latency_males,
+                 latency_females, mutation_range, mutation_rate, a, type_of_average, maximal_number_of_saved_couples,
+                 set_initial_position_in_the_environment):
+        CPopulation.__init__(self, population_size, sex_ratio, s_males, s_females, latency_males,
+                 latency_females, mutation_range, mutation_rate, a, type_of_average, maximal_number_of_saved_couples,
+                 set_initial_position_in_the_environment)
+        if maximal_number_of_saved_couples < 2*population_size:
+            print("Warning: The maximal_number_of_saved_couples should be 2*population_size")
+
+    def update_states(self):
+        CPopulation.update_states(self)
+        self.couples = [] # empty couples array
+
+    def _update_couple_list(self):
+        pass  # this method is not necessary anymore
