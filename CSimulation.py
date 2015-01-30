@@ -1,6 +1,6 @@
 import Environments.Environment2D
 import CPopulation
-from Environments import Environment2DDelaunay, Environment2D,  EnvironmentL
+from Environments import Environment2DFaster, Environment2D,  EnvironmentSoup
 from Visualization.CVisualizationBaseClass import CSimpleVisualization
 from Tools.usefulDecorators import printAllParameters
 from Visualization.VisualizationWithPygame.VisualizationCombination import CCombinationOfVisualizations
@@ -33,7 +33,7 @@ class CSimulationSettings:
         # Environment2D.Environment2DNoBounce
         # Environment2DDelaunay.Environment2DDelaunay
         # EnvironmentL.EnvironmentL
-        self.type_of_environment =  Environment2DDelaunay.Environment2DDelaunay
+        self.type_of_environment =  Environment2DFaster.Environment2DDelaunay
         self.e = 0.99
         # not necessary for this environment
         self.width = 800
