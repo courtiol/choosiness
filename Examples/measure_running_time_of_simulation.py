@@ -6,15 +6,11 @@ from Visualization.VisualizationWithPygame.VisualizationCombination import CComb
 from Tools.timer import Timer
 
 """
-Example how to measure a certain number of cycles
+Example how to measure the time a certain number of iterations need
 """
 
 # Start simulation
 simulation = CSimulation.CSimulation()
-
-visualization = CCombinationOfVisualizations(simulation)
-visualization.init_display()
-add_visualization_to_simulation(simulation, visualization)
 
 with Timer() as t:
     simulation.run_n_timesteps(10)
