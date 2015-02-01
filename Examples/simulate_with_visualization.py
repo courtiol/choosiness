@@ -5,7 +5,7 @@ import time
 import pickle
 from Visualization.decorateSimulation import add_visualization_to_simulation
 from Visualization.VisualizationWithPygame.VisualizationCombination import CCombinationOfVisualizations
-from Visualization.VisualizationWithPygame.VisualizationWithDiagrams import C1HistogramVisualization, CVisualization4Histograms
+from Visualization.VisualizationWithPygame.VisualizationWithDiagrams import C1Histogram, CNHistograms
 from Visualization.VisualizationWithPygame.VisualizationOf2DEnvironment import C2DVisualizationOfSimulation
 
 """
@@ -22,13 +22,15 @@ print(simulation.settings.average_number_of_collisions_per_timestep)
 
 print("Now with graphics")
 # choose a visualization and initialize it
-# Examples: C1HistogramVisualization(simulation, 800, 800)
+# Examples: C1Histogram(simulation, 800, 800)
 
 # We want to combine several visualizations. Therefore we need to define a list of the ones, that we want.
-types_of_visualizations = [C1HistogramVisualization, CVisualization4Histograms, C2DVisualizationOfSimulation]
+used_of_visualizations = [C1Histogram(simulation, simulation.settings.width, simulation.settings.height, 'phi'),
+                           CNHistograms(simulation, simulation.settings.width, simulation.settings.height, ['phi','q']),
+                           C2DVisualizationOfSimulation(simulation, simulation.settings.width, simulation.settings.height)]
 # Create a combination of these visualizations. You can iterate through the simulations by using left and right arrow
 visualization =  CCombinationOfVisualizations(simulation, simulation.settings.width, simulation.settings.height,
-                                              types_of_visualizations)
+                                              used_of_visualizations)
 visualization.init_display()
 # modify the simulation that it can be visualized
 add_visualization_to_simulation(simulation, visualization)

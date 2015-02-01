@@ -13,16 +13,17 @@ import matplotlib.pyplot as plt
 import numpy
 
 """
-Several visualizations using matplotlib. These visualizations can be used also for simulations which use different
-kind of environments.
+Several visualizations using matplotlib. All visualizations are using histograms to display several attributes of
+individuals in the population. These visualizations can be used for different environments and different individuals.
+The only assumption made here is, that the population consists of females and males.
 """
 
-# useful tutorial for matplotlib http://matplotlib.org/users/pyplot_tutorial.html
-# ------------------4 histograms for choosiness/quality of males and females-----------------------
-class CVisualization4Histograms(CVisualizationWithPygameBaseClass):
+# Useful: tutorial for matplotlib http://matplotlib.org/users/pyplot_tutorial.html
+
+#  ---------------------------------------------General version---------------------------------------------------
+class CHistograms(CVisualizationWithPygameBaseClass):
     """
-    Display statistics of the the simulation with 4 histograms (for female choosiness, male choosiness, female quality,
-    male quality)
+    This class can be used as a base class for different visualizations which use histograms.
     """
     number_of_class_instances = 0
     def __init__(self, simulation, width_of_window, height_of_window):
@@ -33,43 +34,25 @@ class CVisualization4Histograms(CVisualizationWithPygameBaseClass):
         self.fig = pylab.figure(figsize=[x_size, y_size], dpi=100)
 
         self.canvas = agg.FigureCanvasAgg(self.fig)
-        self.num_bins = 20
+        self.num_bins = 40
 
         # it is not necessary to update in every step the graphics
         # take expected life = average time of one generation as update rate
         max_s = max([self.simulation.settings.s_males, self.simulation.settings.s_females])
         self.update_in_every_n_step = int(round(1/(1-max_s)))
+        self.update_in_every_n_step += 10
         self.counter = 0
 
         # since there is only one plt object we need to count the number of instances of this class
         # ToDo: not so good. What happens when for some instance one instance of a class is closed
-        CVisualization4Histograms.number_of_class_instances += 1
-        self.current_class_instance_number = CVisualization4Histograms.number_of_class_instances
+        CHistograms.number_of_class_instances += 1
+        self.current_class_instance_number = CHistograms.number_of_class_instances
 
     def draw_simulation(self):
-        if self.counter != 0:
-            self.counter = (self.counter+1) % self.update_in_every_n_step
-            return
-
-        # Get data to plot
-        females_choosiness = self._get_female_choosiness_array()
-        males_choosiness = self._get_male_choosiness_array()
-        females_quality = self._get_female_quality_array()
-        males_quality = self._get_male_quality_array()
-
-        # assemble plot
-        plt.figure(self.current_class_instance_number)
-        self.canvas.figure.clf()  # clears the previous diagram
-        plt.subplot(221) # first subplot of 2×2 subplots
-        self._compute_subfigure(females_choosiness, 'red', 'Choosiness of Females', 'choosiness (dynamic bins)')
-        plt.subplot(222) # second subplot of 2×2 subplots
-        self._compute_subfigure(males_choosiness, 'blue', 'Choosiness of Males', 'choosiness (dynamic bins)')
-        plt.subplot(223) # third subplot of 2×2 subplots
-        self._compute_subfigure(females_quality, 'red', 'Quality of Females', 'quality (dynamic bins)')
-        plt.subplot(224) # fourth subplot of 2×2 subplots
-        self._compute_subfigure(males_quality, 'blue', 'Quality of Males', 'quality (dynamic bins)')
-
-        self._plot()
+        """
+        This method should be overwritten
+        """
+        pass
 
 
     def _plot(self):
@@ -84,6 +67,7 @@ class CVisualization4Histograms(CVisualizationWithPygameBaseClass):
         CVisualizationWithPygameBaseClass.screen.blit(surf, (0, 0))
 
         pygame.display.flip()
+
     def _compute_subfigure(self, data, colour, title, x_axis_label):
         # n, bins, patches = plt.hist(data, self.num_bins, normed=False, facecolor=colour, alpha=0.5)
         plt.hist(data, self.num_bins, normed=False, facecolor=colour, alpha=0.5)
@@ -91,38 +75,40 @@ class CVisualization4Histograms(CVisualizationWithPygameBaseClass):
         plt.ylabel("number of individuals")
         plt.title(title)
 
-    def _get_male_choosiness_array(self):
-        return [ind.phi for ind in self.simulation.population.males]
-
-    def _get_female_choosiness_array(self):
-        return [ind.phi for ind in self.simulation.population.females]
-
-    def _get_female_quality_array(self):
-        return [ind.q for ind in self.simulation.population.females]
-
-    def _get_male_quality_array(self):
-        return [ind.q for ind in self.simulation.population.males]
+    def _get_attribute_array_of_group_of_individuals(self, relevant_attribute, group_of_individuals):
+        """
+        This method returns an array of attributes of a group of individuals.
+        """
+        return [individual.__dict__[relevant_attribute] for individual in group_of_individuals]
 
     def __str__(self):
         return "Diagrams"
 
 
-#---------------------1 histogram with female & male choosiness------------------------------------
-class C1HistogramVisualization(CVisualization4Histograms):
+#---------------------1 histogram with female & male------------------------------------
+class C1Histogram(CHistograms):
     """
-    Histograms for the distribution of choosiness within the population
+    1 Histogram to compare the distribution of an attribute of the male individuals and female individuals
+    of a population.
     """
-    def __init__(self, simulation, width_of_window, height_of_window):
-        CVisualization4Histograms.__init__(self, simulation, width_of_window, height_of_window)
+    def __init__(self, simulation, width_of_window, height_of_window, relevant_attribute = 'phi'):
+        CHistograms.__init__(self, simulation, width_of_window, height_of_window)
+        self.relevant_attribute = relevant_attribute
 
     def draw_simulation(self):
+        self.counter = (self.counter+1) % self.update_in_every_n_step
         if self.counter != 0:
-            self.counter = (self.counter+1) % self.update_in_every_n_step
             return
 
+        # update window title
+        pygame.display.set_caption("Simulation with "+str(self.simulation.population.current_number_of_females) +
+                                   ' females in red and '+str(self.simulation.population.current_number_of_males) +
+                                   ' males in blue')
         # Get data to plot
-        females_choosiness = self._get_female_choosiness_array()
-        males_choosiness = self._get_male_choosiness_array()
+        females_choosiness = self._get_attribute_array_of_group_of_individuals(relevant_attribute = self.relevant_attribute,
+                                                         group_of_individuals = self.simulation.population.females)
+        males_choosiness = self._get_attribute_array_of_group_of_individuals(relevant_attribute = self.relevant_attribute,
+                                                         group_of_individuals = self.simulation.population.males)
 
         # assemble plot
         plt.figure(self.current_class_instance_number)
@@ -135,8 +121,99 @@ class C1HistogramVisualization(CVisualization4Histograms):
                  bins=intervals)
 
         plt.legend()
-        plt.xlabel('choosiness (fixed bins)')
+        plt.xlabel(self.relevant_attribute+' (fixed bins)')
         plt.ylabel('number of individuals')
-        plt.title('Distribution of Choosiness')
+        plt.title('Distribution of '+self.relevant_attribute)
 
         self._plot()
+
+
+# ------------------4 histograms for choosiness/quality of males and females-----------------------
+class CNHistograms(CHistograms):
+    """
+    This class shows for each attribute one histogram for males and one histogram for females
+    """
+    def __init__(self, simulation, width_of_window, height_of_window, list_of_attributes=['phi','q']):
+        CHistograms.__init__(self, simulation, width_of_window, height_of_window)
+        self.list_of_attributes = list_of_attributes
+        # We want to create a number of subplots depending on the number of attributes that should be displayed
+        # Example:plt.subplot(320) means the 3 rows and 2 columns of subplots
+        # Here we calculate therefore the number of rows.
+        self.number_of_subplots = len(self.list_of_attributes)*100
+
+    def draw_simulation(self):
+        self.counter = (self.counter+1) % self.update_in_every_n_step
+        if self.counter != 0:
+            return
+
+        # update window title
+        pygame.display.set_caption("Simulation with "+str(self.simulation.population.current_number_of_females) +
+                                   ' females in red and '+str(self.simulation.population.current_number_of_males) +
+                                   ' males in blue')
+
+        # Get data to plot and assemble plot
+        plot_position = self.number_of_subplots+20  # +20 means one column for males, one column for females
+        plt.figure(self.current_class_instance_number)
+        self.canvas.figure.clf()  # clears the previous diagram
+
+        # Now we iterate over all attributes and create for each one a male and female plot
+        for attribute in self.list_of_attributes:
+            females_attribute = self._get_attribute_array_of_group_of_individuals(relevant_attribute = attribute,
+                                                         group_of_individuals = self.simulation.population.females)
+            males_attribute = self._get_attribute_array_of_group_of_individuals(relevant_attribute = attribute,
+                                                         group_of_individuals = self.simulation.population.males)
+            # females:
+            plot_position += 1  # choose next "sub"-window for plotting
+            plt.subplot(plot_position)
+            self._compute_subfigure(females_attribute, 'red', attribute+' of Females', attribute+' (dynamic bins)')
+
+            # males:
+            plot_position += 1  # choose next "sub"-window for plotting
+            plt.subplot(plot_position)
+            self._compute_subfigure(males_attribute, 'blue', attribute+' of Males', attribute+' (dynamic bins)')
+
+        self._plot()
+
+
+class CAverage(CHistograms):
+    def __init__(self, simulation, width_of_window, height_of_window, relevant_attribute = 'phi'):
+        CHistograms.__init__(self, simulation, width_of_window, height_of_window)
+        self.relevant_attribute = relevant_attribute
+        self.female_averages = []
+        self.male_averages = []
+        self.corresponding_timesteps = []
+    def draw_simulation(self):
+        self.counter = (self.counter+1) % self.update_in_every_n_step
+        if self.counter != 0:
+            return
+
+        self.getAverageOfAttribute()
+
+        # update window title
+        pygame.display.set_caption("Simulation with "+str(self.simulation.population.current_number_of_females) +
+                                   ' females in red and '+str(self.simulation.population.current_number_of_males) +
+                                   ' males in blue')
+
+        # assemble plot
+        plt.figure(self.current_class_instance_number)
+        self.canvas.figure.clf()  # clears the previous diagram
+        plt.subplot(111) # 1 subplot
+        plt.plot(self.corresponding_timesteps, self.male_averages, color='blue')
+        plt.plot(self.corresponding_timesteps, self.female_averages, color='red')
+
+        plt.xlabel('iterations of the simulation')
+        plt.ylabel('average value of '+self.relevant_attribute)
+        plt.title('average value of '+self.relevant_attribute+' for males (blue) and females (red)')
+        self._plot()
+
+    def getAverageOfAttribute(self):
+        # save timestep
+        self.corresponding_timesteps.append(self.simulation.settings.step_counter)
+        # save average of female attribute
+        female_attribute = self._get_attribute_array_of_group_of_individuals(self.relevant_attribute,
+                                                                             self.simulation.population.females)
+        self.female_averages.append(numpy.mean(female_attribute))
+        # save average of male attribute
+        male_attribute = self._get_attribute_array_of_group_of_individuals(self.relevant_attribute,
+                                                                             self.simulation.population.males)
+        self.male_averages.append(numpy.mean(male_attribute))

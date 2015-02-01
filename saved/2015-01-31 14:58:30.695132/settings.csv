@@ -1,0 +1,17 @@
+s_females,0.99
+average_number_of_collisions_per_timestep,0
+a,0.5
+mutation_range,0.01
+latency_females,0.99
+size_of_population,5000
+mutation_rate,0.01
+s_males,0.99
+collision_counter,0
+latency_males,0.98
+type_of_average,0
+maximal_number_of_saved_couples,10000
+e,0.99
+sex_ratio,0.5
+step_counter,1
+type_of_environment,<class 'Environments.EnvironmentSoup.EnvironmentSoup'>
+initial_chromosome,"[(0, False), (0.5, True), (0, False), (0.5, True)]"

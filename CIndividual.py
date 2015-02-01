@@ -9,6 +9,7 @@ IN_LATENCY = 2
 MALE = 1
 FEMALE = 0
 
+INITIAL_CHROMOSOME = [(0, False), (0.0, True), (0, False), (0.0, True)]
 
 class CIndividual:
     """
@@ -28,9 +29,8 @@ class CIndividual:
         if mother is None or father is None:
             # 4 loci are needed (phi_a_male, phi_b_male, phi_a_female, phi_b_female)
             # each chromosome stores all loci
-            chromosome = [(0, False), (0.0, True), (0, False), (0.0, True)]
-            self.ch1 = CChromosome.CChromosome(mutation_range, mutation_rate, list(chromosome))
-            self.ch2 = CChromosome.CChromosome(mutation_range, mutation_rate, list(chromosome))
+            self.ch1 = CChromosome.CChromosome(mutation_range, mutation_rate, list(INITIAL_CHROMOSOME))
+            self.ch2 = CChromosome.CChromosome(mutation_range, mutation_rate, list(INITIAL_CHROMOSOME))
         else:
             # random segregation as if loci where independent (on different chromosomes)
             self.ch1 = mother.ch1 + mother.ch2

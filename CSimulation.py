@@ -1,5 +1,6 @@
 import Environments.Environment2D
 import CPopulation
+import CIndividual
 from Environments import Environment2DFaster, Environment2D,  EnvironmentSoup
 from Visualization.CVisualizationBaseClass import CSimpleVisualization
 from Tools.usefulDecorators import printAllParameters
@@ -14,7 +15,7 @@ class CSimulationSettings:
     """
     def __init__(self):
         # parameters regarding the population and individuals
-        self.size_of_population = 500
+        self.size_of_population = 5000
         self.sex_ratio = 0.5
         self.s_males = 0.99
         self.s_females = 0.99
@@ -22,6 +23,8 @@ class CSimulationSettings:
         self.latency_females = 0.99
         self.mutation_range = 0.01
         self.mutation_rate = 0.01
+        self.initial_chromosome = [(0, False), (0.5, True), (0, False), (0.5, True)]
+        CIndividual.INITIAL_CHROMOSOME = self.initial_chromosome
         # + initial values of chromosomes in class CChromosome: Currently [(0, False), (0.0, True), (0, False), (0.0, True)]
         self.a = 1/2  # factor that influences the weighted average of the qualities of the offspring
         self.type_of_average = CPopulation.ARITHMETIC_MEAN  # choose between ARITHMETIC_MEAN and GEOMETRIC_MEAN
@@ -32,14 +35,14 @@ class CSimulationSettings:
         # Environment2D.Environment2D
         # Environment2D.Environment2DNoBounce
         # Environment2DDelaunay.Environment2DDelaunay
-        # EnvironmentL.EnvironmentL
-        self.type_of_environment =  Environment2DFaster.Environment2DDelaunay
-        self.e = 0.99
-        # not necessary for this environment
-        self.width = 800
-        self.height = 800
-        self.size_of_individuals = 6
-        self.speed_of_individuals = 7
+        self.type_of_environment =  EnvironmentSoup.EnvironmentSoup
+        if self.type_of_environment is not EnvironmentSoup.EnvironmentSoup:
+            self.width = 800
+            self.height = 800
+            self.size_of_individuals = 6
+            self.speed_of_individuals = 7
+        elif self.type_of_environment is EnvironmentSoup.EnvironmentSoup:
+            self.e = 0.99
 
 
         self.collision_counter = 0
@@ -63,9 +66,10 @@ class CSimulation:
         else:
             self.settings = settings
         # set the environment in which the population is placed
-        # self.env = self.settings.type_of_environment(self.settings.e)
-
-        self.env = self.settings.type_of_environment(width=self.settings.width, height=self.settings.height,
+        if self.settings.type_of_environment is EnvironmentSoup.EnvironmentSoup:
+            self.env = self.settings.type_of_environment(self.settings.e)
+        else:
+            self.env = self.settings.type_of_environment(width=self.settings.width, height=self.settings.height,
                                                      itemSize=self.settings.size_of_individuals,
                                                      itemSpeed=self.settings.speed_of_individuals)
 
@@ -146,13 +150,7 @@ class CSimulation:
         self.pause = False if self.pause else True
 
     def __str__(self):
-        z = "total population: "+str(self.settings.size_of_population)+"\n"
-        z += "sex_ratio: "+str(self.settings.sex_ratio)+"\n"
-        z += "s_males: "+str(self.settings.s_males)+"\n"
-        z += "s_females: "+str(self.settings.s_females)+"\n"
-        z += "latency of males: "+str(self.settings.latency_males)+"\n"
-        z += "latency of females: "+str(self.settings.latency_females)+"\n"
-        z += "area: "+str(self.settings.width)+"times"+str(self.settings.height)+"\n"
+        z = str(self.settings)
         return z
 
     def save(self):

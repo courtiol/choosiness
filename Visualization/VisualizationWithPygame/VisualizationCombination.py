@@ -5,29 +5,23 @@ import pygame
 from Visualization.VisualizationWithPygame.CVisualizationWithPygameBaseClass import CVisualizationWithPygameBaseClass
 from Visualization.VisualizationWithPygame.VisualizationOf2DEnvironment import C2DVisualizationOfSimulation
 from Visualization.CVisualizationBaseClass import CSimpleVisualization
-from Visualization.VisualizationWithPygame.VisualizationWithDiagrams import CVisualization4Histograms, \
-    C1HistogramVisualization
+from Visualization.VisualizationWithPygame.VisualizationWithDiagrams import CNHistograms, \
+    C1Histogram
 from Visualization.VisualizationWithPygame.VisualizationOf2DEnvironment import CNoVisualizationOfSimulation
-from Visualization.VisualizationWithPygame.VisualizationWithDiagrams import C1HistogramVisualization
+from Visualization.VisualizationWithPygame.VisualizationWithDiagrams import C1Histogram
 
 
 class CCombinationOfVisualizations(CVisualizationWithPygameBaseClass):
-        def __init__(self, simulation, width_of_window, height_of_window, types_of_visualizations):
+        def __init__(self, simulation, width_of_window, height_of_window, list_of_visualizations):
             CVisualizationWithPygameBaseClass.__init__(self, simulation, width_of_window, height_of_window)
-            self.list_of_visualizations = []
+            self.list_of_visualizations = list_of_visualizations
             self.visualization_pointer = 0  # which visualization
+            """
             self.list_of_visualizations = []
             for type_of_visualization in types_of_visualizations:
                 # All visualizations should have this constructor
                 self.list_of_visualizations.append(type_of_visualization(self.simulation, width_of_window,
                                                                             height_of_window))
-            """
-            self.list_of_visualizations.append(C2DVisualizationOfSimulation(self.simulation, width_of_window,
-                                                                            height_of_window))
-            self.list_of_visualizations.append(CVisualization4Histograms(self.simulation, width_of_window,
-                                                                         height_of_window))
-            self.list_of_visualizations.append(C1HistogramVisualization(self.simulation, width_of_window,
-                                                                        height_of_window))
             """
             self.current_visualization = self.list_of_visualizations[self.visualization_pointer]
 

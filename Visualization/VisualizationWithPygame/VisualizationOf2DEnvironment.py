@@ -2,7 +2,7 @@ import pygame
 import math
 import CIndividual
 from Visualization.VisualizationWithPygame.CVisualizationWithPygameBaseClass import CVisualizationWithPygameBaseClass
-from Visualization.VisualizationWithPygame.VisualizationWithDiagrams import CVisualization4Histograms
+from Visualization.VisualizationWithPygame.VisualizationWithDiagrams import CNHistograms
 from Tools.convertCollisionRateAndE import convert_collision_rate_to_e
 
 """

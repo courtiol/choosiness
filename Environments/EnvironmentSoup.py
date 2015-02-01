@@ -5,7 +5,7 @@ from Tools.usefulDecorators import measure_percentage_of_time
 from random import shuffle, uniform
 
 
-class EnvironmentL():
+class EnvironmentSoup():
     """
     The collisions are computed here without any geometry.
     """

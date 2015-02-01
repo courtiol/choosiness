@@ -34,8 +34,8 @@ class CVisualizationWithPygameBaseClass(CVisualizationBaseClass):
         pygame.init()
 
     def init_screen(self):
-        CVisualizationWithPygameBaseClass.screen = pygame.display.set_mode((self.simulation.settings.width,
-                                                                            self.simulation.settings.height))
+        CVisualizationWithPygameBaseClass.screen = pygame.display.set_mode((self.width_of_window,
+                                                                            self.height_of_window))
 
     def do_interaction_with_user(self):
         """
