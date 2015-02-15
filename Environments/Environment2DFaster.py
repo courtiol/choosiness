@@ -23,10 +23,20 @@ def sq_dist(point1, point2):
 
 
 def check_for_collisions(points, dist, collision_handler):
-    if len(points) == 0:
+    if len(points) <= 1:
+        return
+    elif len(points) < 3:
+        print("Less than 3 points.")
+        if sq_dist(points[0], points[1]) < dist:
+            collision_handler(neighbor, index)
         return
     np_points = np.array(points)
-    tri = Delaunay(np_points)
+    try:
+        tri = Delaunay(np_points)
+    except:
+        print("For the following points is no triangulation possible.")
+        print(np_points)
+        quit(0)
     for index in range(len(np_points)):
         neighbors = find_neighbors(index, tri)
         for neighbor in neighbors:

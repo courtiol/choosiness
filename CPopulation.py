@@ -139,6 +139,10 @@ class CPopulation:
             self.alias_method = None
         self._add_individuals(number_of_new_individuals)
 
+        # check if there are still individuals alive
+        if self.current_population_size == 0:
+            raise Exception("The population died out")
+
     def _choose_couple(self):
         """
         The method chooses randomly a couple with the alias method. This means couples with higher quality are more

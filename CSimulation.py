@@ -43,7 +43,13 @@ class CSimulation:
         Performes one iteration of the simulation
         :return:
         """
-        self.population.update_states()
+        try:
+            self.population.update_states()
+        except:
+            print("The population could not be updated anymore.")
+            print(self.population)
+            self.running = False
+            return
         self.env.update(self.population.males, self.population.females, self.collision_occured)
         self.settings.step_counter += 1
 
@@ -56,6 +62,7 @@ class CSimulation:
             if not self.pause:
                 self.perform_time_step()
             self.hook_for_user_control()
+        print("The simulation is over.")
 
     def run_n_timesteps(self, n):
         """
