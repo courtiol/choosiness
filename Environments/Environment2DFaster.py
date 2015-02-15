@@ -23,6 +23,8 @@ def sq_dist(point1, point2):
 
 
 def check_for_collisions(points, dist, collision_handler):
+    if len(points) == 0:
+        return
     np_points = np.array(points)
     tri = Delaunay(np_points)
     for index in range(len(np_points)):

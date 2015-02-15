@@ -17,7 +17,7 @@ class CIndividual:
     can be created by its "parents". The inheritable information of each individual is saved in a pair of
     chromosomes.
     """
-    def __init__(self, gender, latency, mutation_range, mutation_rate, survival_prob, mother=None, father=None):
+    def __init__(self, gender, latency, chromosome_settings, survival_prob, mother=None, father=None):
         """
 
         :type self: object
@@ -29,8 +29,8 @@ class CIndividual:
         if mother is None or father is None:
             # 4 loci are needed (phi_a_male, phi_b_male, phi_a_female, phi_b_female)
             # each chromosome stores all loci
-            self.ch1 = CChromosome.CChromosome(mutation_range, mutation_rate, list(INITIAL_CHROMOSOME))
-            self.ch2 = CChromosome.CChromosome(mutation_range, mutation_rate, list(INITIAL_CHROMOSOME))
+            self.ch1 = CChromosome.CChromosome(**chromosome_settings)
+            self.ch2 = CChromosome.CChromosome(**chromosome_settings)
         else:
             # random segregation as if loci where independent (on different chromosomes)
             self.ch1 = mother.ch1 + mother.ch2

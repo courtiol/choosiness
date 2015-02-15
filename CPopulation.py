@@ -19,20 +19,14 @@ class CPopulation:
     method replaces dead individuals randomly with children of the couples array. The decision is based on luck and the
      quality of the individuals.
     """
-
-    def __init__(self, population_size, sex_ratio, s_males, s_females, latency_males,
-                 latency_females, mutation_range, mutation_rate, a, type_of_average, maximal_number_of_saved_couples,
-                 set_initial_position_in_the_environment):
+    def __init__(self, population_size, sex_ratio, a, type_of_average,  maximal_number_of_saved_couples,
+                 set_initial_position_in_the_environment, female_individual_settings, male_individual_settings):
         """
         Initializes a population.
         :param population_size: Integer which is the maximal number of the population
-        :param s_males: survival prob. of males for a time step
-        :param s_females: survival prob. of females for a time step
         :param sex_ratio: ratio between the sexes
-        :param latency_males: prob. to remain in latency of males after reproduction
-        :param latency_females: prob. to remain in latency of females after reproduction
-        :param mutation_range: effect of one mutation / possible range of change in one mutation
-        :param mutation_rate: frequency of mutations
+        :param female_individual_settings: settings of female individuals in the population
+        :param male_individual_settings: settings of male individuals in the population
         :param set_initial_position_in_the_environment: function handler for a function which determines the initial
         position of a new individual in the environment
         :return:
@@ -44,14 +38,12 @@ class CPopulation:
         self.couples = []
         self.maximal_number_of_saved_couples = maximal_number_of_saved_couples
         self.sex_ratio = sex_ratio
-        self.s_males = s_males  # survival rate of males
-        self.s_females = s_females  # survival rate of males
-        self.latency_males = latency_males
-        self.latency_females = latency_females
+
+        self.male_settings = male_individual_settings
+        self.female_settings = female_individual_settings
+
         self.populationSize = population_size
         self.set_initial_position_in_the_environment = set_initial_position_in_the_environment
-        self.mutation_range = mutation_range
-        self.mutation_rate = mutation_rate
         self.a = a # weighted average for the quality of the offspring
         self.type_of_average = type_of_average # ARITHMETIC_MEAN / GEOMETRIC_MEAN
 
@@ -113,15 +105,13 @@ class CPopulation:
         if not self.in_initialization and father is None and mother is None:
             return None
         if random.random() >= self.sex_ratio:
-            new_individual = CIndividual.CIndividual(gender=CIndividual.MALE, latency=self.latency_males,
-                                                     mutation_range=self.mutation_range,
-                                                     mutation_rate=self.mutation_rate, survival_prob=self.s_males,
-                                                     mother=mother, father=father)
+            self.male_settings['mother'] = mother
+            self.male_settings['father'] = father
+            new_individual = CIndividual.CIndividual(**self.male_settings)
         else:
-            new_individual = CIndividual.CIndividual(gender=CIndividual.FEMALE, latency=self.latency_females,
-                                                     mutation_range=self.mutation_range,
-                                                     mutation_rate=self.mutation_rate, survival_prob=self.s_females,
-                                                     mother=mother, father=father)
+            self.female_settings['mother'] = mother
+            self.female_settings['father'] = father
+            new_individual = CIndividual.CIndividual(**self.female_settings)
         self.set_initial_position_in_the_environment(new_individual)
         return new_individual
 
@@ -216,12 +206,10 @@ class CPopulationImmediateFlush(CPopulation):
     Keep care that the
 
     """
-    def __init__(self, population_size, sex_ratio, s_males, s_females, latency_males,
-                 latency_females, mutation_range, mutation_rate, a, type_of_average, maximal_number_of_saved_couples,
-                 set_initial_position_in_the_environment):
-        CPopulation.__init__(self, population_size, sex_ratio, s_males, s_females, latency_males,
-                 latency_females, mutation_range, mutation_rate, a, type_of_average, maximal_number_of_saved_couples,
-                 set_initial_position_in_the_environment)
+    def __init__(self, population_size, sex_ratio, a, type_of_average,  maximal_number_of_saved_couples,
+                 set_initial_position_in_the_environment, female_individual_settings, male_individual_settings):
+        CPopulation.__init__(self, population_size, sex_ratio, a, type_of_average,  maximal_number_of_saved_couples,
+                 set_initial_position_in_the_environment, female_individual_settings, male_individual_settings)
         if maximal_number_of_saved_couples < 2*population_size:
             print("Warning: The maximal_number_of_saved_couples should be 2*population_size")
 

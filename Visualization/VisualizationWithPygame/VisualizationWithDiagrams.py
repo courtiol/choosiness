@@ -38,7 +38,9 @@ class CHistograms(CVisualizationWithPygameBaseClass):
 
         # it is not necessary to update in every step the graphics
         # take expected life = average time of one generation as update rate
-        max_s = max([self.simulation.settings.s_males, self.simulation.settings.s_females])
+        s_males = self.simulation.settings.settings_dict['population_settings']['male_individual_settings']['survival_prob']
+        s_females = self.simulation.settings.settings_dict['population_settings']['female_individual_settings']['survival_prob']
+        max_s = max([s_males, s_females])
         self.update_in_every_n_step = int(round(1/(1-max_s)))
         self.update_in_every_n_step += 10
         self.counter = 0

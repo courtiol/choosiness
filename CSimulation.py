@@ -6,53 +6,7 @@ from Visualization.CVisualizationBaseClass import CSimpleVisualization
 from Tools.usefulDecorators import printAllParameters
 from Visualization.VisualizationWithPygame.VisualizationCombination import CCombinationOfVisualizations
 import pickle
-
-
-# ----------------------------CSimulation-------------------------------------
-class CSimulationSettings:
-    """
-    Stores the settings of the simulation
-    """
-    def __init__(self):
-        # parameters regarding the population and individuals
-        self.size_of_population = 5000
-        self.sex_ratio = 0.5
-        self.s_males = 0.99
-        self.s_females = 0.99
-        self.latency_males = 0.98
-        self.latency_females = 0.99
-        self.mutation_range = 0.01
-        self.mutation_rate = 0.01
-        self.initial_chromosome = [(0, False), (0.5, True), (0, False), (0.5, True)]
-        CIndividual.INITIAL_CHROMOSOME = self.initial_chromosome
-        # + initial values of chromosomes in class CChromosome: Currently [(0, False), (0.0, True), (0, False), (0.0, True)]
-        self.a = 1/2  # factor that influences the weighted average of the qualities of the offspring
-        self.type_of_average = CPopulation.ARITHMETIC_MEAN  # choose between ARITHMETIC_MEAN and GEOMETRIC_MEAN
-        self.maximal_number_of_saved_couples = 10000
-
-        # parameters for environment
-        # The following environments can be chosen:
-        # Environment2D.Environment2D
-        # Environment2D.Environment2DNoBounce
-        # Environment2DDelaunay.Environment2DDelaunay
-        self.type_of_environment =  EnvironmentSoup.EnvironmentSoup
-        if self.type_of_environment is not EnvironmentSoup.EnvironmentSoup:
-            self.width = 800
-            self.height = 800
-            self.size_of_individuals = 6
-            self.speed_of_individuals = 7
-        elif self.type_of_environment is EnvironmentSoup.EnvironmentSoup:
-            self.e = 0.99
-
-
-        self.collision_counter = 0
-        self.step_counter = 1
-        self.average_number_of_collisions_per_timestep = 0
-
-
-    @printAllParameters
-    def __str__(self):
-        return ""
+from settings import CSimulationSettings
 
 
 class CSimulation:
@@ -66,24 +20,16 @@ class CSimulation:
         else:
             self.settings = settings
         # set the environment in which the population is placed
-        if self.settings.type_of_environment is EnvironmentSoup.EnvironmentSoup:
-            self.env = self.settings.type_of_environment(self.settings.e)
-        else:
-            self.env = self.settings.type_of_environment(width=self.settings.width, height=self.settings.height,
-                                                     itemSize=self.settings.size_of_individuals,
-                                                     itemSpeed=self.settings.speed_of_individuals)
+        self.env = self.settings.settings_dict['classType_of_environment'](
+                **self.settings.settings_dict['environment_settings'])
 
         # create a population of males on random positions in that environment
-        self.population = CPopulation.CPopulationImmediateFlush(population_size=self.settings.size_of_population,
-                                                  sex_ratio=self.settings.sex_ratio,
-                                                  s_females=self.settings.s_females, s_males=self.settings.s_males,
-                                                  latency_males=self.settings.latency_males,
-                                                  latency_females=self.settings.latency_females,
-                                                  mutation_range=self.settings.mutation_range,
-                                                  mutation_rate=self.settings.mutation_rate,
-                                                  set_initial_position_in_the_environment=self.env.place_item_in_environment,
-                                                  a=self.settings.a, type_of_average=self.settings.type_of_average,
-                                                  maximal_number_of_saved_couples=self.settings.maximal_number_of_saved_couples)
+        # ToDo: Consider better solutions instead of adding smth to the settings
+        self.settings.settings_dict['population_settings']['set_initial_position_in_the_environment'] = \
+            self.env.place_item_in_environment
+
+        self.population =  self.settings.settings_dict['classType_of_population'](
+            **self.settings.settings_dict['population_settings'])
 
         # information about the current simulation
         self.selected_individual = None

@@ -11,7 +11,7 @@ class CChromosome:
     def __init__(self, mutation_range, mutation_rate, loci=None):
         if loci is None:
             loci = []
-        self.loci = loci  # has the form (locus, locus_evolves), locus is a value in [0,1]
+        self.loci = list(loci)  # make a copy, has the form [(locus, locus_evolves), ...], locus is a value in [0,1]
         self.mutation_range = mutation_range  # mutation range: for details go to the method mutate
         self.mutation_rate = mutation_rate  # mutation rate: for details go to the method mutate
 
@@ -39,6 +39,7 @@ class CChromosome:
             if random.random() < 0.5:
                 novi_loci.append((
                     # *1 ensures that a copy of the value is made and not just a reference
+                    # ToDo: Necessary? If yes, there is for sure a better way!
                     locus_a * 1, locus_a_evolves))
             else:
                 novi_loci.append((locus_b * 1, locus_b_evolves))
