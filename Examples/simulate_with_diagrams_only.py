@@ -1,8 +1,7 @@
 __author__ = 'robert'
 
 import CSimulation
-import time
-import pickle
+import settings
 from Visualization.decorateSimulation import add_visualization_to_simulation
 from Visualization.VisualizationWithPygame.VisualizationCombination import CCombinationOfVisualizations
 from Visualization.VisualizationWithPygame.VisualizationWithDiagrams import C1Histogram, CNHistograms, CAverage
@@ -13,7 +12,8 @@ Simple example for using the Simulation class together with any Visualization
 """
 
 # Create simulation object
-simulation = CSimulation.CSimulation()
+settings = settings.CSimulationSettings('Examples/example_settings_in_soup.txt')
+simulation = CSimulation.CSimulation(settings=settings)
 
 # We don't need to visualize the simulation from the first iteration on
 print("1000 iterations without graphics")

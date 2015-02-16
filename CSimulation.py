@@ -1,10 +1,4 @@
-import Environments.Environment2D
-import CPopulation
-import CIndividual
-from Environments import Environment2DFaster, Environment2D,  EnvironmentSoup
-from Visualization.CVisualizationBaseClass import CSimpleVisualization
 from Tools.usefulDecorators import printAllParameters
-from Visualization.VisualizationWithPygame.VisualizationCombination import CCombinationOfVisualizations
 import pickle
 from settings import CSimulationSettings
 
@@ -21,14 +15,14 @@ class CSimulation:
             self.settings = settings
         # set the environment in which the population is placed
         self.env = self.settings.settings_dict['classType_of_environment'](
-                **self.settings.settings_dict['environment_settings'])
+                    **self.settings.settings_dict['environment_settings'])
 
         # create a population of males on random positions in that environment
         # ToDo: Consider better solutions instead of adding smth to the settings
         self.settings.settings_dict['population_settings']['set_initial_position_in_the_environment'] = \
             self.env.place_item_in_environment
 
-        self.population =  self.settings.settings_dict['classType_of_population'](
+        self.population = self.settings.settings_dict['classType_of_population'](
             **self.settings.settings_dict['population_settings'])
 
         # information about the current simulation

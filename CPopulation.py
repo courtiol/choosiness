@@ -3,10 +3,9 @@ import CIndividual
 import alias
 from Tools.usefulDecorators import measure_percentage_of_time
 
-# Parameters of environment:
-
 ARITHMETIC_MEAN = 0
 GEOMETRIC_MEAN = 1
+
 
 class CPopulation:
     """
@@ -20,7 +19,8 @@ class CPopulation:
      quality of the individuals.
     """
     def __init__(self, population_size, sex_ratio, a, type_of_average,  maximal_number_of_saved_couples,
-                 set_initial_position_in_the_environment, female_individual_settings, male_individual_settings):
+                 set_initial_position_in_the_environment, female_individual_settings, male_individual_settings,
+                 classType_of_individual):
         """
         Initializes a population.
         :param population_size: Integer which is the maximal number of the population
@@ -41,11 +41,12 @@ class CPopulation:
 
         self.male_settings = male_individual_settings
         self.female_settings = female_individual_settings
+        self.classType_of_individual = classType_of_individual
 
         self.populationSize = population_size
         self.set_initial_position_in_the_environment = set_initial_position_in_the_environment
-        self.a = a # weighted average for the quality of the offspring
-        self.type_of_average = type_of_average # ARITHMETIC_MEAN / GEOMETRIC_MEAN
+        self.a = a  # weighted average for the quality of the offspring
+        self.type_of_average = type_of_average  # ARITHMETIC_MEAN / GEOMETRIC_MEAN
 
         # Add individuals to population
         # Set in_initialization to True to allow creating individuals from couples of the form (None, None)
@@ -64,7 +65,7 @@ class CPopulation:
         :return:
         """
         # Add n individuals
-        for i in range(n):
+        for _ in range(n):
             individual = self._create_individual()
             # if for whatever reason there could no individual be created (e.g. no couple in the queue), skip the step
             # This happens if the queue of couples is empty and the class is not anymore in the initialization mode
@@ -107,11 +108,11 @@ class CPopulation:
         if random.random() >= self.sex_ratio:
             self.male_settings['mother'] = mother
             self.male_settings['father'] = father
-            new_individual = CIndividual.CIndividual(**self.male_settings)
+            new_individual = self.classType_of_individual(**self.male_settings)
         else:
             self.female_settings['mother'] = mother
             self.female_settings['father'] = father
-            new_individual = CIndividual.CIndividual(**self.female_settings)
+            new_individual = self.classType_of_individual(**self.female_settings)
         self.set_initial_position_in_the_environment(new_individual)
         return new_individual
 
@@ -178,6 +179,7 @@ class CPopulation:
                 quality_of_couple = male_parent.q**self.a * female_parent.q**(1-self.a)
             else:
                 print("You did not choose a correct value for the type of average in the constructor.")
+                raise Exception("Unknown type of average")
             if len(self.couples) > self.maximal_number_of_saved_couples:
                 self._update_couple_list()
             self.couples.append(((male_parent, female_parent), quality_of_couple))
@@ -197,9 +199,9 @@ class CPopulation:
 
     def __str__(self):
         return """total population: {0}\nfemales: {1}\nmales: {2}\nmaximal number of saved couples: {3}\n
-        current number of couple in que: {4}\n""".format(self.current_population_size,
-        self.current_number_of_females, self.current_number_of_males, self.maximal_number_of_saved_couples,
-        len(self.couples))
+               current number of couple in que: {4}\n""".format(self.current_population_size,
+               self.current_number_of_females, self.current_number_of_males, self.maximal_number_of_saved_couples,
+               len(self.couples))
 
 
 # -------------------------------------slightly different implementation---------------------------------------------------------
@@ -211,15 +213,17 @@ class CPopulationImmediateFlush(CPopulation):
 
     """
     def __init__(self, population_size, sex_ratio, a, type_of_average,  maximal_number_of_saved_couples,
-                 set_initial_position_in_the_environment, female_individual_settings, male_individual_settings):
+                 set_initial_position_in_the_environment, female_individual_settings, male_individual_settings,
+                 classType_of_individual):
         CPopulation.__init__(self, population_size, sex_ratio, a, type_of_average,  maximal_number_of_saved_couples,
-                 set_initial_position_in_the_environment, female_individual_settings, male_individual_settings)
+                             set_initial_position_in_the_environment, female_individual_settings,
+                             male_individual_settings, classType_of_individual)
         if maximal_number_of_saved_couples < 2*population_size:
             print("Warning: The maximal_number_of_saved_couples should be 2*population_size")
 
     def update_states(self):
         CPopulation.update_states(self)
-        self.couples = [] # empty couples array
+        self.couples = []  # empty couples array
 
     def _update_couple_list(self):
         pass  # this method is not necessary anymore

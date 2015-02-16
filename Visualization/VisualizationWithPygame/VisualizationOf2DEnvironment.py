@@ -74,12 +74,12 @@ class C2DVisualizationOfSimulation(CVisualizationWithPygameBaseClass):
         CVisualizationWithPygameBaseClass.screen.fill(self.colour_of_environment)
         estimated_e = convert_collision_rate_to_e(
             collisions_per_time_step=self.simulation.settings.average_number_of_collisions_per_timestep,
-            population_size=self.simulation.settings.size_of_population,
-            proportion_males=self.simulation.settings.sex_ratio)
+            population_size=self.simulation.population.populationSize,
+            proportion_males=self.simulation.population.sex_ratio)
         text = 'collisions: '+str(self.simulation.settings.collision_counter)
         text += " average: "+str(round(self.simulation.settings.average_number_of_collisions_per_timestep, 4))
         text += " e: "+str(round(estimated_e, 4))
-        self.print_text_on_screen(text, self.simulation.settings.width/2, self.simulation.settings.height/2)
+        self.print_text_on_screen(text, self.width_of_window/2, self.height_of_window/2)
 
     def _draw_population(self, population):
         pygame.display.set_caption("Simulation with "+str(self.simulation.population.current_number_of_females) +

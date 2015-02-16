@@ -1,19 +1,19 @@
 __author__ = 'robert'
 
 import CSimulation
-import time
-import pickle
 from Visualization.decorateSimulation import add_visualization_to_simulation
 from Visualization.VisualizationWithPygame.VisualizationCombination import CCombinationOfVisualizations
 from Visualization.VisualizationWithPygame.VisualizationWithDiagrams import C1Histogram, CNHistograms
 from Visualization.VisualizationWithPygame.VisualizationOf2DEnvironment import C2DVisualizationOfSimulation
+import settings
 
 """
 Simple example for using the Simulation class together with any Visualization
 """
 
 # Create simulation object
-simulation = CSimulation.CSimulation()
+settings = settings.CSimulationSettings('Examples/example_settings_2D.txt')
+simulation = CSimulation.CSimulation(settings)
 
 # We don't need to visualize the simulation from the first iteration on
 print("10 iterations without graphics")
@@ -25,11 +25,13 @@ print("Now with graphics")
 # Examples: C1Histogram(simulation, 800, 800)
 
 # We want to combine several visualizations. Therefore we need to define a list of the ones, that we want.
-used_of_visualizations = [C1Histogram(simulation, simulation.settings.width, simulation.settings.height, 'phi'),
-                           CNHistograms(simulation, simulation.settings.width, simulation.settings.height, ['phi','q']),
-                           C2DVisualizationOfSimulation(simulation, simulation.settings.width, simulation.settings.height)]
+width = 800
+height = 800
+used_of_visualizations = [C1Histogram(simulation, width, height, 'phi'),
+                           CNHistograms(simulation, width, height, ['phi','q']),
+                           C2DVisualizationOfSimulation(simulation, width, height)]
 # Create a combination of these visualizations. You can iterate through the simulations by using left and right arrow
-visualization =  CCombinationOfVisualizations(simulation, simulation.settings.width, simulation.settings.height,
+visualization =  CCombinationOfVisualizations(simulation, width, height,
                                               used_of_visualizations)
 visualization.init_display()
 # modify the simulation that it can be visualized
