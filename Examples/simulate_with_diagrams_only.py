@@ -1,7 +1,8 @@
+from settings import settings
+
 __author__ = 'robert'
 
 import CSimulation
-import settings
 from Visualization.decorateSimulation import add_visualization_to_simulation
 from Visualization.VisualizationWithPygame.VisualizationCombination import CCombinationOfVisualizations
 from Visualization.VisualizationWithPygame.VisualizationWithDiagrams import C1Histogram, CNHistograms, CAverage

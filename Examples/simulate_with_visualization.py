@@ -1,3 +1,5 @@
+from settings import settings
+
 __author__ = 'robert'
 
 import CSimulation
@@ -5,7 +7,6 @@ from Visualization.decorateSimulation import add_visualization_to_simulation
 from Visualization.VisualizationWithPygame.VisualizationCombination import CCombinationOfVisualizations
 from Visualization.VisualizationWithPygame.VisualizationWithDiagrams import C1Histogram, CNHistograms
 from Visualization.VisualizationWithPygame.VisualizationOf2DEnvironment import C2DVisualizationOfSimulation
-import settings
 
 """
 Simple example for using the Simulation class together with any Visualization

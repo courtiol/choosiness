@@ -27,6 +27,7 @@ class CIndividual:
         if mother is None or father is None:
             # 4 loci are needed (phi_a_male, phi_b_male, phi_a_female, phi_b_female)
             # each chromosome stores all loci
+            # Take also a look in the settings for details regarding 'chromosome_settings'
             self.ch1 = classType_of_chromosome(**chromosome_settings)
             self.ch2 = classType_of_chromosome(**chromosome_settings)
         else:

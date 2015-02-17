@@ -1,6 +1,6 @@
 from Tools.usefulDecorators import printAllParameters
 import pickle
-from settings import CSimulationSettings
+from settings.settings import CSimulationSettings
 
 
 class CSimulation:
