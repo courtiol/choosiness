@@ -6,8 +6,32 @@ from Tools.usefulDecorators import measure_percentage_of_time
 ARITHMETIC_MEAN = 0
 GEOMETRIC_MEAN = 1
 
+class CBasePopulation():
+    """
+    The following methods need to be implemented, in order to ensure compatibility with the simulation.
+    """
+    def update_states(self):
+        pass
 
-class CPopulation:
+    def check_for_mating(self, male_parent, female_parent):
+        pass
+
+    @property
+    def current_population_size(self):
+        return len(self.males)+len(self.females)
+
+    @property
+    def current_number_of_males(self):
+        return len(self.males)
+
+    @property
+    def current_number_of_females(self):
+        return len(self.females)
+
+# --------------------------------------------------------------------------------------------------------------
+
+
+class CPopulation(CBasePopulation):
     """
     The class consists basically of two arrays: males and females
     The constructor of the class initializes these arrays with as many individuals as given by the allowed size of
@@ -19,8 +43,9 @@ class CPopulation:
      quality of the individuals.
     """
     def __init__(self, population_size, sex_ratio, a, type_of_average,  maximal_number_of_saved_couples,
-                 set_initial_position_in_the_environment, female_individual_settings, male_individual_settings,
-                 classType_of_individual):
+                 set_initial_position_in_the_environment,
+                 classType_of_male_individual : CIndividual.CBaseIndividual,
+                 classType_of_female_individual : CIndividual.CBaseIndividual, classType_settings):
         """
         Initializes a population.
         :param population_size: Integer which is the maximal number of the population
@@ -39,9 +64,10 @@ class CPopulation:
         self.maximal_number_of_saved_couples = maximal_number_of_saved_couples
         self.sex_ratio = sex_ratio
 
-        self.male_settings = male_individual_settings
-        self.female_settings = female_individual_settings
-        self.classType_of_individual = classType_of_individual
+        self.male_settings = classType_settings['classType_of_male_individual']
+        self.female_settings = classType_settings['classType_of_female_individual']
+        self.classType_of_female_individual = classType_of_male_individual
+        self.classType_of_male_individual = classType_of_female_individual
 
         self.populationSize = population_size
         self.set_initial_position_in_the_environment = set_initial_position_in_the_environment
@@ -108,11 +134,11 @@ class CPopulation:
         if random.random() >= self.sex_ratio:
             self.male_settings['mother'] = mother
             self.male_settings['father'] = father
-            new_individual = self.classType_of_individual(**self.male_settings)
+            new_individual = self.classType_of_male_individual(**self.male_settings)
         else:
             self.female_settings['mother'] = mother
             self.female_settings['father'] = father
-            new_individual = self.classType_of_individual(**self.female_settings)
+            new_individual = self.classType_of_female_individual(**self.female_settings)
         self.set_initial_position_in_the_environment(new_individual)
         return new_individual
 
@@ -205,22 +231,13 @@ class CPopulation:
 
 
 # -------------------------------------slightly different implementation---------------------------------------------------------
-class CPopulationImmediateFlush(CPopulation):
+class CPopulationImmediateFlush(CPopulation, CBasePopulation):
     """
     The couples array is not kept over several birth cycles here. After each refilling of the males and females it is
     set again to an emtpy list. This corresponds to the reference implementation.
     Keep care that the
 
     """
-    def __init__(self, population_size, sex_ratio, a, type_of_average,  maximal_number_of_saved_couples,
-                 set_initial_position_in_the_environment, female_individual_settings, male_individual_settings,
-                 classType_of_individual):
-        CPopulation.__init__(self, population_size, sex_ratio, a, type_of_average,  maximal_number_of_saved_couples,
-                             set_initial_position_in_the_environment, female_individual_settings,
-                             male_individual_settings, classType_of_individual)
-        if maximal_number_of_saved_couples < 2*population_size:
-            print("Warning: The maximal_number_of_saved_couples should be 2*population_size")
-
     def update_states(self):
         CPopulation.update_states(self)
         self.couples = []  # empty couples array

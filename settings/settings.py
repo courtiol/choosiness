@@ -80,45 +80,49 @@ class CSimulationSettings:
         # Otherwise choose the following ones
         self.settings_dict = {}
         self.settings_dict['classType_of_population'] = CPopulation.CPopulationImmediateFlush
-        self.settings_dict['population_settings'] = {}
-        self.settings_dict['population_settings']['population_size'] = 5000
-        self.settings_dict['population_settings']['maximal_number_of_saved_couples'] = \
-            2*self.settings_dict['population_settings']['population_size']
-        self.settings_dict['population_settings']['sex_ratio'] = 0.5
-        self.settings_dict['population_settings']['type_of_average'] = CPopulation.ARITHMETIC_MEAN
-        self.settings_dict['population_settings']['a'] = 0.5
-        self.settings_dict['population_settings']['classType_of_individual'] = CIndividual.CIndividual
-        self.settings_dict['population_settings']['male_individual_settings'] = {}
-        self.settings_dict['population_settings']['male_individual_settings']['gender'] = CIndividual.MALE
-        self.settings_dict['population_settings']['male_individual_settings']['survival_prob'] = 0.99
-        self.settings_dict['population_settings']['male_individual_settings']['latency'] = 0.98
-        self.settings_dict['population_settings']['male_individual_settings']['classType_of_chromosome'] = \
-            CChromosome.CChromosome
-        self.settings_dict['population_settings']['male_individual_settings']['chromosome_settings'] = {}
-        self.settings_dict['population_settings']['male_individual_settings']['chromosome_settings']['mutation_range']\
+        self.settings_dict['classType_settings'] = {}
+        self.settings_dict['classType_settings']['classType_of_population'] = {}
+        self.settings_dict['classType_settings']['classType_of_population']['population_size'] = 5000
+        self.settings_dict['classType_settings']['classType_of_population']['maximal_number_of_saved_couples'] = \
+            2*self.settings_dict['classType_settings']['classType_of_population']['population_size']
+        self.settings_dict['classType_settings']['classType_of_population']['sex_ratio'] = 0.5
+        self.settings_dict['classType_settings']['classType_of_population']['type_of_average'] = CPopulation.ARITHMETIC_MEAN
+        self.settings_dict['classType_settings']['classType_of_population']['a'] = 0.5
+        self.settings_dict['classType_settings']['classType_of_population']['classType_of_male_individual'] = CIndividual.CIndividual
+        self.settings_dict['classType_settings']['classType_of_population']['classType_of_female_individual'] = CIndividual.CIndividual
+        self.settings_dict['classType_settings']['classType_of_population']['classType_settings'] = {}
+        self.settings_dict['classType_settings']['classType_of_population']['classType_settings']['classType_of_male_individual'] = {}
+        self.settings_dict['classType_settings']['classType_of_population']['classType_settings']['classType_of_male_individual']['gender'] = CIndividual.MALE
+        self.settings_dict['classType_settings']['classType_of_population']['classType_settings']['classType_of_male_individual']['survival_prob'] = 0.99
+        self.settings_dict['classType_settings']['classType_of_population']['classType_settings']['classType_of_male_individual']['latency'] = 0.98
+        self.settings_dict['classType_settings']['classType_of_population']['classType_settings']['classType_of_male_individual']['classType_of_chromosome'] = CChromosome.CChromosome
+        self.settings_dict['classType_settings']['classType_of_population']['classType_settings']['classType_of_male_individual']['classType_settings'] = {}
+        self.settings_dict['classType_settings']['classType_of_population']['classType_settings']['classType_of_male_individual']['classType_settings']['classType_of_chromosome'] = {}
+        self.settings_dict['classType_settings']['classType_of_population']['classType_settings']['classType_of_male_individual']['classType_settings']['classType_of_chromosome']['mutation_range']\
             = 0.01
-        self.settings_dict['population_settings']['male_individual_settings']['chromosome_settings']['mutation_rate']\
+        self.settings_dict['classType_settings']['classType_of_population']['classType_settings']['classType_of_male_individual']['classType_settings']['classType_of_chromosome']['mutation_rate']\
             = 0.01
-        self.settings_dict['population_settings']['male_individual_settings']['chromosome_settings']['loci']\
+        self.settings_dict['classType_settings']['classType_of_population']['classType_settings']['classType_of_male_individual']['classType_settings']['classType_of_chromosome']['loci']\
             = [(0, False), (0.5, True), (0, False), (0.5, True)] # initial_chromosome
 
-        self.settings_dict['population_settings']['female_individual_settings'] = {}
-        self.settings_dict['population_settings']['female_individual_settings']['gender'] = CIndividual.FEMALE
-        self.settings_dict['population_settings']['female_individual_settings']['survival_prob'] = 0.99
-        self.settings_dict['population_settings']['female_individual_settings']['latency'] = 0.99
-        self.settings_dict['population_settings']['female_individual_settings']['classType_of_chromosome'] = \
+        self.settings_dict['classType_settings']['classType_of_population']['classType_settings']['classType_of_female_individual'] = {}
+        self.settings_dict['classType_settings']['classType_of_population']['classType_settings']['classType_of_female_individual']['gender'] = CIndividual.FEMALE
+        self.settings_dict['classType_settings']['classType_of_population']['classType_settings']['classType_of_female_individual']['survival_prob'] = 0.99
+        self.settings_dict['classType_settings']['classType_of_population']['classType_settings']['classType_of_female_individual']['latency'] = 0.99
+        self.settings_dict['classType_settings']['classType_of_population']['classType_settings']['classType_of_female_individual']['classType_of_chromosome'] = \
             CChromosome.CChromosome
-        self.settings_dict['population_settings']['female_individual_settings']['chromosome_settings'] = {}
-        self.settings_dict['population_settings']['female_individual_settings']['chromosome_settings']['mutation_range']\
+        self.settings_dict['classType_settings']['classType_of_population']['classType_settings']['classType_of_female_individual']['classType_settings'] = {}
+        self.settings_dict['classType_settings']['classType_of_population']['classType_settings']['classType_of_female_individual']['classType_settings']['classType_of_chromosome'] = {}
+        self.settings_dict['classType_settings']['classType_of_population']['classType_settings']['classType_of_female_individual']['classType_settings']['classType_of_chromosome']['mutation_range']\
             = 0.01
-        self.settings_dict['population_settings']['female_individual_settings']['chromosome_settings']['mutation_rate']\
+        self.settings_dict['classType_settings']['classType_of_population']['classType_settings']['classType_of_female_individual']['classType_settings']['classType_of_chromosome']['mutation_rate']\
             = 0.01
-        self.settings_dict['population_settings']['female_individual_settings']['chromosome_settings']['loci']\
+        self.settings_dict['classType_settings']['classType_of_population']['classType_settings']['classType_of_female_individual']['classType_settings']['classType_of_chromosome']['loci']\
             = [(0, False), (0.5, True), (0, False), (0.5, True)] # initial_chromosome
 
         self.settings_dict['classType_of_environment'] = EnvironmentSoup.EnvironmentSoup
-        self.settings_dict['environment_settings'] = {}
-        self.settings_dict['environment_settings']['e'] = 0.99
+        self.settings_dict['classType_settings']['classType_of_environment'] = {}
+        self.settings_dict['classType_settings']['classType_of_environment']['e'] = 0.99
 
     @printAllParameters
     def __str__(self):
@@ -139,3 +143,9 @@ class CSimulationSettings:
         json_str = f.read()
         self.settings_dict = jsonpickle.decode(json_str)
         print("settings loaded from "+filename)
+
+
+# -------------------------------------
+settings = CSimulationSettings()
+# settings.load_settings_from_file("test.txt")
+settings.save_settings_to_file("example_settings3.txt")

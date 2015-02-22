@@ -3,6 +3,7 @@ import math
 from scipy.spatial import Delaunay
 from Environments.Environment2D import Environment2D
 from Tools.usefulDecorators import measure_percentage_of_time
+from Environments.EnvironmentBase import CBaseEnvironment
 
 
 def find_neighbors(pindex, triang):
@@ -48,7 +49,7 @@ def check_for_collisions(points, dist, collision_handler):
             collision_handler(neighbor, index)
 
 
-class Environment2DDelaunay(Environment2D):
+class Environment2DDelaunay(Environment2D, CBaseEnvironment):
     """
     This class provides a faster method to check collisions using a delaunay triangulation, which can be computed in
     O(nlog n).

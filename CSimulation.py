@@ -15,15 +15,15 @@ class CSimulation:
             self.settings = settings
         # set the environment in which the population is placed
         self.env = self.settings.settings_dict['classType_of_environment'](
-                    **self.settings.settings_dict['environment_settings'])
+                    **self.settings.settings_dict['classType_settings']['classType_of_environment'])
 
         # create a population of males on random positions in that environment
         # ToDo: Consider better solutions instead of adding smth to the settings
-        self.settings.settings_dict['population_settings']['set_initial_position_in_the_environment'] = \
+        self.settings.settings_dict['classType_settings']['classType_of_population']['set_initial_position_in_the_environment'] = \
             self.env.place_item_in_environment
 
         self.population = self.settings.settings_dict['classType_of_population'](
-            **self.settings.settings_dict['population_settings'])
+            **self.settings.settings_dict['classType_settings']['classType_of_population'])
 
         # information about the current simulation
         self.selected_individual = None

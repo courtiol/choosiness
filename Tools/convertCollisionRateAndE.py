@@ -31,7 +31,7 @@ def convert_e_to_collision_rate(e, population_size, proportion_males):
     collisions_per_time_step = e*expected_number_of_min_of_males_and_females
     return collisions_per_time_step
 """
-Example:
+Settings_Gui:
 
 # population_size = 100
 # proportion_males = 0.5

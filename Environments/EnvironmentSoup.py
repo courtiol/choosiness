@@ -3,9 +3,10 @@ __author__ = 'robert'
 from Tools.usefulDecorators import printAllParameters
 from Tools.usefulDecorators import measure_percentage_of_time
 from random import shuffle, uniform
+from Environments.EnvironmentBase import CBaseEnvironment
 
 
-class EnvironmentSoup():
+class EnvironmentSoup(CBaseEnvironment):
     """
     The collisions are computed here without any geometry.
     """

@@ -46,8 +46,8 @@ def simulate(settings_file, number_of_iterations):
     print(simulation)
     simulation.run_n_timesteps(number_of_iterations)
 
-list_of_simulation_settings = [('settings/example_settings_in_soup.txt', 1000),
-                               ('settings/example_settings_in_soup.txt', 1000)]
+list_of_simulation_settings = [('settings/Vergleich2.txt', 1000),
+                               ('settings/example_settings3.txt', 1000)]
 
 for settings_file, number_of_iterations in list_of_simulation_settings:
     print("Run next simulation.")

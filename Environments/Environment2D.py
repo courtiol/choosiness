@@ -2,6 +2,7 @@ import math
 import random
 from Tools.usefulDecorators import printAllParameters
 from Tools.usefulDecorators import measure_percentage_of_time
+from Environments.EnvironmentBase import CBaseEnvironment
 
 
 # Parameters of environment:
@@ -23,7 +24,7 @@ def add_vectors(angle1, length1, angle2, length2):
 # -----------End-----------------
 
 
-class Environment2D():
+class Environment2D(CBaseEnvironment):
     """
     Defines the structure of the environment (e.g.boundary of a simulation and its properties)
     """
@@ -156,7 +157,7 @@ class Environment2D():
         return ""
 
 
-class Environment2DNoBounce(Environment2D):
+class Environment2DNoBounce(Environment2D, CBaseEnvironment):
     """
     No bouncing at the borders of the area.
     """

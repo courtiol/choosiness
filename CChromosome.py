@@ -1,8 +1,27 @@
 import random
 
+class CBaseChromosome():
+    """
+    The following methods need to be implemented, in order to assure compatibility with the population class.
+    """
+    def mutate(self):
+        """
+        Random change in stored data
+        :return:
+        """
+        pass
+
+    def __add__(self, other_chromosome):
+        """
+        This method should define a + operator for chromosomes. The operator should realize a random
+        recombination of two chromosomes.
+        :param other_chromosome:
+        :return:result of recombination
+        """
+        pass
 
 # -------------------------------Class CChromosome-------------------------------------
-class CChromosome:
+class CChromosome(CBaseChromosome):
     """
     Saves the inheritable information of individuals. This information is saved in an array "loci", which has the form
     [..., (locus,locus_evolves), ...]

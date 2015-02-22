@@ -1,5 +1,6 @@
 import random
 from Tools.usefulDecorators import printAllParameters
+from CChromosome import CBaseChromosome
 
 # constants:
 ALIVE = 0
@@ -8,14 +9,28 @@ IN_LATENCY = 2
 MALE = 1
 FEMALE = 0
 
+class CBaseIndividual():
+    """
+    The following methods need to be implemented, in order to assure compatibility with the population class.
+    """
+    def update_state(self):
+        pass
 
-class CIndividual:
+    def accepts_for_mating(self, other_sex):
+        pass
+
+    def mate(self):
+        pass
+
+# --------------------------------------------------------------------------------------------------------------
+
+class CIndividual(CBaseIndividual):
     """
     The class represents one individual in the simulation. Each individual has different states and
     can be created by its "parents". The inheritable information of each individual is saved in a pair of
     chromosomes.
     """
-    def __init__(self, gender, latency, survival_prob, classType_of_chromosome, chromosome_settings, mother=None, father=None):
+    def __init__(self, gender, latency, survival_prob, classType_of_chromosome : CBaseChromosome, classType_settings, mother=None, father=None):
         """
 
         :type self: object
@@ -28,8 +43,8 @@ class CIndividual:
             # 4 loci are needed (phi_a_male, phi_b_male, phi_a_female, phi_b_female)
             # each chromosome stores all loci
             # Take also a look in the settings for details regarding 'chromosome_settings'
-            self.ch1 = classType_of_chromosome(**chromosome_settings)
-            self.ch2 = classType_of_chromosome(**chromosome_settings)
+            self.ch1 = classType_of_chromosome(**classType_settings['classType_of_chromosome'])
+            self.ch2 = classType_of_chromosome(**classType_settings['classType_of_chromosome'])
         else:
             # random segregation as if loci where independent (on different chromosomes)
             self.ch1 = mother.ch1 + mother.ch2
@@ -89,3 +104,5 @@ class CIndividual:
     @printAllParameters
     def __str__(self):
         return ""
+
+

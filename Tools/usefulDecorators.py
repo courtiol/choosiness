@@ -89,7 +89,7 @@ def measure_percentage_of_time(timed_method):
     return timed
 
 """
-Example of using @measure_percentage_of_time:
+Settings_Gui of using @measure_percentage_of_time:
 
 
 class Tester:

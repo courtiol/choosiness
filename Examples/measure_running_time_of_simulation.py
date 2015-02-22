@@ -6,7 +6,7 @@ from Visualization.VisualizationWithPygame.VisualizationCombination import CComb
 from Tools.timer import Timer
 
 """
-Example how to measure the time a certain number of iterations need
+Settings_Gui how to measure the time a certain number of iterations need
 """
 
 # Start simulation

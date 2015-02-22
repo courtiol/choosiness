@@ -38,8 +38,8 @@ class CHistograms(CVisualizationWithPygameBaseClass):
 
         # it is not necessary to update in every step the graphics
         # take expected life = average time of one generation as update rate
-        s_males = self.simulation.settings.settings_dict['population_settings']['male_individual_settings']['survival_prob']
-        s_females = self.simulation.settings.settings_dict['population_settings']['female_individual_settings']['survival_prob']
+        s_males = self.simulation.settings.settings_dict['classType_settings']['classType_of_population']['classType_settings']['classType_of_male_individual']['survival_prob']
+        s_females = self.simulation.settings.settings_dict['classType_settings']['classType_of_population']['classType_settings']['classType_of_female_individual']['survival_prob']
         max_s = max([s_males, s_females])
         self.update_in_every_n_step = int(round(1/(1-max_s)))
         self.update_in_every_n_step += 10
@@ -139,7 +139,7 @@ class CNHistograms(CHistograms):
         CHistograms.__init__(self, simulation, width_of_window, height_of_window)
         self.list_of_attributes = list_of_attributes
         # We want to create a number of subplots depending on the number of attributes that should be displayed
-        # Example:plt.subplot(320) means the 3 rows and 2 columns of subplots
+        # Settings_Gui:plt.subplot(320) means the 3 rows and 2 columns of subplots
         # Here we calculate therefore the number of rows.
         self.number_of_subplots = len(self.list_of_attributes)*100
 
