@@ -143,9 +143,3 @@ class CSimulationSettings:
         json_str = f.read()
         self.settings_dict = jsonpickle.decode(json_str)
         print("settings loaded from "+filename)
-
-
-# -------------------------------------
-settings = CSimulationSettings()
-# settings.load_settings_from_file("test.txt")
-settings.save_settings_to_file("example_settings3.txt")

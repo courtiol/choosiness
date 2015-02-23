@@ -81,22 +81,37 @@ def get_subclasses(base_class):
         list_of_classes.append(sc)
     return list_of_classes
 
-
-class SettingsGui(QtGui.QWidget):
-    """
-    Creates dynamically a gui for the settings of the simulation, where all implementations of
-    CPopulation.CBasePopulation and CBaseEnvironment can be selected. To do that the 'inspect' module is used. The
-    constructor of each class is iterated. For each parameter in the constructor that is by itself a derived class
-    of any base class the necessary settings are recursively extracted.
-    """
-    def __init__(self):
-        super(SettingsGui, self).__init__()
-        # two dictionaries for assigning values between the widgets and the settings dictionary:
+class WidgetFromDict(QtGui.QWidget):
+    def __init__(self, data):
+        super(WidgetFromDict, self).__init__()
+        # two dictionaries, for assigning values between the widgets and the settings dictionary:
         self.widget_to_dict_entry = {}
         self.dict_entry_to_widget = {}
 
-        self.initUI()
+        # Get parameters for the environment
+        if data is None:
+            self.parameter_settings = {'classType_of_population': getDictFromBaseClass(CPopulation.CBasePopulation),
+                                       'classType_of_environment': getDictFromBaseClass(CBaseEnvironment)}
+        else:
+            self.parameter_settings = data
+        print("settings:")
+        print(self.parameter_settings)
 
+        hbox = self.get_layout_of_dict(self.parameter_settings)
+
+        self.parentWidget = QtGui.QWidget()
+        self.parentWidget.setLayout(hbox)
+        self.scroll = QtGui.QScrollArea()
+        self.scroll.setWidget(self.parentWidget)
+        hbox2 = QtGui.QVBoxLayout()
+        hbox2.addWidget(self.scroll)
+
+        self.setLayout(hbox2)
+        self.setGeometry(800, 800, 800, 800)
+        self.setWindowTitle('Create settings for the simulation:')
+        self.show()
+
+        self.set_data_to_widgets()
 
     def get_stacked_layout(self, list_of_dicts):
         """
@@ -161,53 +176,28 @@ class SettingsGui(QtGui.QWidget):
                 vbox.addLayout(parameter_box)
         return vbox
 
-    def initUI(self):
-        # Get parameters for the environment
-        self.parameter_settings = {'classType_of_population': getDictFromBaseClass(CPopulation.CBasePopulation),
-                                   'classType_of_environment': getDictFromBaseClass(CBaseEnvironment)}
-        print("settings:")
-        print(self.parameter_settings)
+    def set_data_to_widgets(self):
+        for widget in self.widget_to_dict_entry.keys():
+            if type(widget) != QtGui.QComboBox:
+                widget.setText(self.widget_to_dict_entry[widget].v)
 
-        hbox = self.get_layout_of_dict(self.parameter_settings)
-
-        self.parentWidget = QtGui.QWidget()
-        self.parentWidget.setLayout(hbox)
-        self.scroll = QtGui.QScrollArea()
-        self.scroll.setWidget(self.parentWidget)
-        hbox2 = QtGui.QVBoxLayout()
-        hbox2.addWidget(self.scroll)
-
-        self.create_settings_button = QtGui.QPushButton('Create Settings', self)
-        self.create_settings_button.clicked.connect(self.on_create_settings_button_clicked)
-        hbox2.addWidget(self.create_settings_button)
-
-        self.setLayout(hbox2)
-        self.setGeometry(800, 800, 800, 800)
-        self.setWindowTitle('Create settings for the simulation:')
-        self.show()
-
-    def on_create_settings_button_clicked(self):
+    def get_data_from_widgets(self):
         """
-        Save the settings in a to settings.CSimulationSettings compatible format
+        Stores the data of the widgets in self.parameter_settings
         """
-        # Save first just every value of the layout in the corresponding dictionary 'self.parameter_settings' by using
-        # 'self.widget_to_dict_entry'
         for widget in self.widget_to_dict_entry.keys():
             if type(widget) != QtGui.QComboBox:
                 self.widget_to_dict_entry[widget].v = widget.text()
-        # Now check what entries are selected in the comboboxes and retrieve from this the settings
-        resulting_dict = self.create_dict_from_combobox_choice(self.parameter_settings)
-        # Save these settings
-        new_settings = settings.CSimulationSettings()
-        new_settings.settings_dict = resulting_dict
-        new_settings.save_settings_to_file('Vergleich.txt')
-        # ToDo: More markers. It's not enough to just test for  list. What is, when you really need a list as a parameter?
 
-    def create_dict_from_combobox_choice(self, sub_dict):
+
+    def create_dict_from_combobox_choice(self, sub_dict=None):
         """
         Create a dictionary compatible to settings.CSimulationSettings. This means for each combobox the selected
         key und subdirectory in the dictionary must be extracted
         """
+        if sub_dict is None:
+            sub_dict = self.parameter_settings
+
         current_dict = {}  # create a new dictionary to store the data
         for key in sub_dict.keys():  # iterate over the input dictionary
             # if an entry is a list, the list entry selected in the combobox must be selected
@@ -231,9 +221,65 @@ class SettingsGui(QtGui.QWidget):
                 current_dict[key] = jsonpickle.decode(sub_dict[key].v)
         return current_dict
 
+# ----------------------------------------------------------------
+
+
+
+class SettingsGui(QtGui.QWidget):
+    """
+    Creates dynamically a gui for the settings of the simulation, where all implementations of
+    CPopulation.CBasePopulation and CBaseEnvironment can be selected. To do that the 'inspect' module is used. The
+    constructor of each class is iterated. For each parameter in the constructor that is by itself a derived class
+    of any base class the necessary settings are recursively extracted.
+    """
+    def __init__(self):
+        super(SettingsGui, self).__init__()
+        self.initUI()
+
+    def initUI(self):
+        temp_settings = settings.CSimulationSettings('default_settings.txt')
+        self.settings_widget = WidgetFromDict(temp_settings.settings_dict)
+
+        hbox = QtGui.QVBoxLayout()
+        hbox.addWidget(self.settings_widget)
+
+        self.create_settings_button = QtGui.QPushButton('Create Settings', self)
+        self.create_settings_button.clicked.connect(self.on_create_settings_button_clicked)
+        hbox.addWidget(self.create_settings_button)
+
+        self.set_as_default_button = QtGui.QPushButton('Set as default', self)
+        self.set_as_default_button.clicked.connect(self.on_set_as_default_button_clicked)
+        hbox.addWidget(self.set_as_default_button)
+
+        self.setLayout(hbox)
+        self.setGeometry(800, 800, 800, 800)
+        self.setWindowTitle('Create settings for the simulation:')
+        self.show()
+
+    def on_create_settings_button_clicked(self):
+        """
+        Save the settings in a to settings.CSimulationSettings compatible format
+        """
+        self.settings_widget.get_data_from_widgets()
+        # Check what entries are selected in the comboboxes and retrieve from this the settings
+        resulting_dict = self.settings_widget.create_dict_from_combobox_choice()
+        # Save these settings
+        new_settings = settings.CSimulationSettings()
+        new_settings.settings_dict = resulting_dict
+        new_settings.save_settings_to_file('settings.txt')
+        # ToDo: More markers. It's not enough to just test for  list. What is, when you really need a list as a parameter?
+
+    def on_set_as_default_button_clicked(self):
+        self.settings_widget.get_data_from_widgets()
+        temp_settings = settings.CSimulationSettings()
+        temp_settings.settings_dict = self.settings_widget.parameter_settings
+        temp_settings.save_settings_to_file('default_settings.txt')
+
 
 def main():
     app = QtGui.QApplication(sys.argv)
+    temp_settings = settings.CSimulationSettings('default_settings.txt')
+    #ex = WidgetFromDict(temp_settings.settings_dict)
     ex = SettingsGui()
     sys.exit(app.exec_())
 
