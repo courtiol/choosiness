@@ -1,0 +1,3 @@
+phi_m = 0
+phi_f = 0.684
+convergence_stable = 1
