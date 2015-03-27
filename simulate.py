@@ -1,9 +1,7 @@
-__author__ = 'robert'
+__author__ = 'RobertS'
 
 from settings.settings import CSimulationSettings
 from CSimulation import CSimulation
-import time
-import pickle
 from Visualization.decorateSimulation import add_visualization_to_simulation
 from Visualization.VisualizationWithPygame.VisualizationCombination import CCombinationOfVisualizations
 from Visualization.VisualizationWithPygame.VisualizationWithDiagrams import C1Histogram, CNHistograms, CAverage
