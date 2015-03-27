@@ -1,6 +1,5 @@
 __author__ = 'RobertS'
 
-
 from settings.settings import CSimulationSettings
 from CSimulation import CSimulation
 from Visualization.decorateSimulation import add_visualization_to_simulation
@@ -9,7 +8,13 @@ from Visualization.VisualizationWithPygame.VisualizationWithDiagrams import C1Hi
 from Visualization.VisualizationWithPygame.VisualizationOf2DEnvironment import C2DVisualizationOfSimulation
 from Logger.StandardLogger import CLoggerOfSimulation, add_logger_to_simulation
 
-def simulate(settings_file, number_of_iterations):
+# Parameters for visualisation and file creation (to include in GUI later on)
+frequency_saving = 10000
+width_window = 1200
+height_window = 800
+number_of_iterations = 500000
+
+def simulate(settings_file, number_of_iterations, frequency_saving, width_window, height_window):
     """
     Run simulation with specified settings and number of iterations
     :param settings_file: path/filename of settings
@@ -20,23 +25,20 @@ def simulate(settings_file, number_of_iterations):
     settings = CSimulationSettings(settings_file)
     simulation = CSimulation(settings=settings)
 
-
-
     # initialize logger
-    logger_of_simulation = CLoggerOfSimulation(simulation, 10000)  # log every 10000th iteration
+    logger_of_simulation = CLoggerOfSimulation(simulation, frequency_saving)  # log every frequency_saving iteration
     add_logger_to_simulation(simulation, logger_of_simulation)  # connects the logger to the simulation
 
     # We want to combine several visualizations. Therefore we need to define a list of the ones, that we want.
     # In each visualization we pick the attributes of the individuals, which we like to see
-    used_of_visualizations = [C1Histogram(simulation, 1200, 800, 'phi'),
-                          CNHistograms(simulation, 1200, 800, ['phi','q']),
-                          CAverage(simulation, 1200, 800, 'phi'),
-                          CAverage(simulation, 1200, 800, 'q'),
-                          C2DVisualizationOfSimulation(simulation, 1200, 800)]
+    used_of_visualizations = [C1Histogram(simulation, width_window, height_window, 'phi'),
+                          CNHistograms(simulation, width_window, height_window, ['phi','q']),
+                          CAverage(simulation, width_window, height_window, 'phi'),
+                          CAverage(simulation, width_window, height_window, 'q'),
+                          C2DVisualizationOfSimulation(simulation, width_window, height_window)]
 
     # Create a combination of these visualizations. You can iterate through the simulations by using left and right arrow
-    visualization =  CCombinationOfVisualizations(simulation, 1200, 800,
-                                              used_of_visualizations)
+    visualization = CCombinationOfVisualizations(simulation, width_window, height_window, used_of_visualizations)
 
     visualization.init_display()
     # modify the simulation that it can be visualized
@@ -49,7 +51,7 @@ def simulate(settings_file, number_of_iterations):
     print(simulation)
     simulation.run_n_timesteps(number_of_iterations)
 
-list_of_simulation_settings = [('settings/settings.txt', 500000)]
+list_of_simulation_settings = [('settings/settings.txt', number_of_iterations)]
 
 for settings_file, number_of_iterations in list_of_simulation_settings:
     print("Run next simulation.")
