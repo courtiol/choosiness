@@ -1,5 +1,6 @@
 __author__ = 'RobertS'
 
+
 from settings.settings import CSimulationSettings
 from CSimulation import CSimulation
 from Visualization.decorateSimulation import add_visualization_to_simulation
