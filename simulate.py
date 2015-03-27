@@ -30,7 +30,9 @@ def simulate(settings_file, number_of_iterations):
     used_of_visualizations = [C1Histogram(simulation, 1200, 800, 'phi'),
                           CNHistograms(simulation, 1200, 800, ['phi','q']),
                           CAverage(simulation, 1200, 800, 'phi'),
-                          CAverage(simulation, 1200, 800, 'q')]
+                          CAverage(simulation, 1200, 800, 'q'),
+                          C2DVisualizationOfSimulation(simulation, 1200, 800)]
+
     # Create a combination of these visualizations. You can iterate through the simulations by using left and right arrow
     visualization =  CCombinationOfVisualizations(simulation, 1200, 800,
                                               used_of_visualizations)
