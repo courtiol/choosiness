@@ -9,6 +9,7 @@ from Visualization.VisualizationWithPygame.VisualizationOf2DEnvironment import C
 from Logger.StandardLogger import CLoggerOfSimulation, add_logger_to_simulation
 
 # Parameters for visualisation and file creation (to include in GUI later on)
+# ToDO: transfer these declaration in create_settings...
 frequency_saving = 10000
 width_window = 1200
 height_window = 800
