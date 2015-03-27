@@ -108,7 +108,7 @@ class CSimulationSettings:
         self.settings_dict['classType_settings']['classType_of_population']['classType_settings']['classType_of_female_individual'] = {}
         self.settings_dict['classType_settings']['classType_of_population']['classType_settings']['classType_of_female_individual']['gender'] = CIndividual.FEMALE
         self.settings_dict['classType_settings']['classType_of_population']['classType_settings']['classType_of_female_individual']['survival_prob'] = 0.99
-        self.settings_dict['classType_settings']['classType_of_population']['classType_settings']['classType_of_female_individual']['latency'] = 0.999
+        self.settings_dict['classType_settings']['classType_of_population']['classType_settings']['classType_of_female_individual']['latency'] = 0.99
         self.settings_dict['classType_settings']['classType_of_population']['classType_settings']['classType_of_female_individual']['classType_of_chromosome'] = \
             CChromosome.CChromosome
         self.settings_dict['classType_settings']['classType_of_population']['classType_settings']['classType_of_female_individual']['classType_settings'] = {}
