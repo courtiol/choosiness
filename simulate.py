@@ -55,4 +55,4 @@ list_of_simulation_settings = [('settings/settings.txt', number_of_iterations)]
 
 for settings_file, number_of_iterations in list_of_simulation_settings:
     print("Run next simulation.")
-    simulate(settings_file, number_of_iterations)
+    simulate(settings_file, number_of_iterations, frequency_saving, width_window, height_window)
