@@ -69,7 +69,7 @@ class CVisualizationWithPygameBaseClass(CVisualizationBaseClass):
         text_surface = large_text.render(text, True, colour)
         text_rect = text_surface.get_rect()
         text_rect.center = (pos_x, pos_y)
-        CVisualizationWithPygameBaseClass.screen.blit(text_surface, text_rect)
+        #CVisualizationWithPygameBaseClass.screen.blit(text_surface, text_rect)
 
     def _show_couples_array(self):
         print("couples with length " + str(len(self.simulation.population.couples)) + "\n")

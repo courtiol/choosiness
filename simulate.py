@@ -32,9 +32,10 @@ def simulate(settings_file, number_of_iterations):
                           CAverage(simulation, 1200, 800, 'phi'),
                           CAverage(simulation, 1200, 800, 'q')]
     # Create a combination of these visualizations. You can iterate through the simulations by using left and right arrow
-    visualization =  CCombinationOfVisualizations(simulation, 1200, 800,
-                                              used_of_visualizations)
+    # visualization =  CCombinationOfVisualizations(simulation, 1200, 800,
+    #                                          used_of_visualizations)
 
+    visualization = C2DVisualizationOfSimulation(simulation, 800, 800)
     visualization.init_display()
     # modify the simulation that it can be visualized
     add_visualization_to_simulation(simulation, visualization)

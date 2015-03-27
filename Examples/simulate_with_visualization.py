@@ -13,7 +13,7 @@ Simple example for using the Simulation class together with any Visualization
 """
 
 # Create simulation object
-settings = settings.CSimulationSettings('Examples/example_settings_2D.txt')
+settings = settings.CSimulationSettings('settings/example_settings_2D.txt')
 simulation = CSimulation.CSimulation(settings)
 
 # We don't need to visualize the simulation from the first iteration on
