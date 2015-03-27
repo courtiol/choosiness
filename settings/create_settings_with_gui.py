@@ -264,14 +264,14 @@ class SettingsGui(QtGui.QWidget):
         # Check what entries are selected in the comboboxes and retrieve from this the settings
         resulting_dict = self.settings_widget.create_dict_from_combobox_choice()
         # Save these settings
-        new_settings = settings.CSimulationSettings()
+        new_settings = settings.CSimulationSettings(None)
         new_settings.settings_dict = resulting_dict
         new_settings.save_settings_to_file('settings.txt')
         # ToDo: More markers. It's not enough to just test for  list. What is, when you really need a list as a parameter?
 
     def on_set_as_default_button_clicked(self):
         self.settings_widget.get_data_from_widgets()
-        temp_settings = settings.CSimulationSettings()
+        temp_settings = settings.CSimulationSettings(None)
         temp_settings.settings_dict = self.settings_widget.parameter_settings
         temp_settings.save_settings_to_file('default_settings.txt')
 

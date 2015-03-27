@@ -1,7 +1,3 @@
-import CIndividual
-import CPopulation
-import CChromosome
-from Environments import Environment2DFaster, Environment2D,  EnvironmentSoup
 from Tools.usefulDecorators import printAllParameters
 import jsonpickle
 
@@ -69,7 +65,8 @@ class CSimulationSettings:
         self.collision_counter = 0
         self.step_counter = 1
         self.average_number_of_collisions_per_timestep = 0
-        self.load_settings_from_file(settings_file)
+        if settings_file is not None:
+            self.load_settings_from_file(settings_file)
 
     @printAllParameters
     def __str__(self):
