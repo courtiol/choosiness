@@ -21,6 +21,8 @@ def simulate(settings_file, number_of_iterations):
     settings = CSimulationSettings(settings_file)
     simulation = CSimulation(settings=settings)
 
+
+
     # initialize logger
     logger_of_simulation = CLoggerOfSimulation(simulation, 10000)  # log every 10000th iteration
     add_logger_to_simulation(simulation, logger_of_simulation)  # connects the logger to the simulation
