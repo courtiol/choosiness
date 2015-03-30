@@ -6,7 +6,7 @@ from Logger.StandardLogger import CLoggerOfSimulation, add_logger_to_simulation
 
 # constants:
 frequency_logging = 100 # How often should be logged?
-path_for_logging = "saved/" # Where the logged data should be saved
+path_for_logging = "/data/fg2/schwieger/data_evolution_of_choosiness/inSoup/" # Where the logged data should be saved
 
 def simulate(settings_file ,number_of_timesteps, frequency_logging, path_for_logging):
     # Create simulation object
