@@ -5,7 +5,7 @@ from settings.settings import CSimulationSettings
 from Logger.StandardLogger import CLoggerOfSimulation, add_logger_to_simulation
 
 # constants:
-frequency_logging = 100 # How often should be logged?
+frequency_logging = 10000 # How often should be logged?
 path_for_logging = "/data/fg2/schwieger/data_evolution_of_choosiness/inSoup/" # Where the logged data should be saved
 
 def simulate(settings_file ,number_of_timesteps, frequency_logging, path_for_logging):
@@ -25,10 +25,10 @@ def simulate(settings_file ,number_of_timesteps, frequency_logging, path_for_log
     logger_of_simulation.log_current_state_of_simulation()
     print("Simulation is over.")
 
-list_of_simulation_settings = [('settings/settings_comp_with_analytic1.txt', 1000),
-                               ('settings/settings_comp_with_analytic2.txt', 1000),
-                               ('settings/settings_comp_with_analytic3.txt', 1000),
-                               ('settings/settings_comp_with_analytic4.txt', 1000)]
+list_of_simulation_settings = [('settings/settings_comp_with_analytic1.txt', 500000),
+                               ('settings/settings_comp_with_analytic2.txt', 500000),
+                               ('settings/settings_comp_with_analytic3.txt', 500000),
+                               ('settings/settings_comp_with_analytic4.txt', 500000)]
 
 for settings_file, number_of_iterations in list_of_simulation_settings:
     simulate(settings_file=settings_file,number_of_timesteps=number_of_iterations, frequency_logging=frequency_logging,
