@@ -57,7 +57,7 @@ the class EnvironmentSoup.EnvironmentSoup
         self.settings_dict['environment_settings']['itemSpeed'] = 7 # speed_of_individuals
 """
 
-class CSimulationSettings:
+class CSimulationData:
     """
     Stores the settings of the simulation
     """
@@ -72,7 +72,7 @@ class CSimulationSettings:
     def __str__(self):
         return ""
 
-    def save_settings_to_file(self, filename):  ## ToDO: check if this is usefull
+    def save_settings_to_file(self, filename):
         """
         Converts the settings into json-format and saves it in the given file
         :param filename: 'relative path/filename'
@@ -82,7 +82,7 @@ class CSimulationSettings:
         f.write(settings_as_json)
         print("settings saved to "+filename)
 
-    def load_settings_from_file(self, filename):  ## ToDO: check if this is usefull
+    def load_settings_from_file(self, filename):
         f = open(filename)
         json_str = f.read()
         self.settings_dict = jsonpickle.decode(json_str)

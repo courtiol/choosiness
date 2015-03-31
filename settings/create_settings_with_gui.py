@@ -33,7 +33,6 @@ def get_dict_from_class(class_type):
     # iterate over the arguments
     for parameter_name, _ in signature_of_constructor.parameters.items():
         # if the current parameter is a class....
-        # ToDo: Do that better
         if signature_of_constructor.parameters[parameter_name].annotation != inspect._empty \
                     and inspect.isclass(signature_of_constructor.parameters[parameter_name].annotation):
             current_dict[parameter_name] = \
@@ -237,7 +236,7 @@ class SettingsGui(QtGui.QWidget):
         self.initUI()
 
     def initUI(self):
-        temp_settings = settings.CSimulationSettings('default_settings.txt')
+        temp_settings = settings.CSimulationData('default_settings.txt')
         self.settings_widget = WidgetFromDict(temp_settings.settings_dict)
 
         hbox = QtGui.QVBoxLayout()
@@ -264,21 +263,21 @@ class SettingsGui(QtGui.QWidget):
         # Check what entries are selected in the comboboxes and retrieve from this the settings
         resulting_dict = self.settings_widget.create_dict_from_combobox_choice()
         # Save these settings
-        new_settings = settings.CSimulationSettings(None)
+        new_settings = settings.CSimulationData(None)
         new_settings.settings_dict = resulting_dict
         new_settings.save_settings_to_file('settings.txt')
         # ToDo: More markers. It's not enough to just test for  list. What is, when you really need a list as a parameter?
 
     def on_set_as_default_button_clicked(self):
         self.settings_widget.get_data_from_widgets()
-        temp_settings = settings.CSimulationSettings(None)
+        temp_settings = settings.CSimulationData(None)
         temp_settings.settings_dict = self.settings_widget.parameter_settings
         temp_settings.save_settings_to_file('default_settings.txt')
 
 
 def main():
     app = QtGui.QApplication(sys.argv)
-    temp_settings = settings.CSimulationSettings('default_settings.txt')
+    temp_settings = settings.CSimulationData('default_settings.txt')
     #ex = WidgetFromDict(temp_settings.settings_dict)
     ex = SettingsGui()
     sys.exit(app.exec_())

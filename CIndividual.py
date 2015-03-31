@@ -30,11 +30,8 @@ class CIndividual(CBaseIndividual):
     can be created by its "parents". The inheritable information of each individual is saved in a pair of
     chromosomes.
     """
-    def __init__(self, gender, latency, survival_prob, classType_of_chromosome : CBaseChromosome, classType_settings, mother=None, father=None):
-        """
-
-        :type self: object
-        """
+    def __init__(self, gender, latency, survival_prob, classType_of_chromosome : CBaseChromosome, classType_settings,
+                                                                                 mother=None, father=None):
         self.state = ALIVE  # possible states: alive, dead, in_latency
         self.gender = gender
         self.s = survival_prob
@@ -104,5 +101,3 @@ class CIndividual(CBaseIndividual):
     @printAllParameters
     def __str__(self):
         return ""
-
-

@@ -1,7 +1,7 @@
 __author__ = 'robert'
 
 from CSimulation import CSimulation
-from settings.settings import CSimulationSettings
+from settings.settings import CSimulationData
 from Logger.StandardLogger import CLoggerOfSimulation, add_logger_to_simulation
 
 # constants:
@@ -10,7 +10,7 @@ path_for_logging = "/data/fg2/schwieger/data_evolution_of_choosiness/inSoup/" # 
 
 def simulate(settings_file ,number_of_timesteps, frequency_logging, path_for_logging):
     # Create simulation object
-    settings = CSimulationSettings(settings_file)
+    settings = CSimulationData(settings_file)
     simulation = CSimulation(settings=settings)
 
     # initialize logger

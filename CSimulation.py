@@ -1,6 +1,6 @@
 from Tools.usefulDecorators import printAllParameters
 import pickle
-from settings.settings import CSimulationSettings
+from settings.settings import CSimulationData
 
 
 class CSimulation:
@@ -10,7 +10,7 @@ class CSimulation:
     """
     def __init__(self, settings=None):
         if settings is None:
-            self.settings = CSimulationSettings()
+            self.settings = CSimulationData()
         else:
             self.settings = settings
         # set the environment in which the population is placed

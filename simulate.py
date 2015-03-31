@@ -1,6 +1,6 @@
 __author__ = 'RobertS'
 
-from settings.settings import CSimulationSettings
+from settings.settings import CSimulationData
 from CSimulation import CSimulation
 from Visualization.decorateSimulation import add_visualization_to_simulation
 from Visualization.VisualizationWithPygame.VisualizationCombination import CCombinationOfVisualizations
@@ -23,7 +23,7 @@ def simulate(settings_file, number_of_iterations, frequency_saving, width_window
     :return:-
     """
     # Create simulation object
-    settings = CSimulationSettings(settings_file)
+    settings = CSimulationData(settings_file)
     simulation = CSimulation(settings=settings)
 
     # initialize logger
@@ -43,9 +43,9 @@ def simulate(settings_file, number_of_iterations, frequency_saving, width_window
     # ToDO: do not initialize the loger in the following class!
     visualization = CCombinationOfVisualizations(simulation, width_window, height_window, used_of_visualizations)
 
-    # visualization.init_display()
+    visualization.init_display()
     # modify the simulation that it can be visualized
-    # add_visualization_to_simulation(simulation, visualization)
+    add_visualization_to_simulation(simulation, visualization)
 
     # Start the simulation
     print("Start simulation")
