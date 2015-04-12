@@ -29,7 +29,7 @@ class WidgetFromDict(QWidget):
         self.treeView.setContextMenuPolicy(Qt.CustomContextMenu)
         self.treeView.customContextMenuRequested.connect(self.openMenu)
 
-        self.dict_to_item = {}
+        self.item_to_dict = {}
 
         self.model = QStandardItemModel()
         self.rootItem = self.model.invisibleRootItem()
@@ -37,7 +37,6 @@ class WidgetFromDict(QWidget):
         self.treeView.setModel(self.model)
 
         self.model.itemChanged.connect(self.on_item_changed)
-
 
         self.model.setColumnCount(2)
         self.model.setHorizontalHeaderLabels([self.tr("Parameter"), self.tr("Value")])
@@ -50,42 +49,56 @@ class WidgetFromDict(QWidget):
 
     def on_item_changed(self, item):
         # print(item.checkState())
-        if not item.isCheckable():
+        if not item.isCheckable(): # check if item has children
             rep = self.item_to_dict[item.index()]
             rep['v'] = item.text()
             print(str(self.data_dictionary))
-        elif item.checkState() == 0: # item unchecked
+        elif item.checkState() == 0: # item unchecked; nothing needs to be done here (see checkState == 2)
             pass
         elif item.checkState() == 2: # item checked
-            parent = item.parent()
-            if parent == 0:
-                print("1")
+            parent = item.parent() # take parent of the child
+            if parent is None:
+                parent = self.rootItem # invisible root is for some strange reason (bug?) never shown as parent in qt
+            if parent == 0: # check if this parent exits
                 print(str(item.text)+" has no parent")
-            elif parent is not None:
-                print("2")
-                if hasattr(parent, 'selectedChild'):
-                    if parent.selectedChild != item:
-                        parent.selectedChild.setCheckState(0)
-                parent.selectedChild = item
-        # some useful stuff:
-        # item.checkState()
+            else: # when yes then ...
+                if hasattr(parent, 'selectedChild') and (parent.selectedChild is not None): # check if it has already a child
+                    if parent.selectedChild != item: # and if this child is not already this item
+                        parent.selectedChild.setCheckState(0) # then set the check state of the previous item to
+                        # to unchecked. (Only one item should be selected)
+                parent.selectedChild = item # update the selected item of the parent
+                print("selectedChild added to "+str(parent.text())+" "+str(parent))
 
     def addItems(self, parent, elements):
-        for class_type, dictionary in elements:
-            new_parent_key = QStandardItem(str(class_type))
+        for class_type, dictionary in elements: # elements is here a list of tuples. The second entry is always a
+            # dictionary
+            new_parent_key = QStandardItem(str(class_type)) # Create a checkable entry in the treeview
             new_parent_key.setCheckable(True)
             parent.appendRow(new_parent_key)
-            for key in dictionary.keys():
+
+            if not hasattr(parent, 'children'):
+                parent.children = []
+            parent.children.append(new_parent_key)
+            if not hasattr(parent, 'selectedChild'):
+                parent.selectedChild = None
+
+            for key in dictionary.keys(): # now take for every class type the corresponding dictionary
                 if type(dictionary[key]) is list:
-                    new_child = QStandardItem(key)
+                    new_child = QStandardItem(key) # for each entry in the dictionary that is again a list
                     new_parent_key.appendRow(new_child)
-                    self.addItems(new_child, dictionary[key])
-                else:
+                    if not hasattr(new_parent_key, 'children'):
+                        new_parent_key.children = []
+                    new_parent_key.children.append(new_child)
+                    self.addItems(new_child, dictionary[key]) # perform a recursive step
+                else: # otherwise just create an entry in the treeview ...
                     new_child = QStandardItem(key)
                     # dictionary[key] is always from type Reference. The actual value is saved under the key 'v'
-                    new_value = QStandardItem(str(dictionary[key]['v']))
+                    new_value = QStandardItem(str(dictionary[key]['v'])) # ... with this value
                     new_parent_key.appendRow([new_child, new_value])
                     self.item_to_dict[new_value.index()] = dictionary[key]
+                    if not hasattr(new_parent_key, 'children'):
+                        new_parent_key.children = []
+                    new_parent_key.children.append([new_child, new_value])
 
     def openMenu(self, position):
         indexes = self.treeView.selectedIndexes()
@@ -102,44 +115,85 @@ class WidgetFromDict(QWidget):
         menu.addAction(self.tr("Edit Value"))
         menu.exec_(self.treeView.viewport().mapToGlobal(position))
 
-    def create_dict_from_selection(self, sub_dict=None):
+    def selectedChildtraversed(self, parent, selected_child):
+        # print(str(parent)+" "+str(parent.text()))
+        pass
+
+    def unselectableChildTraversed(self, parent, child):
+        pass
+
+    def leafTraversed(self, leaf):
+        new_child = leaf[0]
+        new_value = leaf[1]
+        # print("new_child: "+str(new_child.text())+", new_value: "+str(new_value.text()))
+
+    def createDictFromUserChoice(self):
+        resulting_dict = {}
+        self.traverseTree(None, resulting_dict)
+        return (resulting_dict['classType_settings'])['root']
+
+    def traverseTree(self, root=None, parent_dict=None):
         """
         Create a dictionary compatible to settings.CSimulationSettings. This means for each combobox the selected
         key und subdirectory in the dictionary must be extracted
         """
-        if sub_dict is None:
-            sub_dict = self.parameters
-        print(sub_dict)
+        """
+        We want to convert the user data is the following form:
 
-        current_dict = {}  # create a new dictionary to store the data
-        for key in sub_dict.keys():  # iterate over the input dictionary
-            # if an entry is a list, the list entry selected in the combobox must be selected
-            if type(sub_dict[key]) == list:
-                # Get this entry with 'self.dict_entry_to_widget'
-                print("Test1 "+str(sub_dict[key]))
-                selected_dict = self.get_selected_list_element(sub_dict[key])
-                print("Test2 "+str(selected_dict))
-                # current_list = sub_dict[key]  # save for convenience this list
-                if "classType_settings" not in current_dict:
-                     current_dict["classType_settings"] = {}
-                current_dict["classType_settings"][key] = self.create_dict_from_selection(selected_dict)
-                """
-                for elem in current_list:  # now we select the entry corresponding to the combobox
-                    # If the string representation of the first element of the current tuple matches the
-                    # selected list element .....
-                    if str(elem[0]) == selected_list_element:
-                        # ... then deal with that 'subdictionary' in
-                        current_dict[key] = elem[0]
-                        # if no "classType_settings" is yet in 'current_dict', an entry is created
-                        if "classType_settings" not in current_dict:
-                            current_dict["classType_settings"] = {}
-                        # Save the parameters of the corresponding combobox 'subsettings'
-                        current_dict["classType_settings"][key] = self.create_dict_from_combobox_choice(elem[1])
-                """
+        {
+            "classType_settings":
+            {
+                "classType_of_environment":
+                {
+                    ...parameters
+                }
+            }
+            "classType_of_environment":
+            {
+
+            }
+        }
+        """
+        current_dict = {}
+        if root is None:
+            root = self.rootItem
+        if parent_dict is None: # if parent_d
+            parent_dict = {}
+        if hasattr(root, 'selectedChild'): # if 'root' has a selected item then we need to create an classType_settings
+            # entry and a classType_of_???? entry
+            if root.selectedChild is not None: # The user selected an item. (he should always!)
+                self.selectedChildtraversed(root, root.selectedChild)
+                # child_dict = self.traverseTree(root.selectedChild, None)
+                child_dict = self.traverseTree(root.selectedChild, current_dict) # get the settings of the selected child.
+
+                class_name = ""
+                if root == self.rootItem: # the root has no parameter text(). Therefore we need to deal with this case
+                    # in a different way
+                    class_name = "root"
+                else:
+                    class_name = str(root.text()) # otherwise take the label in the treeView
+
+                if "classType_settings" not in parent_dict.keys(): # if there is no key 'classType_settings' create one.
+                    parent_dict["classType_settings"] = {}
+                (parent_dict["classType_settings"])[class_name] = child_dict # save the attributes in the parent dict
+                current_dict = (root.selectedChild).text() # and the class name
+        else:
+            # otherwise iterate through all children
+            if hasattr(root, 'children'):
+                for child in root.children:
+                    self.unselectableChildTraversed(root, child)
+                    # temp_dict[str(child.text())] = "x"
+                    childDict = self.traverseTree(child, current_dict) # get the dictionary starting in the current child
+                    if hasattr(child, 'text'):
+                        current_dict[child.text()] = childDict
+                    else:
+                        current_dict[str(child[0].text())] = childDict
             else:
-                # We saved everything as a reference. Now we want the real value
-                print("leaf: "+str(sub_dict[key]))
-                current_dict[key] = jsonpickle.decode(sub_dict[key]['v'])
+                new_child = root[0]
+                new_value = root[1]
+                self.leafTraversed(root)
+
+                current_dict = str(new_value.text())
         return current_dict
 
     def get_selected_list_element(self, elements):
@@ -190,7 +244,7 @@ class SettingsGui(QWidget):
         """
         Save the settings in a to settings.CSimulationSettings compatible format
         """
-        resulting_dict = self.settings_widget.create_dict_from_selection()
+        resulting_dict = self.settings_widget.createDictFromUserChoice()
         # Check what entries are selected in the comboboxes and retrieve from this the settings
         # Save these settings
         new_settings = settings.CSimulationData(None)
