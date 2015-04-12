@@ -251,7 +251,6 @@ class SettingsGui(QWidget):
         new_settings.settings_dict = resulting_dict
         new_settings.save_settings_to_file('settings.txt')
         print(new_settings.settings_dict)
-        # ToDo: More markers. It's not enough to just test for  list. What is, when you really need a list as a parameter?
 
     def on_set_as_default_button_clicked(self):
         self.settings_widget.print_dict_to_item()
