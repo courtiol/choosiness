@@ -72,7 +72,7 @@ class WidgetFromDict(QWidget):
     def addItems(self, parent, elements):
         for class_type, dictionary in elements: # elements is here a list of tuples. The second entry is always a
             # dictionary
-            new_parent_key = QStandardItem(str(class_type)) # Create a checkable entry in the treeview
+            new_parent_key = QStandardItem(jsonpickle.encode(class_type)) # Create a checkable entry in the treeview
             new_parent_key.setCheckable(True)
             parent.appendRow(new_parent_key)
 
@@ -176,7 +176,7 @@ class WidgetFromDict(QWidget):
                 if "classType_settings" not in parent_dict.keys(): # if there is no key 'classType_settings' create one.
                     parent_dict["classType_settings"] = {}
                 (parent_dict["classType_settings"])[class_name] = child_dict # save the attributes in the parent dict
-                current_dict = (root.selectedChild).text() # and the class name
+                current_dict = jsonpickle.decode((root.selectedChild).text()) # and the class name
         else:
             # otherwise iterate through all children
             if hasattr(root, 'children'):
@@ -193,7 +193,7 @@ class WidgetFromDict(QWidget):
                 new_value = root[1]
                 self.leafTraversed(root)
 
-                current_dict = str(new_value.text())
+                current_dict = jsonpickle.decode(new_value.text())
         return current_dict
 
     def get_selected_list_element(self, elements):
